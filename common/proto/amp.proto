@@ -1,0 +1,41 @@
+syntax = "proto3";
+package amp;
+
+///=============================================
+/// Enumerations
+///=============================================
+
+enum service_id
+{
+    CCLIENT_ID          = 0;    // c++ client
+    PCLIENT_ID          = 1;    // python client
+    GCLIENT_ID          = 2;    // golang client
+    RCLIENT_ID          = 3;    // rust client
+}
+
+enum command_id
+{
+    CMD_SET_ID          = 0;
+    CMD_PRINT_ID        = 1;
+}
+
+///=============================================
+/// Protocol main structures (REQ/RESP)
+///=============================================
+
+message request_t
+{
+    service_id srv_id   = 1;
+    command_id cmd_id   = 2;
+    string branch       = 3;
+    string payload      = 4;
+}
+
+message response_t
+{
+    service_id srv_id   = 1;
+    command_id cmd_id   = 2;
+    string branch       = 3;
+    uint32 status       = 4;
+    string resp         = 5;
+}
