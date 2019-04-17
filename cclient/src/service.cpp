@@ -3,6 +3,19 @@
 #include "service.hpp"
 #include "tpath/tpath.hpp"
 
+cclient::service::service() : ctx_(true)
+{
+    // init command handlers
+    std::function<void(const amp::request_t&, amp::response_t&)> f_set_pwr_led_1 =
+            [&](const amp::request_t& req, amp::response_t& resp) {
+        this->pwr_led_1(req, resp);
+    };
+    handler_.insert(std::make_pair("/app/pwr/led/1", f_set_pwr_led_1));
+
+    // TODO: config file
+    read_json("data.json");
+}
+
 void cclient::service::stop()
 {
     ctx_ = false;
@@ -38,24 +51,10 @@ int cclient::service::start()
                 std::string buf = zmultipart_msg.peekstr(zmultipart_msg.size() - 1);
                 if (packet.ParseFromString(buf))
                 {
-                    auto cmd = packet.cmd_id();
-                    switch(cmd)
+                    if (handler_.find(packet.branch()) != handler_.end())
                     {
-                        case amp::command_id::CMD_SET_ID:
-                        {
-                            set(packet, response);
-                            break;
-                        }
-
-                        case amp::command_id::CMD_PRINT_ID:
-                        {
-                            print(packet, response);
-                            break;
-                        }
-
-                        default:
-                            break;
-
+                        auto f = handler_.at(packet.branch());
+                        f(packet, response);
                     }
                 }
 
@@ -75,7 +74,7 @@ int cclient::service::start()
     return 0;
 }
 
-void cclient::service::set(const amp::request_t& req, amp::response_t& resp)
+void cclient::service::set_to_storage(const amp::request_t& req, amp::response_t& resp)
 {
     int err = 0;
 
@@ -119,7 +118,7 @@ void cclient::service::set(const amp::request_t& req, amp::response_t& resp)
     }
 }
 
-void cclient::service::print(const amp::request_t& req, amp::response_t& resp)
+void cclient::service::print_storage(const amp::request_t& req, amp::response_t& resp)
 {
     int err = 0;
 
@@ -159,5 +158,27 @@ void cclient::service::print(const amp::request_t& req, amp::response_t& resp)
     else
     {
         resp.set_status(1);
+    }
+}
+
+void cclient::service::pwr_led_1(const amp::request_t& req, amp::response_t& resp)
+{
+    auto cmd = req.cmd_id();
+    switch(cmd)
+    {
+        case amp::command_id::CMD_SET_ID:
+        {
+            set_to_storage(req, resp);
+            break;
+        }
+
+        case amp::command_id::CMD_PRINT_ID:
+        {
+            print_storage(req, resp);
+            break;
+        }
+
+        default:
+            break;
     }
 }
