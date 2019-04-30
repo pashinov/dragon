@@ -5,11 +5,7 @@
 #ifndef AMP_CCLIENT_SERVICE_HPP
 #define AMP_CCLIENT_SERVICE_HPP
 
-#include <iomanip>
-#include <fstream>
-#include <nlohmann/json.hpp>
-
-#include "amp.pb.h"
+#include "amsp.pb.h"
 
 namespace cclient
 {
