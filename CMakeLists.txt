@@ -9,7 +9,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 option(WITH_ASAN "Build with Address Sanitizer" OFF)
 option(WITH_TSAN "Build with Threads Sanitizer" OFF)
-option(WITH_MSAN "Build with Memory Sanitizer" OFF)
+option(WITH_MSAN "Build with Memory Sanitizer"  OFF)
 
 set(AMP_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -18,20 +18,21 @@ set(AMP_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 #----------------------------------------------------------
 option(WITH_ROUTER          "Build ROUTER"          ON)
 option(WITH_CCLIENT         "Build CCLIENT"         ON)
+option(WITH_RCLIENT         "Build RCLIENT"         ON)
 
 if(WITH_TSAN)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -fsanitize=thread -g -O2 -fPIC -pie")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -g -O2 -fPIC -pie")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -g -O2 -fPIC -pie")
 endif()
 
 if(WITH_ASAN)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -g -fsanitize=address -fno-omit-frame-pointer")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer")
 endif()
 
 if(WITH_MSAN)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -fsanitize=memory -fno-omit-frame-pointer -g")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=memory -fno-omit-frame-pointer -g")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=memory -fno-omit-frame-pointer -g")
 endif()
 
 include(ProjectDeps)
@@ -47,4 +48,24 @@ endif()
 
 if(WITH_CCLIENT)
     add_subdirectory(cclient)
+endif()
+
+if(WITH_RCLIENT)
+    # Generate protobuf .rs code
+    execute_process(
+            COMMAND protoc --rust_out=rclient/src 2ndparty/proto/amsp.proto
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+    # Enable ExternalProject CMake module
+    include(ExternalProject)
+
+    # Add rclient as a CMake Rust target
+    ExternalProject_Add(
+            rclient
+            DOWNLOAD_COMMAND ""
+            CONFIGURE_COMMAND ""
+            BUILD_COMMAND cargo build COMMAND cargo build --release
+            BINARY_DIR "${CMAKE_SOURCE_DIR}/rclient"
+            INSTALL_COMMAND ""
+            LOG_BUILD ON)
 endif()
