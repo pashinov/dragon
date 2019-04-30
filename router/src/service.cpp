@@ -7,6 +7,7 @@
 broker::service::service() : ctx_(true)
 {
     conn_.insert(std::make_pair(amsp::service_id::CCLIENT_ID, "ipc:///tmp/cclient"));
+    conn_.insert(std::make_pair(amsp::service_id::RCLIENT_ID, "ipc:///tmp/rclient"));
 }
 
 void broker::service::stop()
