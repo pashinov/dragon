@@ -25,9 +25,6 @@ int cclient::service::start()
     // bind socket
     ssock.bind(url);
 
-    amsp::request_t  packet;
-    amsp::response_t response;
-
     std::vector<zmq::pollitem_t> poller = { { ssock, 0, ZMQ_POLLIN, 0 } };
 
     while(ctx_)
@@ -38,15 +35,20 @@ int cclient::service::start()
         {
             if (zmsg.recv(ssock))
             {
+                amsp::request_t  packet;
+                amsp::response_t response;
+
                 std::string buf = zmsg.peekstr(zmsg.size() - 1);
                 if (packet.ParseFromString(buf))
                 {
-                    response.set_resp("Hello, World!!");
+                    response.set_resp("cclient: Hello, World!!");
                     response.set_status(0);
                 }
 
                 response.set_srv_id(packet.srv_id());
                 response.set_cmd_id(packet.cmd_id());
+                response.set_branch(packet.branch());
+
                 auto rspstr = response.SerializeAsString();
 
                 // replace last element that contains data with created response
