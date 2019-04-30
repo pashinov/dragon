@@ -1,12 +1,12 @@
 #include <iostream>
 #include <zmq.hpp>
 
-#include "amp.pb.h"
+#include "amsp.pb.h"
 #include "service.hpp"
 
 broker::service::service() : ctx_(true)
 {
-    conn_.insert(std::make_pair(amp::service_id::CCLIENT_ID, "ipc:///tmp/cclient"));
+    conn_.insert(std::make_pair(amsp::service_id::CCLIENT_ID, "ipc:///tmp/cclient"));
 }
 
 void broker::service::stop()
@@ -35,11 +35,11 @@ int broker::service::start()
     };
 
     // TODO: config file
-    std::string ownurl  = "ipc:///tmp/broker";
+    std::string ownurl  = "ipc:///tmp/router";
     int timeout         = 5000;
 
-    amp::request_t  request;
-    amp::response_t response;
+    amsp::request_t  request;
+    amsp::response_t response;
 
     std::vector<zmq::pollitem_t> items;
     std::shared_ptr<zmq::context_t> zctx = std::make_shared<zmq::context_t>();

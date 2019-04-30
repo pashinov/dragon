@@ -25,8 +25,8 @@ int cclient::service::start()
     // bind socket
     ssock.bind(url);
 
-    amp::request_t  packet;
-    amp::response_t response;
+    amsp::request_t  packet;
+    amsp::response_t response;
 
     std::vector<zmq::pollitem_t> poller = { { ssock, 0, ZMQ_POLLIN, 0 } };
 
