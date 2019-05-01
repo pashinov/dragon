@@ -3,7 +3,7 @@
 #---------------------------------------------
 
 # find protobuf
-find_package(Protobuf 3.7 REQUIRED)
+find_package(Protobuf 3.5.0 REQUIRED)
 if(PROTOBUF_FOUND)
     message ("protobuf found")
 else()
