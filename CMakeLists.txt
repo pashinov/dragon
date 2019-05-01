@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
+option(WITH_TESTS "Enable Unit Tests" OFF)
+
 option(WITH_ASAN "Build with Address Sanitizer" OFF)
 option(WITH_TSAN "Build with Threads Sanitizer" OFF)
 option(WITH_MSAN "Build with Memory Sanitizer"  OFF)
@@ -68,4 +70,8 @@ if(WITH_RCLIENT)
             BINARY_DIR "${CMAKE_SOURCE_DIR}/rclient"
             INSTALL_COMMAND ""
             LOG_BUILD ON)
+endif()
+
+if(WITH_TESTS)
+    enable_testing()
 endif()
