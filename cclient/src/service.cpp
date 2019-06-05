@@ -35,8 +35,8 @@ int cclient::service::start()
         {
             if (zmsg.recv(ssock))
             {
-                amsp::request_t  packet;
-                amsp::response_t response;
+                falcon::request_t  packet;
+                falcon::response_t response;
 
                 std::string buf = zmsg.peekstr(zmsg.size() - 1);
                 if (packet.ParseFromString(buf))

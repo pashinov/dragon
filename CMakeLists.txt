@@ -55,7 +55,7 @@ endif()
 if(WITH_RCLIENT)
     # Generate protobuf .rs code
     execute_process(
-            COMMAND protoc --rust_out=rclient/src 2ndparty/proto/amsp.proto
+            COMMAND protoc --rust_out=rclient/src 2ndparty/proto/falcon.proto
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
     # Enable ExternalProject CMake module

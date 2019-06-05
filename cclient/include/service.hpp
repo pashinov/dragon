@@ -5,7 +5,7 @@
 #ifndef AMP_CCLIENT_SERVICE_HPP
 #define AMP_CCLIENT_SERVICE_HPP
 
-#include "amsp.pb.h"
+#include "falcon.pb.h"
 
 namespace cclient
 {
