@@ -1,4 +1,4 @@
-use crate::amsp;
+use crate::falcon;
 use protobuf::Message;
 
 pub struct Service  {
@@ -27,8 +27,8 @@ impl Service  {
             if poll_items[0].get_revents() == zmq::POLLIN {
                 let mut zmsg = socket.recv_multipart(0).unwrap();
 
-                let request: amsp::request_t = protobuf::parse_from_bytes(&zmsg[zmsg.len() - 1]).unwrap();
-                let mut response = amsp::response_t::new();
+                let request: falcon::request_t = protobuf::parse_from_bytes(&zmsg[zmsg.len() - 1]).unwrap();
+                let mut response = falcon::response_t::new();
 
                 response.set_srv_id(request.srv_id);
                 response.set_cmd_id(request.cmd_id);
