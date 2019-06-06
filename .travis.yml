@@ -10,9 +10,9 @@ matrix:
     - env: BUILD_TYPE=Release WITH_TESTS=OFF
 
 before_install:
-  - docker build -t amsp-image .
-  - docker run -v $TRAVIS_BUILD_DIR:/home/develop/amsp -it -d --name amsp amsp-image bash
+  - docker build -t falcon-image .
+  - docker run -v $TRAVIS_BUILD_DIR:/home/develop/falcon -it -d --name falcon falcon-image bash
 
 script:
-  - docker exec amsp cmake -H/home/develop/amsp -B/home/develop/amsp/build-$BUILD_TYPE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DWITH_TESTS=$WITH_TESTS
-  - docker exec amsp cmake --build /home/develop/amsp/build-$BUILD_TYPE
+  - docker exec falcon cmake -H/home/develop/falcon -B/home/develop/falcon/build-$BUILD_TYPE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DWITH_TESTS=$WITH_TESTS
+  - docker exec falcon cmake --build /home/develop/falcon/build-$BUILD_TYPE
