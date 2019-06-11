@@ -1,0 +1,7 @@
+#
+#  Description: General configuration file
+#
+
+zmq:
+  url:      @RCLIENT_ZMQ_URL@
+  timeout:  @RCLIENT_ZMQ_TIMEOUT@
