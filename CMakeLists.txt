@@ -70,6 +70,10 @@ if(WITH_RCLIENT)
             BINARY_DIR "${CMAKE_SOURCE_DIR}/rclient"
             INSTALL_COMMAND ""
             LOG_BUILD ON)
+
+    set(RCLIENT_ZMQ_URL "ipc:///tmp/rclient")
+    set(RCLIENT_ZMQ_TIMEOUT 5000)
+    configure_file(rclient/etc/rclient.yaml.in ${CMAKE_BINARY_DIR}/rclient.yaml)
 endif()
 
 if(WITH_TESTS)

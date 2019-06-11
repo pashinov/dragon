@@ -1,22 +1,27 @@
+use config::Config;
 use protobuf::Message;
 use zmq::{SocketType};
 
 use crate::falcon;
 use crate::connection::Zmq;
 
-pub struct Service  {
-    ctx: bool
+pub struct Service<'a>  {
+    ctx: bool,
+    settings: &'a Config
 }
 
-impl Service  {
-    pub fn new() -> Self {
-        Service { ctx: true }
+impl<'a> Service<'a>  {
+    pub fn new(settings: &'a Config) -> Self {
+        Service { ctx: true, settings }
     }
 
     pub fn start(&self) -> () {
+        let zmq_url = self.settings.get_str("zmq.url").unwrap();
+        let zmq_timeout = self.settings.get_int("zmq.timeout").unwrap();
+
         let mut zmq = Zmq::new()
-            .url("".to_string())
-            .timeout(5000)
+            .url(zmq_url)
+            .timeout(zmq_timeout)
             .socket_type(SocketType::ROUTER)
             .finalize();
 
