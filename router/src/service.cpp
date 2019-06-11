@@ -4,18 +4,13 @@
 #include "falcon.pb.h"
 #include "service.hpp"
 
-broker::service::service() : ctx_(true)
-{
-    conn_.insert(std::make_pair(falcon::service_id::CCLIENT_ID, "ipc:///tmp/cclient"));
-    conn_.insert(std::make_pair(falcon::service_id::RCLIENT_ID, "ipc:///tmp/rclient"));
-}
 
-void broker::service::stop()
+void router::service::stop()
 {
     ctx_ = false;
 }
 
-int broker::service::start()
+int router::service::start()
 {
     auto zsock_recv = [](zmq::socket_t& zsocket, zmq::message_t& identity, zmq::message_t& emptyfrm,
                          zmq::message_t& data) {
@@ -36,8 +31,8 @@ int broker::service::start()
     };
 
     // TODO: config file
-    std::string ownurl  = "ipc:///tmp/router";
-    int timeout         = 5000;
+    std::string zmq_url = "ipc:///tmp/router";
+    int zmq_timeout     = 5000;
 
     falcon::request_t  request;
     falcon::response_t response;
@@ -46,7 +41,7 @@ int broker::service::start()
     std::shared_ptr<zmq::context_t> zctx = std::make_shared<zmq::context_t>();
 
     zmq::socket_t zsocket_frontend(*zctx, zmq::socket_type::router);
-    zsocket_frontend.bind(ownurl);
+    zsocket_frontend.bind(zmq_url);
 
     items.push_back({ zsocket_frontend, 0, ZMQ_POLLIN, 0 });
 
@@ -56,26 +51,21 @@ int broker::service::start()
     // need to get zmq socket by name
     std::unordered_map<std::string, zmq::socket_t> zsocket_backend;
 
-    // registration of backend sockets
-    for (const auto& [id, url]: conn_)
-    {
-        zsocket_backend.insert(std::make_pair(url, zmq::socket_t(*zctx, zmq::socket_type::dealer)));
-        zsocket_backend.at(url).connect(url);
-
-        items.push_back({ zsocket_backend.at(url), 0 , ZMQ_POLLIN, 0 });
-        items_num.insert(std::make_pair(items.size() - 1, std::ref(zsocket_backend.at(url))));
-    }
+    // storage of registered service's zmq url's
+    std::unordered_map<std::uint32_t, std::string> connections;
 
     while(ctx_)
     {
         // polling frontend and backend sockets:
         // item[0] - frontend socket
         // item[1], items[...] - backend sockets
-        zmq::poll(&items[0], items.size(), timeout);
+        zmq::poll(&items[0], items.size(), zmq_timeout);
 
         // forward requests from frontend socket
         if (items[0].revents & ZMQ_POLLIN)
         {
+            int rval = -1;
+
             zmq::message_t  identity;
             zmq::message_t  emptyfrm;
             zmq::message_t  message;
@@ -88,14 +78,90 @@ int broker::service::start()
             std::string buf(static_cast<char*>(message.data()), message.size());
             if (request.ParseFromString(buf))
             {
-                auto srv = request.srv_id();
-                std::string url = get_connection(srv);
-
-                if (!url.empty())
+                auto cmd = request.cmd_id();
+                switch (cmd)
                 {
-                    zsock_send(zsocket_backend.at(url), identity, emptyfrm, message);
+                    case falcon::command_id::CMD_REG_ID:
+                    {
+                        falcon::reg_data_t reg_data;
+                        if (reg_data.ParseFromString(request.payload()))
+                        {
+                            auto svc_id = request.srv_id();
+                            auto svc_url = reg_data.svc_url();
+
+                            connections.insert(std::make_pair(svc_id, svc_url));
+
+                            zsocket_backend.insert(std::make_pair(svc_url, zmq::socket_t(*zctx, zmq::socket_type::dealer)));
+                            zsocket_backend.at(svc_url).connect(svc_url);
+
+                            items.push_back({ zsocket_backend.at(svc_url), 0 , ZMQ_POLLIN, 0 });
+                            items_num.insert(std::make_pair(items.size() - 1, std::ref(zsocket_backend.at(svc_url))));
+
+                            rval = 0;
+                        }
+                        break;
+                    }
+
+                    case falcon::command_id::CMD_DEREG_ID:
+                    {
+                        falcon::dereg_data_t dereg_data;
+                        if (dereg_data.ParseFromString(request.payload()))
+                        {
+                            auto svc_id = request.srv_id();
+                            auto svc_url = dereg_data.svc_url();
+
+                            auto connit = connections.find(svc_id);
+                            auto backit = zsocket_backend.find(svc_url);
+                            if (connit != connections.end() && backit != zsocket_backend.end())
+                            {
+                                connections.erase(connit);
+
+                                for (const auto& it : items_num)
+                                {
+                                    if (it.second == (*backit).second)
+                                    {
+                                        auto index = it.first;
+
+                                        // we have to save size of items and we have not to remove
+                                        // deleted socket from items otherwise we will have problems
+                                        // with indexes of sockets
+                                        items.at(index) = { nullptr, 0, 0 ,0 };
+
+                                        items_num.erase(index);
+
+                                        break;
+                                    }
+                                }
+
+                                (*backit).second.close();
+                                zsocket_backend.erase(backit);
+
+                                rval = 0;
+                            }
+                        }
+                        break;
+                    }
+
+                    default:
+                    {
+                        auto srv = request.srv_id();
+                        std::string url = get_connection(srv, connections);
+
+                        if (!url.empty())
+                        {
+                            zsock_send(zsocket_backend.at(url), identity, emptyfrm, message);
+                            continue;
+                        }
+                        break;
+                    }
                 }
             }
+
+            response.set_status(rval);
+
+            auto resp_str = response.SerializeAsString();
+            zmq::message_t resp_msg(std::begin(resp_str), std::end(resp_str));
+            zsock_send(zsocket_frontend, identity, emptyfrm, resp_msg);
         }
 
         // forward responses from backend sockets
@@ -120,12 +186,12 @@ int broker::service::start()
     return 0;
 }
 
-std::string broker::service::get_connection(const std::uint32_t& srv_id)
+std::string router::service::get_connection(const std::uint32_t& srv_id, const std::unordered_map<std::uint32_t, std::string>& conn)
 {
     std::string url;
-    if (conn_.find(srv_id) != conn_.end())
+    if (conn.find(srv_id) != conn.end())
     {
-        url = conn_.at(srv_id);
+        url = conn.at(srv_id);
     }
     return url;
 }
