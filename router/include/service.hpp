@@ -7,12 +7,12 @@
 
 #include <unordered_map>
 
-namespace broker
+namespace router
 {
     class service
     {
     public:
-        service();
+        service() : ctx_(true) {};
         ~service() = default;
 
         int start();
@@ -23,14 +23,16 @@ namespace broker
         service(const service&) = delete;
         service& operator=(const service&) = delete;
 
+        // no move
+        // no move
+        service(service&&) = delete;
+        service& operator=(service&&) = delete;
+
         // get service's url
-        std::string get_connection(const std::uint32_t& srv_id);
+        std::string get_connection(const std::uint32_t& srv_id, const std::unordered_map<std::uint32_t, std::string>& conn);
 
         // context
         bool ctx_;
-
-        // storage of service's zmq url's
-        std::unordered_map<std::uint32_t, std::string> conn_;
     };
 }
 

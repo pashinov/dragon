@@ -5,6 +5,6 @@
 int main(int arcv, char* argv[])
 {
     // TODO: daemonize
-    auto srv = std::make_unique<broker::service>();
+    auto srv = std::make_unique<router::service>();
     return srv->start();
 }

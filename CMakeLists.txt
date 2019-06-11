@@ -73,6 +73,7 @@ if(WITH_RCLIENT)
 
     set(RCLIENT_ZMQ_URL "ipc:///tmp/rclient")
     set(RCLIENT_ZMQ_TIMEOUT 5000)
+    set(ROUTER_ZMQ_URL "ipc:///tmp/router")
     configure_file(rclient/etc/rclient.yaml.in ${CMAKE_BINARY_DIR}/rclient.yaml)
 endif()
 
