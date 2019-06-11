@@ -1,5 +1,8 @@
-use crate::falcon;
 use protobuf::Message;
+use zmq::{SocketType};
+
+use crate::falcon;
+use crate::connection::Zmq;
 
 pub struct Service  {
     ctx: bool
@@ -11,21 +14,21 @@ impl Service  {
     }
 
     pub fn start(&self) -> () {
-        let zctx = zmq::Context::new();
-        let socket = zctx.socket(zmq::ROUTER).unwrap();
+        let mut zmq = Zmq::new()
+            .url("".to_string())
+            .timeout(5000)
+            .socket_type(SocketType::ROUTER)
+            .finalize();
 
-        let url = "ipc:///tmp/rclient".to_string();
-        let timeout = 5000;
+        zmq.create().unwrap();
+        zmq.bind().unwrap();
 
-        socket.bind(&url).unwrap();
-
-        let mut poll_items = vec![socket.as_poll_item(zmq::POLLIN)];
+        let mut poll_items = vec![zmq.get_socket().as_poll_item(zmq::POLLIN)];
 
         while self.ctx {
-            zmq::poll(&mut poll_items, timeout).unwrap();
-
+            zmq.poll(&mut poll_items).unwrap();
             if poll_items[0].get_revents() == zmq::POLLIN {
-                let mut zmsg = socket.recv_multipart(0).unwrap();
+                let mut zmsg = zmq.recv_multipart().unwrap();
 
                 let request: falcon::request_t = protobuf::parse_from_bytes(&zmsg[zmsg.len() - 1]).unwrap();
                 let mut response = falcon::response_t::new();
@@ -40,11 +43,9 @@ impl Service  {
                 zmsg.remove(zmsg.len() - 1);
                 zmsg.push(response.write_to_bytes().unwrap());
 
-                socket.send_multipart(&zmsg, 0).unwrap();
+                zmq.send_multipart(&zmsg).unwrap();
             }
         }
-
-        drop(socket);
     }
 
     #[allow(dead_code)]
