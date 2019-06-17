@@ -3,8 +3,18 @@
 #
 
 router:
-  url:      @ROUTER_ZMQ_URL@
+  zmq:
+    url:      @ROUTER_ZMQ_URL@
 
 service:
-  url:      @RCLIENT_ZMQ_URL@
-  timeout:  @RCLIENT_ZMQ_TIMEOUT@
+  zmq:
+    url:      @SERVICE_ZMQ_URL@
+    timeout:  @SERVICE_ZMQ_TIMEOUT@
+
+  daemon:
+    pidfile:  @SERVICE_DAEMON_PIDFILE@
+
+  channel:
+    timeout:
+      secs:   @SERVICE_CHANNEL_TIMEOUT_SECS@
+      nanos:  @SERVICE_CHANNEL_TIMEOUT_NANOS@

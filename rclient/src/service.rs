@@ -1,36 +1,43 @@
+use std::time::Duration;
+use std::sync::mpsc::{Receiver, RecvTimeoutError};
+
 use config::Config;
 use protobuf::Message;
 
 use crate::falcon;
 
-pub struct Service<'a>  {
+pub struct Service  {
     ctx: bool,
-    settings: &'a Config
+    settings: Config
 }
 
-impl<'a> Service<'a>  {
-    pub fn new(settings: &'a Config) -> Self {
+impl Service  {
+    pub fn new(settings: Config) -> Self {
         Service { ctx: true, settings }
     }
 
-    pub fn start(&self) -> () {
-        let zmq_url = self.settings.get_str("service.url").unwrap();
-        let zmq_timeout = self.settings.get_int("service.timeout").unwrap();
-        let router_url = self.settings.get_str("router.url").unwrap();
+    pub fn run(&mut self, rx: Receiver<i32>) -> () {
+        let service_zmq_url = self.settings.get_str("service.zmq.url").unwrap();
+        let service_zmq_timeout= self.settings.get_int("service.zmq.timeout").unwrap();
+        let router_zmq_url= self.settings.get_str("router.zmq.url").unwrap();
+
+        let service_channel_timeout_secs = self.settings.get_int("service.channel.timeout.secs").unwrap() as u64;
+        let service_channel_timeout_nenos = self.settings.get_int("service.channel.timeout.nanos").unwrap() as u32;
+        let service_channel_timeout = Duration::new(service_channel_timeout_secs, service_channel_timeout_nenos);
 
         let zctx = zmq::Context::new();
         let socket = zctx.socket(zmq::ROUTER).unwrap();
 
-        socket.bind(&zmq_url).unwrap();
+        socket.bind(&service_zmq_url).unwrap();
 
-        if !self.register_service(&zctx, &zmq_url, &router_url) {
+        if !self.register_service(&zctx, &service_zmq_url, &router_zmq_url) {
             panic!("rclient: Unable to register");
         }
 
         let mut poll_items = vec![socket.as_poll_item(zmq::POLLIN)];
 
         while self.ctx {
-            zmq::poll(&mut poll_items, zmq_timeout).unwrap();
+            zmq::poll(&mut poll_items, service_zmq_timeout).unwrap();
 
             if poll_items[0].get_revents() == zmq::POLLIN {
                 let mut zmsg = socket.recv_multipart(0).unwrap();
@@ -50,9 +57,20 @@ impl<'a> Service<'a>  {
 
                 socket.send_multipart(&zmsg, 0).unwrap();
             }
+
+            match rx.recv_timeout(service_channel_timeout) {
+                Ok(message) => {
+                    if message == signal_hook::SIGINT && message == signal_hook::SIGTERM {
+                        //
+                        self.ctx = false;
+                    }
+                },
+                Err(RecvTimeoutError::Timeout) => {},
+                Err(RecvTimeoutError::Disconnected) => { panic!("The channel was disconnected") },
+            }
         }
 
-        if !self.deregister_service(&zctx, &zmq_url, &router_url) {
+        if !self.deregister_service(&zctx, &service_zmq_url, &router_zmq_url) {
             panic!("rclient: Unable to deregister");
         }
 
@@ -111,11 +129,5 @@ impl<'a> Service<'a>  {
         }
 
         rval
-    }
-
-    #[allow(dead_code)]
-    pub fn stop(&mut self) -> ()
-    {
-        self.ctx = true;
     }
 }
