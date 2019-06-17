@@ -71,8 +71,11 @@ if(WITH_RCLIENT)
             INSTALL_COMMAND ""
             LOG_BUILD ON)
 
-    set(RCLIENT_ZMQ_URL "ipc:///tmp/rclient")
-    set(RCLIENT_ZMQ_TIMEOUT 5000)
+    set(SERVICE_ZMQ_URL "ipc:///tmp/rclient")
+    set(SERVICE_ZMQ_TIMEOUT 5000)
+    set(SERVICE_DAEMON_PIDFILE /tmp/rclient.pid)
+    set(SERVICE_CHANNEL_TIMEOUT_SECS 1)
+    set(SERVICE_CHANNEL_TIMEOUT_NANOS 0)
     set(ROUTER_ZMQ_URL "ipc:///tmp/router")
     configure_file(rclient/etc/rclient.yaml.in ${CMAKE_BINARY_DIR}/rclient.yaml)
 endif()
