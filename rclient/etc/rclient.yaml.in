@@ -1,5 +1,5 @@
 #
-#  Description: General configuration file
+#  Description: General configuration file of rclient
 #
 
 router:
@@ -13,6 +13,10 @@ service:
 
   daemon:
     pidfile:  @SERVICE_DAEMON_PIDFILE@
+
+  log:
+    path:     @SERVICE_LOG_PATH@
+    level:    @SERVICE_LOG_LEVEL@
 
   channel:
     timeout:

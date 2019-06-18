@@ -17,6 +17,8 @@ impl Service  {
     }
 
     pub fn run(&mut self, rx: Receiver<i32>) -> () {
+        info!("Running tha service...");
+
         let service_zmq_url = self.settings.get_str("service.zmq.url").unwrap();
         let service_zmq_timeout= self.settings.get_int("service.zmq.timeout").unwrap();
         let router_zmq_url= self.settings.get_str("router.zmq.url").unwrap();
@@ -31,7 +33,7 @@ impl Service  {
         socket.bind(&service_zmq_url).unwrap();
 
         if !self.register_service(&zctx, &service_zmq_url, &router_zmq_url) {
-            panic!("rclient: Unable to register");
+            panic!("rclient: Unable to register with {}", router_zmq_url);
         }
 
         let mut poll_items = vec![socket.as_poll_item(zmq::POLLIN)];
@@ -60,21 +62,24 @@ impl Service  {
 
             match rx.recv_timeout(service_channel_timeout) {
                 Ok(message) => {
-                    if message == signal_hook::SIGINT && message == signal_hook::SIGTERM {
-                        //
-                        self.ctx = false;
+                    match message {
+                        signal_hook::SIGINT => { self.ctx = false; info!("SIGINT was handled"); },
+                        signal_hook::SIGTERM => { self.ctx = false; info!("SIGTERM was handled"); },
+                        _ => unreachable!(),
                     }
                 },
                 Err(RecvTimeoutError::Timeout) => {},
-                Err(RecvTimeoutError::Disconnected) => { panic!("The channel was disconnected") },
+                Err(RecvTimeoutError::Disconnected) => { warn!("The channel was disconnected") },
             }
         }
 
         if !self.deregister_service(&zctx, &service_zmq_url, &router_zmq_url) {
-            panic!("rclient: Unable to deregister");
+            panic!("rclient: Unable to deregister from {}", router_zmq_url);
         }
 
         drop(socket);
+
+        info!("Stopping the service...");
     }
 
     fn register_service(&self, zctx: &zmq::Context, reg_url: &String, dest_url: &String) -> bool {
