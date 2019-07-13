@@ -86,7 +86,7 @@ int router::service::start()
                         falcon::reg_data_t reg_data;
                         if (reg_data.ParseFromString(request.payload()))
                         {
-                            auto svc_id = request.srv_id();
+                            auto svc_id = request.svc_id();
                             auto svc_url = reg_data.svc_url();
 
                             connections.insert(std::make_pair(svc_id, svc_url));
@@ -107,7 +107,7 @@ int router::service::start()
                         falcon::dereg_data_t dereg_data;
                         if (dereg_data.ParseFromString(request.payload()))
                         {
-                            auto svc_id = request.srv_id();
+                            auto svc_id = request.svc_id();
                             auto svc_url = dereg_data.svc_url();
 
                             auto connit = connections.find(svc_id);
@@ -144,7 +144,7 @@ int router::service::start()
 
                     default:
                     {
-                        auto srv = request.srv_id();
+                        auto srv = request.svc_id();
                         std::string url = get_connection(srv, connections);
 
                         if (!url.empty())

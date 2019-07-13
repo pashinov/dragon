@@ -17,7 +17,7 @@ impl Service  {
     }
 
     pub fn run(&mut self, rx: Receiver<i32>) -> () {
-        info!("Running tha service...");
+        info!("Running service...");
 
         let service_zmq_url = self.settings.get_str("service.zmq.url").unwrap();
         let service_zmq_timeout= self.settings.get_int("service.zmq.timeout").unwrap();
@@ -47,11 +47,11 @@ impl Service  {
                 let request: falcon::request_t = protobuf::parse_from_bytes(&zmsg[zmsg.len() - 1]).unwrap();
                 let mut response = falcon::response_t::new();
 
-                response.set_svc_id(request.srv_id);
+                response.set_svc_id(request.svc_id);
                 response.set_cmd_id(request.cmd_id);
                 response.set_branch(request.branch);
                 response.set_status(0);
-                response.set_resp("rclient: Hello, World!!!".to_string());
+                response.set_resp("rclient: ".to_string() + &request.payload);
 
                 // replace last element that contains data with created response
                 zmsg.remove(zmsg.len() - 1);
@@ -90,6 +90,7 @@ impl Service  {
 
         let mut request = falcon::request_t::new();
 
+        request.set_svc_id(falcon::service_id::RCLIENT_ID);
         request.set_cmd_id(falcon::command_id::CMD_REG_ID);
         request.set_payload(String::from_utf8(reg_data.write_to_bytes().unwrap()).unwrap());
 
@@ -117,6 +118,7 @@ impl Service  {
 
         let mut request = falcon::request_t::new();
 
+        request.set_svc_id(falcon::service_id::RCLIENT_ID);
         request.set_cmd_id(falcon::command_id::CMD_DEREG_ID);
         request.set_payload(String::from_utf8(dereg_data.write_to_bytes().unwrap()).unwrap());
 

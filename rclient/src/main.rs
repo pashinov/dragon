@@ -48,18 +48,18 @@ fn main() {
     let daemonize = Daemonize::new()
         .pid_file(settings.get_str("service.daemon.pidfile").unwrap())
         .working_directory("/")
-        .umask(0o777)
+        .umask(0o027)
         .privileged_action(|| info!("Starting the daemon..."));
 
     match daemonize.start() {
         Ok(_) => {
             let (tx, rx): (Sender<i32>, Receiver<i32>) = mpsc::channel();
 
-            // Running tha main thread
+            // Running main thread
             let mut srv = service::Service::new(settings);
             let thread = thread::spawn(move || srv.run(rx));
 
-            // Running the handler of signals
+            // Running handler of signals
             let signals = Signals::new(&[signal_hook::SIGINT, signal_hook::SIGTERM]).unwrap();
             for signal in &signals {
                 match signal {
