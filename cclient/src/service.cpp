@@ -49,11 +49,11 @@ int cclient::service::start()
                 std::string buf = zmsg.peekstr(zmsg.size() - 1);
                 if (packet.ParseFromString(buf))
                 {
-                    response.set_resp("cclient: Hello, World!!");
+                    response.set_resp("cclient response: " + packet.payload());
                     response.set_status(0);
                 }
 
-                response.set_svc_id(packet.srv_id());
+                response.set_svc_id(packet.svc_id());
                 response.set_cmd_id(packet.cmd_id());
                 response.set_branch(packet.branch());
 
@@ -87,6 +87,7 @@ bool cclient::service::register_service(zmq::context_t& zctx, const std::string&
     falcon::request_t request;
     falcon::response_t response;
 
+    request.set_svc_id(falcon::service_id::CCLIENT_ID);
     request.set_cmd_id(falcon::command_id::CMD_REG_ID);
     request.set_payload(reg_data.SerializeAsString());
 

@@ -27,7 +27,7 @@ enum command_id
 
 message request_t
 {
-    service_id srv_id   = 1;
+    service_id svc_id   = 1;
     command_id cmd_id   = 2;
     string branch       = 3;
     string payload      = 4;
