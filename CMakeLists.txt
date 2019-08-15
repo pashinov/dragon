@@ -42,7 +42,7 @@ include(ProjectDeps)
 include_directories(3rdparty/cppzmq)
 include_directories(3rdparty/json/include)
 
-add_subdirectory(2ndparty)
+add_subdirectory(3rdparty/proto)
 
 if(WITH_ROUTER)
     add_subdirectory(router)
@@ -53,11 +53,6 @@ if(WITH_CCLIENT)
 endif()
 
 if(WITH_RCLIENT)
-    # Generate protobuf .rs code
-    execute_process(
-            COMMAND protoc --rust_out=rclient/src 2ndparty/proto/falcon.proto
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-
     # Enable ExternalProject CMake module
     include(ExternalProject)
 
