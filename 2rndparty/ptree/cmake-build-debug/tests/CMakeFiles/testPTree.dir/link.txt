@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/testPTree.dir/base_node_test.o CMakeFiles/testPTree.dir/main.o  -o testPTree -lgtest -lgmock -lpthread 

@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/PropertyTree
+ptree/base_node.hpp
+../include/ptree/base_node.hpp
+ptree/traits.h
+../include/ptree/traits.h
+
+../include/ptree/base_node.h
+traits.h
+../include/ptree/traits.h
+optional
+-
+base_node.hpp
+../include/ptree/base_node.hpp
+
+../include/ptree/base_node.hpp
+base_node.h
+../include/ptree/base_node.h
+
+../include/ptree/traits.h
+map
+-
+
+/home/john/work/c++/falcon/2rndparty/ptree/tests/base_node_test.cpp
+gtest/gtest.h
+-
+PropertyTree
+-
+string
+-
+

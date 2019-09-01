@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/testproperty_tree.dir/main.o  -o testproperty_tree -lgtest -lgmock -lpthread 

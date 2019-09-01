@@ -1,0 +1,51 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_26292/fast 
+/usr/bin/make -f CMakeFiles/cmTC_26292.dir/build.make CMakeFiles/cmTC_26292.dir/build
+make[1]: вход в каталог «/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp»
+Building C object CMakeFiles/cmTC_26292.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_26292.dir/CheckSymbolExists.c.o   -c /home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_26292
+/opt/CLion-2019.2/clion-2019.2/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_26292.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_26292.dir/CheckSymbolExists.c.o  -o cmTC_26292 
+/usr/bin/ld: CMakeFiles/cmTC_26292.dir/CheckSymbolExists.c.o: in function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_26292.dir/build.make:87: cmTC_26292] Ошибка 1
+make[1]: выход из каталога «/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp»
+make: *** [Makefile:121: cmTC_26292/fast] Ошибка 2
+
+File /home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2d274/fast 
+/usr/bin/make -f CMakeFiles/cmTC_2d274.dir/build.make CMakeFiles/cmTC_2d274.dir/build
+make[1]: вход в каталог «/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp»
+Building C object CMakeFiles/cmTC_2d274.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_2d274.dir/CheckFunctionExists.c.o   -c /opt/CLion-2019.2/clion-2019.2/bin/cmake/linux/share/cmake-3.14/Modules/CheckFunctionExists.c
+Linking C executable cmTC_2d274
+/opt/CLion-2019.2/clion-2019.2/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2d274.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_2d274.dir/CheckFunctionExists.c.o  -o cmTC_2d274 -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_2d274.dir/build.make:87: cmTC_2d274] Ошибка 1
+make[1]: выход из каталога «/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/CMakeTmp»
+make: *** [Makefile:121: cmTC_2d274/fast] Ошибка 2
+
+

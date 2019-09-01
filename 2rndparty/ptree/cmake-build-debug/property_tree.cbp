@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="property_tree"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\tests\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="testproperty_tree">
+				<Option output="/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/testproperty_tree" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir=""/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DGTEST_LINKED_AS_SHARED_LIBRARY"/>
+					<Add directory="/home/john/work/c++/falcon/2rndparty/ptree/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 testproperty_tree"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="testproperty_tree/fast">
+				<Option output="/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/testproperty_tree" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir=""/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DGTEST_LINKED_AS_SHARED_LIBRARY"/>
+					<Add directory="/home/john/work/c++/falcon/2rndparty/ptree/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 testproperty_tree/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/include/PropertyTree">
+			<Option target="testproperty_tree"/>
+		</Unit>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/include/ptree/base_node.h">
+			<Option target="testproperty_tree"/>
+		</Unit>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/include/ptree/base_node.hpp">
+			<Option target="testproperty_tree"/>
+		</Unit>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/include/ptree/ptree_node.h">
+			<Option target="testproperty_tree"/>
+		</Unit>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/include/ptree/traits.h">
+			<Option target="testproperty_tree"/>
+		</Unit>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/tests/main.cpp">
+			<Option target="testproperty_tree"/>
+		</Unit>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/john/work/c++/falcon/2rndparty/ptree/tests/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tests\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

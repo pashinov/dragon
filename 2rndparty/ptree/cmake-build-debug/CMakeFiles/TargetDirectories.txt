@@ -1,0 +1,5 @@
+/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/CMakeFiles/rebuild_cache.dir
+/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/CMakeFiles/testPTree.dir
+/home/john/work/c++/falcon/2rndparty/ptree/cmake-build-debug/tests/CMakeFiles/edit_cache.dir
