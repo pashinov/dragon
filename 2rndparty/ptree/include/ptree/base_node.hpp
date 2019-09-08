@@ -5,6 +5,9 @@
 #include "base_node.h"
 #include "base_node_error.h"
 
+// std
+#include <algorithm>
+
 namespace ptree
 {
     template <typename Traits>
@@ -18,18 +21,51 @@ namespace ptree
     }
 
     template <typename Traits>
-    bool base_node<Traits>::set(const typename Traits::value_t& value)
+    bool base_node<Traits>::set_value(const typename Traits::value_t& value)
     {
-        bool was_set = false;
-        if (holds_value_ == holds_value_t::child) was_set = false;
-        else
+        bool was_set = false; // use NRVO optimization
+        if (holds_value_ != holds_value_t::child)
         {
             value_.reset();
             value_.emplace(value);
             holds_value_ = holds_value_t::value;
             was_set = true;
         }
+
         return was_set;
+    }
+
+    template <typename Traits>
+    typename Traits::node_ptr base_node<Traits>::add_child(const typename Traits::key_t& key)
+    {
+        typename Traits::node_ptr node = nullptr; // use NRVO optimization
+        if (holds_value_ != holds_value_t::value)
+        {
+            node = create_node(key);
+            if (node)
+            {
+                holds_value_ = holds_value_t::child;
+            }
+        }
+
+        return node;
+    }
+
+    template <typename Traits>
+    typename Traits::node_ptr base_node<Traits>::add_child
+            (const typename Traits::key_t& key, const typename Traits::value_t& value)
+    {
+        typename Traits::node_ptr node = nullptr; // use NRVO optimization
+        if (holds_value_ != holds_value_t::value)
+        {
+            node = create_node(key);
+            if (node)
+            {
+                node->set_value(value);
+                holds_value_ = holds_value_t::child;
+            }
+        }
+        return node;
     }
 
     template <typename Traits>
@@ -88,9 +124,44 @@ namespace ptree
     }
 
     template <typename Traits>
+    bool base_node<Traits>::exist(const typename Traits::node_ptr child) const
+    {
+        auto predicate = [&](const auto& pair) { return pair.second == child; };
+        return std::find_if(children_.cbegin(), children_.cend(), predicate) != children_.cend();
+    }
+
+    template <typename Traits>
+    bool base_node<Traits>::exist(const typename Traits::key_t& key) const
+    {
+        return children_.find(key) != children_.cend();
+    }
+
+    template <typename Traits>
+    void base_node<Traits>::clear()
+    {
+    }
+
+    template <typename Traits>
+    void base_node<Traits>::erase(const typename Traits::key_t& key)
+    {
+    }
+
+    template <typename Traits>
     typename Traits::node_ptr base_node<Traits>::root()
     {
         return new base_node<Traits>(typename Traits::key_t());
+    }
+
+    template <typename Traits>
+    typename Traits::node_ptr base_node<Traits>::create_node(const typename Traits::key_t& key)
+    {
+        typename Traits::node_ptr node = nullptr;
+        if (!exist(key))
+        {
+            node = new base_node<Traits>(key, this);
+            children_.insert(std::pair<typename Traits::key_t, typename Traits::node_ptr>(key, node));
+        }
+        return node;
     }
 
 } //namespace

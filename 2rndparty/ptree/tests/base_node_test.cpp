@@ -97,11 +97,45 @@ TEST_F(base_node_test, set_value)
     std::uint64_t value = 5;
 
     // Act
-    root_->set(std::uint64_t(5));
+    root_->set_value(std::uint64_t(5));
 
     // Assert
     ASSERT_FALSE(root_->empty());
     ASSERT_TRUE(root_->has_value());
     ASSERT_FALSE(root_->has_children());
     ASSERT_EQ(std::get<std::uint64_t>(root_->value()), value);
+}
+
+TEST_F(base_node_test, set_node)
+{
+    // Arrange
+    base_node_traits_t::key_t key1 = { "child1" };
+    base_node_traits_t::key_t key2 = { "child2" };
+
+    // Act
+    base_node_traits_t::node_ptr child1 = root_->add_child(key1);
+    base_node_traits_t::node_ptr child2 = root_->add_child(key2, std::uint64_t(10));
+
+    // Assert
+    ASSERT_TRUE(child1);
+    ASSERT_TRUE(child2);
+
+    ASSERT_EQ(root_.get(), child1->parent());
+    ASSERT_EQ(root_.get(), child2->parent());
+
+    ASSERT_EQ(child1->key(), key1);
+    ASSERT_EQ(child2->key(), key2);
+
+    ASSERT_TRUE(child1->empty());
+    ASSERT_FALSE(child2->empty());
+
+    ASSERT_FALSE(child1->has_value());
+    ASSERT_TRUE(child2->has_value());
+
+    ASSERT_FALSE(child1->has_children());
+    ASSERT_FALSE(child2->has_children());
+
+    ASSERT_EQ(root_->child(key1), child1);
+    ASSERT_EQ(root_->child(key2), child2);
+    ASSERT_FALSE(root_->child(base_node_traits_t::key_t("child3")));
 }

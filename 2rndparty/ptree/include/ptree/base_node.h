@@ -16,7 +16,10 @@ namespace ptree
     public:
         ~base_node();
 
-        bool set(const typename Traits::value_t& value);
+        bool set_value(const typename Traits::value_t& value);
+        
+        typename Traits::node_ptr add_child(const typename Traits::key_t& key);
+        typename Traits::node_ptr add_child(const typename Traits::key_t& key, const typename Traits::value_t& value);
 
         [[nodiscard]] bool empty() const;
         [[nodiscard]] bool has_children() const;
@@ -34,6 +37,12 @@ namespace ptree
 
         typename Traits::node_ptr child(const typename Traits::key_t& key);
 
+        bool exist(const typename Traits::node_ptr child) const;
+        bool exist(const typename Traits::key_t& child) const;
+
+        void clear();
+        void erase(const typename Traits::key_t& key);
+
         static typename Traits::node_ptr root();
 
     protected:
@@ -41,6 +50,8 @@ namespace ptree
 
     private:
         enum class holds_value_t : std::uint8_t { empty, value, child };
+
+        typename Traits::node_ptr create_node(const typename Traits::key_t& key);
 
     private:
         typename Traits::key_t key_                    { typename Traits::key_t() };
