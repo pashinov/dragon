@@ -1,2 +1,5 @@
 /.idea
 /cmake-build-*
+2rndparty/ptree/.idea/
+2rndparty/ptree/cmake-build-debug
+

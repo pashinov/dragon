@@ -1,2 +1,3 @@
 #include "ptree/base_node.hpp"
 #include "ptree/traits.h"
+#include "ptree/ptree_node.h"
