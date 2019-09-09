@@ -35,6 +35,8 @@ namespace ptree
         return was_set;
     }
 
+
+    // TODO: for return value can be use return_type<V,E>
     template <typename Traits>
     typename Traits::node_ptr base_node<Traits>::add_child(const typename Traits::key_t& key)
     {
@@ -51,6 +53,7 @@ namespace ptree
         return node;
     }
 
+    // TODO: for return value can be use return_type<V,E>
     template <typename Traits>
     typename Traits::node_ptr base_node<Traits>::add_child
             (const typename Traits::key_t& key, const typename Traits::value_t& value)
@@ -58,10 +61,9 @@ namespace ptree
         typename Traits::node_ptr node = nullptr; // use NRVO optimization
         if (holds_value_ != holds_value_t::value)
         {
-            node = create_node(key);
+            node = create_node(key, value);
             if (node)
             {
-                node->set_value(value);
                 holds_value_ = holds_value_t::child;
             }
         }
@@ -139,11 +141,36 @@ namespace ptree
     template <typename Traits>
     void base_node<Traits>::clear()
     {
+        switch (holds_value_)
+        {
+        case holds_value_t::value:
+        {
+            value_.reset();
+            holds_value_ = holds_value_t::empty;
+            break;
+        }
+        case holds_value_t::child:
+        {
+            for (auto it = children_.begin(); it != children_; ++it)
+            {
+                if (it->second) delete it->second;
+            }
+            holds_value_ = holds_value_t::empty;
+            break;
+        }
+        case holds_value_t::empty:
+        default:
+            break;
+        }
     }
 
     template <typename Traits>
     void base_node<Traits>::erase(const typename Traits::key_t& key)
     {
+        if (auto it = children_.find(key); it != children_.cend())
+        {
+            it = children_.erise(it);
+        }
     }
 
     template <typename Traits>
@@ -159,7 +186,21 @@ namespace ptree
         if (!exist(key))
         {
             node = new base_node<Traits>(key, this);
-            children_.insert(std::pair<typename Traits::key_t, typename Traits::node_ptr>(key, node));
+            children_.emplace(key, node);
+        }
+        return node;
+    }
+
+    template <typename Traits>
+    typename Traits::node_ptr base_node<Traits>::create_node(const typename Traits::key_t& key,
+            const typename Traits::value_t& value)
+    {
+        typename Traits::node_ptr node = nullptr;
+        if (!exist(key))
+        {
+            node = new base_node<Traits>(key, this);
+            node->set_value(value);
+            children_.emplace(key, node);
         }
         return node;
     }

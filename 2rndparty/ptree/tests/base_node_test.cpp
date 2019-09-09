@@ -114,7 +114,7 @@ TEST_F(base_node_test, set_node)
 
     // Act
     base_node_traits_t::node_ptr child1 = root_->add_child(key1);
-    base_node_traits_t::node_ptr child2 = root_->add_child(key2, std::uint64_t(10));
+    base_node_traits_t::node_ptr child2 = root_->add_child(key2, { std::uint64_t(10) });
 
     // Assert
     ASSERT_TRUE(child1);

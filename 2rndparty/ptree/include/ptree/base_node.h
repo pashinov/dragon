@@ -6,7 +6,6 @@
 
 // std
 #include <optional>
-#include <exception>
 
 namespace ptree
 {
@@ -52,6 +51,7 @@ namespace ptree
         enum class holds_value_t : std::uint8_t { empty, value, child };
 
         typename Traits::node_ptr create_node(const typename Traits::key_t& key);
+        typename Traits::node_ptr create_node(const typename Traits::key_t& key, const typename Traits::value_t& value);
 
     private:
         typename Traits::key_t key_                    { typename Traits::key_t() };
