@@ -13,14 +13,13 @@ option(WITH_ASAN "Build with Address Sanitizer" OFF)
 option(WITH_TSAN "Build with Threads Sanitizer" OFF)
 option(WITH_MSAN "Build with Memory Sanitizer"  OFF)
 
-set(AMP_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+set(FALCON_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 #----------------------------------------------------------
 # Platform targets
 #----------------------------------------------------------
 option(WITH_ROUTER          "Build ROUTER"          ON)
-option(WITH_CCLIENT         "Build CCLIENT"         ON)
-option(WITH_RCLIENT         "Build RCLIENT"         ON)
+option(WITH_SYSINFO_SVC     "Build SYSINFO-SVC"     ON)
 
 if(WITH_TSAN)
     set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -fsanitize=thread -g -O2 -fPIC -pie")
@@ -48,33 +47,8 @@ if(WITH_ROUTER)
     add_subdirectory(router)
 endif()
 
-if(WITH_CCLIENT)
-    add_subdirectory(cclient)
-endif()
-
-if(WITH_RCLIENT)
-    # Enable ExternalProject CMake module
-    include(ExternalProject)
-
-    # Add rclient as a CMake Rust target
-    ExternalProject_Add(
-            rclient
-            DOWNLOAD_COMMAND ""
-            CONFIGURE_COMMAND ""
-            BUILD_COMMAND cargo build COMMAND cargo build --release
-            BINARY_DIR "${CMAKE_SOURCE_DIR}/rclient"
-            INSTALL_COMMAND ""
-            LOG_BUILD ON)
-
-    set(SERVICE_ZMQ_URL "ipc:///tmp/rclient")
-    set(SERVICE_ZMQ_TIMEOUT 5000)
-    set(SERVICE_DAEMON_PIDFILE /tmp/rclient.pid)
-    set(SERVICE_LOG_PATH /tmp/rclient.log)
-    set(SERVICE_LOG_LEVEL INFO)
-    set(SERVICE_CHANNEL_TIMEOUT_SECS 1)
-    set(SERVICE_CHANNEL_TIMEOUT_NANOS 0)
-    set(ROUTER_ZMQ_URL "ipc:///tmp/router")
-    configure_file(rclient/etc/rclient.yaml.in ${CMAKE_BINARY_DIR}/rclient.yaml)
+if(WITH_SYSINFO_SVC)
+    add_subdirectory(sysinfo-svc)
 endif()
 
 if(WITH_TESTS)
