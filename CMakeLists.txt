@@ -41,7 +41,7 @@ include(ProjectDeps)
 include_directories(3rdparty/cppzmq)
 include_directories(3rdparty/json/include)
 
-add_subdirectory(3rdparty/proto)
+add_subdirectory(2ndparty/proto)
 
 if(WITH_ROUTER)
     add_subdirectory(router)
