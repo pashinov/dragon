@@ -43,7 +43,7 @@ namespace ptree
         typename Traits::node_ptr node = nullptr; // use NRVO optimization
         if (holds_value_ != holds_value_t::value)
         {
-            node = create_node(key);
+            node = create_child(key);
             if (node)
             {
                 holds_value_ = holds_value_t::child;
@@ -61,7 +61,7 @@ namespace ptree
         typename Traits::node_ptr node = nullptr; // use NRVO optimization
         if (holds_value_ != holds_value_t::value)
         {
-            node = create_node(key, value);
+            node = create_child(key, value);
             if (node)
             {
                 holds_value_ = holds_value_t::child;
@@ -139,6 +139,12 @@ namespace ptree
     }
 
     template <typename Traits>
+    void base_node<Traits>::value_reset()
+    {
+        if (holds_value_ == holds_value_t::value) value_.reset();
+    }
+
+    template <typename Traits>
     void base_node<Traits>::clear()
     {
         switch (holds_value_)
@@ -186,7 +192,7 @@ namespace ptree
     }
 
     template <typename Traits>
-    typename Traits::node_ptr base_node<Traits>::create_node(const typename Traits::key_t& key)
+    typename Traits::node_ptr base_node<Traits>::create_child(const typename Traits::key_t& key)
     {
         typename Traits::node_ptr node = nullptr;
         if (!exist(key))
@@ -198,8 +204,8 @@ namespace ptree
     }
 
     template <typename Traits>
-    typename Traits::node_ptr base_node<Traits>::create_node(const typename Traits::key_t& key,
-            const typename Traits::value_t& value)
+    typename Traits::node_ptr base_node<Traits>::create_child(const typename Traits::key_t& key,
+                                                              const typename Traits::value_t& value)
     {
         typename Traits::node_ptr node = nullptr;
         if (!exist(key))
