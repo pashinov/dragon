@@ -3,6 +3,8 @@
 
 // internal
 #include "notification_handle.h"
+#include "storage_interface.h"
+#include "objects_storage.h"
 
 // std
 #include <functional>
@@ -15,7 +17,14 @@ public:
 
 public:
     notification_handle connect(const callback& f) const;
+
+    template <typename Object, typename Callback>
+    notification_handle connect(const Object& object, const Callback& callback) const;
+
     void notify(const Args& ... args);
+
+private:
+    objects_storage<Args...> storage_;
 };
 
 #endif // NOTIFICATION_OBJECT_H
