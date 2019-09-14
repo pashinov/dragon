@@ -1,2 +1,2 @@
-add_subdirectory(notification)
+add_subdirectory(notification_object)
 add_subdirectory(ptree)

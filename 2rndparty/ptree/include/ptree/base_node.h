@@ -42,6 +42,8 @@ namespace ptree
         void clear();
         void erase(const typename Traits::key_t& key);
 
+        const typename Traits::value_changed_t& value_changed() const;
+
         static typename Traits::node_ptr root();
 
     protected:
@@ -59,6 +61,8 @@ namespace ptree
         typename Traits::node_ptr parent_              { nullptr };
         typename Traits::children_t children_          { typename Traits::children_t() };
         holds_value_t holds_value_                     { holds_value_t::empty };
+
+        typename Traits::value_changed_t value_changed_;
     };
 
 } //namespace

@@ -106,7 +106,7 @@ TEST_F(base_node_test, set_value)
     ASSERT_EQ(std::get<std::uint64_t>(root_->value()), value);
 }
 
-TEST_F(base_node_test, set_node)
+TEST_F(base_node_test, add_children)
 {
     // Arrange
     base_node_traits_t::key_t key1 = { "child1" };
@@ -138,4 +138,10 @@ TEST_F(base_node_test, set_node)
     ASSERT_EQ(root_->child(key1), child1);
     ASSERT_EQ(root_->child(key2), child2);
     ASSERT_FALSE(root_->child(base_node_traits_t::key_t("child3")));
+}
+
+TEST_F(base_node_test, clear)
+{
+    root_->add_child(base_node_traits_t::key_t("child1"));
+    root_->add_child(base_node_traits_t::key_t("child2"));
 }

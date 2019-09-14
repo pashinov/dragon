@@ -1,6 +1,9 @@
 #ifndef TRAITS_H
 #define TRAITS_H
 
+// notification_object
+#include <NotificationObject>
+
 // std
 #include <map>
 
@@ -19,6 +22,7 @@ namespace ptree
         using key_t = Key;
         using value_t = Value;
         using children_t = std::map<key_t, node_ptr>;
+        using value_changed_t = notification_object<value_t>;
 
     public:
         static node_ptr root();

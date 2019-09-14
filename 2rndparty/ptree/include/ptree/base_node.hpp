@@ -174,6 +174,12 @@ namespace ptree
     }
 
     template <typename Traits>
+    const typename Traits::value_changed_t& base_node<Traits>::value_changed() const
+    {
+        return value_changed_;
+    }
+
+    template <typename Traits>
     typename Traits::node_ptr base_node<Traits>::root()
     {
         return new base_node<Traits>(typename Traits::key_t());
