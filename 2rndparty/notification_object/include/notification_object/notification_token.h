@@ -2,21 +2,21 @@
 #define NOTIFICATION_TOKEN_H
 
 // forward declaration class
-class storage_interface;
-using storage_ptr = storage_interface*;
+class storage_action;
+using storage_action_ptr = storage_action*;
 
 class notification_token
 {
 public:
-    explicit notification_token(storage_ptr base) : base_(base) { }
+    explicit notification_token(storage_action_ptr storage);
 
-    void reset(storage_ptr base) { base_ = base; }
+    void reset(storage_action_ptr storage);
 
     [[nodiscard]]
-    storage_ptr get() const { return base_; }
+    storage_action_ptr get() const;
 
 private:
-    storage_ptr base_;
+    storage_action_ptr storage_;
 };
 
 using notification_token_ptr = notification_token*;

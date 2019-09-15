@@ -3,20 +3,17 @@
 
 // internal
 #include "notification_token.h"
-#include "storage_interface.h"
+#include "storage_action.h"
 
 class notification_handle
 {
 public:
-    explicit notification_handle(const notification_token& token) : token_(token) { }
+    explicit notification_handle(notification_token_ptr token);
 
-    void disconnect()
-    {
-        token_.get()->remove(token_);
-    }
+    void disconnect();
 
 private:
-    notification_token token_;
+    notification_token_ptr token_;
 };
 
 #endif // NOTIFICATION_HANDLE_H

@@ -3,8 +3,8 @@
 
 // internal
 #include "notification_handle.h"
-#include "storage_interface.h"
-#include "objects_storage.h"
+#include "storage_action.h"
+#include "callbacks_storage.h"
 
 // std
 #include <functional>
@@ -24,9 +24,10 @@ public:
     void notify(const Args& ... args);
 
 private:
-    objects_storage<Args...> storage_;
+    callbacks_storage<Args...> storage_;
 };
 
 #endif // NOTIFICATION_OBJECT_H
 
+// implementation
 #include "notification_object.hpp"

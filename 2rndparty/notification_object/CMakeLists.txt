@@ -7,11 +7,12 @@ add_compile_options(-pedantic -fPIC -Wall -Wextra -fabi-version=10)
 
 # Library target
 add_library(${PROJECT_NAME} INTERFACE)
-# target_link_libraries (${PROJECT_NAME} INTERFACE notification)
 
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-file(GLOB_RECURSE SOURCES "./include/*")
-target_sources(${PROJECT_NAME} INTERFACE ${SOURCES})
+file(GLOB_RECURSE HEADERS "./include/*")
+file(GLOB_RECURSE SOURCES "./sources/*.cpp")
+
+target_sources(${PROJECT_NAME} INTERFACE ${HEADERS} ${SOURCES})
 
 add_subdirectory(tests)

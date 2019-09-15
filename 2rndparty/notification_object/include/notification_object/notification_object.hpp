@@ -6,7 +6,8 @@
 template <typename ...Args>
 notification_handle notification_object<Args...>::connect(const notification_object::callback& f) const
 {
-    return handle(*storage_.add(f));
+    // RVO optimization
+    return { *storage_.add(f) };
 }
 
 template <typename ...Args>
