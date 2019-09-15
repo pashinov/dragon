@@ -10,10 +10,10 @@
 template <typename ...Args>
 callbacks_storage<Args...>::~callbacks_storage()
 {
-    for(auto it = callbacks_.begin(); it != callbacks_.end(); ++it)
+    for(auto it = callbacks_.begin(); it != callbacks_.end();)
     {
         notification_token_ptr token = it->first;
-        callbacks_.erase(it);
+        it = callbacks_.erase(it);
         delete token;
     }
 }
@@ -41,7 +41,7 @@ void callbacks_storage<Args...>::notify(const Args& ...args)
 {
     for (const auto& item : callbacks_)
     {
-        item.sencond(args...);
+        item.second(args...);
     }
 }
 

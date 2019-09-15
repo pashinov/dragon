@@ -4,15 +4,14 @@
 #include "notification_object.h"
 
 template <typename ...Args>
-notification_handle notification_object<Args...>::connect(const notification_object::callback& f) const
+notification_handle notification_object<Args...>::connect(const notification_object::callback& f)
 {
-    // RVO optimization
-    return { *storage_.add(f) };
+    return notification_handle { storage_.add(f) };
 }
 
 template <typename ...Args>
 template <typename Object, typename Callback>
-notification_handle notification_object<Args...>::connect(const Object& object, const Callback& callback) const
+notification_handle notification_object<Args...>::connect(const Object& object, const Callback& callback)
 {
     // using SFINAE to validate templates arguments
     static_assert(std::is_invocable_v<Callback, Object*, Args...>, "Error, callback is not invocable with given arg");
