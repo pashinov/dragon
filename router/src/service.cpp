@@ -144,8 +144,8 @@ int router::service::start()
 
                     default:
                     {
-                        auto srv = request.svc_id();
-                        std::string url = get_connection(srv, connections);
+                        auto svc = request.svc_id();
+                        std::string url = get_connection(svc, connections);
 
                         if (!url.empty())
                         {
@@ -186,12 +186,12 @@ int router::service::start()
     return 0;
 }
 
-std::string router::service::get_connection(const std::uint32_t& srv_id, const std::unordered_map<std::uint32_t, std::string>& conn)
+std::string router::service::get_connection(const std::uint32_t& svc_id, const std::unordered_map<std::uint32_t, std::string>& conn)
 {
     std::string url;
-    if (conn.find(srv_id) != conn.end())
+    if (conn.find(svc_id) != conn.end())
     {
-        url = conn.at(srv_id);
+        url = conn.at(svc_id);
     }
     return url;
 }

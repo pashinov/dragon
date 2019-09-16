@@ -9,7 +9,7 @@
 
 #include "falcon.pb.h"
 
-namespace cclient
+namespace sysinfo_svc
 {
     class service
     {

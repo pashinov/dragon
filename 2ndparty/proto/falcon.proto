@@ -7,10 +7,7 @@ package falcon;
 
 enum service_id
 {
-    CCLIENT_ID          = 0;    // c++ client
-    RCLIENT_ID          = 1;    // rust client
-    GCLIENT_ID          = 2;    // golang client
-    PCLIENT_ID          = 3;    // python client
+    SYSINFO_SVC_ID      = 0;    // service for getting system information about device
 }
 
 enum command_id
@@ -18,7 +15,7 @@ enum command_id
     CMD_REG_ID          = 0;
     CMD_DEREG_ID        = 1;
     CMD_SET_ID          = 2;
-    CMD_PRINT_ID        = 3;
+    CMD_GET_ID          = 3;
 }
 
 ///=============================================

@@ -29,7 +29,7 @@ namespace router
         service& operator=(service&&) = delete;
 
         // get service's url
-        std::string get_connection(const std::uint32_t& srv_id, const std::unordered_map<std::uint32_t, std::string>& conn);
+        std::string get_connection(const std::uint32_t& svc_id, const std::unordered_map<std::uint32_t, std::string>& conn);
 
         // context
         bool ctx_;

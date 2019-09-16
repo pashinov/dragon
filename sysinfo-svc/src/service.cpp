@@ -2,16 +2,16 @@
 
 #include "service.hpp"
 
-cclient::service::service() : ctx_(true)
+sysinfo_svc::service::service() : ctx_(true)
 {
 }
 
-void cclient::service::stop()
+void sysinfo_svc::service::stop()
 {
     ctx_ = false;
 }
 
-int cclient::service::start()
+int sysinfo_svc::service::start()
 {
     zmq::context_t zctx;
     zmq::socket_t socket(zctx, zmq::socket_type::router);
@@ -19,7 +19,7 @@ int cclient::service::start()
     zmq::multipart_t zmsg;
 
     // TODO: config file
-    std::string url = "ipc:///tmp/cclient";
+    std::string url = "ipc:///tmp/sysinfo-svc";
     int timeout     = 5000;
 
     std::string router_url = "ipc:///tmp/router";
@@ -30,7 +30,7 @@ int cclient::service::start()
     // register service
     if (!register_service(zctx, url, router_url))
     {
-        throw std::runtime_error("cclient: Unable to register");
+        throw std::runtime_error("sysinfo-svc: Unable to register");
     }
 
     std::vector<zmq::pollitem_t> poller = { { socket, 0, ZMQ_POLLIN, 0 } };
@@ -49,7 +49,7 @@ int cclient::service::start()
                 std::string buf = zmsg.peekstr(zmsg.size() - 1);
                 if (packet.ParseFromString(buf))
                 {
-                    response.set_resp("cclient response: " + packet.payload());
+                    response.set_resp("sysinfo-svc response: " + packet.payload());
                     response.set_status(0);
                 }
 
@@ -71,13 +71,13 @@ int cclient::service::start()
     // deregister service
     if (!deregister_service(zctx, url, router_url))
     {
-        throw std::runtime_error("cclient: Unable to deregister");
+        throw std::runtime_error("sysinfo-svc: Unable to deregister");
     }
 
     return 0;
 }
 
-bool cclient::service::register_service(zmq::context_t& zctx, const std::string& reg_url, const std::string& dest_url)
+bool sysinfo_svc::service::register_service(zmq::context_t& zctx, const std::string& reg_url, const std::string& dest_url)
 {
     bool rval = false;
 
@@ -87,7 +87,7 @@ bool cclient::service::register_service(zmq::context_t& zctx, const std::string&
     falcon::request_t request;
     falcon::response_t response;
 
-    request.set_svc_id(falcon::service_id::CCLIENT_ID);
+    request.set_svc_id(falcon::service_id::SYSINFO_SVC_ID);
     request.set_cmd_id(falcon::command_id::CMD_REG_ID);
     request.set_payload(reg_data.SerializeAsString());
 
@@ -115,7 +115,7 @@ bool cclient::service::register_service(zmq::context_t& zctx, const std::string&
     return rval;
 }
 
-bool cclient::service::deregister_service(zmq::context_t& zctx, const std::string& dereg_url, const std::string& dest_url)
+bool sysinfo_svc::service::deregister_service(zmq::context_t& zctx, const std::string& dereg_url, const std::string& dest_url)
 {
     bool rval = false;
 

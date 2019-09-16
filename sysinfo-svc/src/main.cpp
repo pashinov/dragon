@@ -5,6 +5,6 @@
 int main(int arcv, char* argv[])
 {
     // TODO: daemonize
-    auto srv = std::make_unique<cclient::service>();
+    auto srv = std::make_unique<sysinfo_svc::service>();
     return srv->start();
 }
