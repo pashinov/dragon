@@ -19,7 +19,7 @@ public:
     notification_handle connect(const callback& f);
 
     template <typename Object, typename Callback>
-    notification_handle connect(const Object& object, const Callback& callback);
+    notification_handle connect(Object* object, const Callback& callback);
 
     void notify(const Args& ... args);
 
