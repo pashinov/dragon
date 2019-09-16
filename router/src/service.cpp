@@ -1,9 +1,11 @@
-#include <iostream>
+// 3rdparty includes
 #include <zmq.hpp>
 
-#include "falcon.pb.h"
-#include "service.hpp"
+// 2ndparty includes
+#include <falcon.pb.h>
 
+// project includes
+#include <service.hpp>
 
 void router::service::stop()
 {

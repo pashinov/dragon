@@ -1,6 +1,8 @@
+// 3rdparty includes
 #include <zmq_addon.hpp>
 
-#include "service.hpp"
+// project includes
+#include <service.hpp>
 
 sysinfo_svc::service::service() : ctx_(true)
 {

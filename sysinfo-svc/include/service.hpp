@@ -2,12 +2,14 @@
 // Created by apashinov on 08/04/19
 //
 
-#ifndef AMP_CCLIENT_SERVICE_HPP
-#define AMP_CCLIENT_SERVICE_HPP
+#ifndef FLACON_SYSINFO_SERVICE_HPP
+#define FLACON_SYSINFO_SERVICE_HPP
 
+// 3rdparty includes
 #include <zmq.hpp>
 
-#include "falcon.pb.h"
+// 2ndparty includes
+#include <falcon.pb.h>
 
 namespace sysinfo_svc
 {
@@ -40,4 +42,4 @@ namespace sysinfo_svc
     };
 }
 
-#endif // AMP_CCLIENT_SERVICE_HPP
+#endif // FLACON_SYSINFO_SERVICE_HPP

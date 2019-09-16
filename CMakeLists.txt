@@ -1,19 +1,18 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(msplatform VERSION 1.0.0)
+project(falcon VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-option(WITH_TESTS "Enable Unit Tests" OFF)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 option(WITH_ASAN "Build with Address Sanitizer" OFF)
 option(WITH_TSAN "Build with Threads Sanitizer" OFF)
 option(WITH_MSAN "Build with Memory Sanitizer"  OFF)
 
-set(FALCON_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+option(WITH_TESTS "Enable Unit Tests" OFF)
 
 #----------------------------------------------------------
 # Platform targets
@@ -39,9 +38,10 @@ endif()
 include(ProjectDeps)
 
 include_directories(3rdparty/cppzmq)
+include_directories(3rdparty/spdlog/include)
 include_directories(3rdparty/json/include)
 
-add_subdirectory(2ndparty/proto)
+add_subdirectory(2ndparty)
 
 if(WITH_ROUTER)
     add_subdirectory(router)

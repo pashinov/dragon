@@ -2,9 +2,10 @@
 // Created by apashinov on 08/04/19
 //
 
-#ifndef AMP_BROKER_SERVICE_HPP
-#define AMP_BROKER_SERVICE_HPP
+#ifndef FALCON_ROUTER_SERVICE_HPP
+#define FALCON_ROUTER_SERVICE_HPP
 
+// system includes
 #include <unordered_map>
 
 namespace router
@@ -36,4 +37,4 @@ namespace router
     };
 }
 
-#endif // AMP_BROKER_SERVICE_HPP
+#endif // FALCON_ROUTER_SERVICE_HPP

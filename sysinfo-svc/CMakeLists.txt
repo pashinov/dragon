@@ -17,7 +17,7 @@ set(SVC_SRC_MAIN_FILES
         )
 
 include_directories(include)
-include_directories(${FALCON_BINARY_DIR}/common)
+include_directories(${CMAKE_SOURCE_DIR}/2ndparty/include)
 
 add_executable(${PROJECT_NAME} ${SVC_HDR_FILES} ${SVC_SRC_FILES} ${SVC_SRC_MAIN_FILES})
-target_link_libraries(${PROJECT_NAME} PRIVATE proto -lzmq)
+target_link_libraries(${PROJECT_NAME} PRIVATE proto -lzmq falcon-log)
