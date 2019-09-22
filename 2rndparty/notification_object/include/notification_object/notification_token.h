@@ -9,6 +9,7 @@ class notification_token
 {
 public:
     explicit notification_token(storage_action_ptr storage);
+    ~notification_token();
 
     void reset(storage_action_ptr storage);
 

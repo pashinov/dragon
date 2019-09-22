@@ -1,7 +1,12 @@
 #ifndef NOTIFICATION_OBJECT_HPP
 #define NOTIFICATION_OBJECT_HPP
 
+
+// internal
 #include "notification_object.h"
+
+// std
+#include <cassert>
 
 template <typename ...Args>
 notification_handle notification_object<Args...>::connect(const notification_object::callback& f)
@@ -13,6 +18,7 @@ template <typename ...Args>
 template <typename Object, typename Callback>
 notification_handle notification_object<Args...>::connect(Object* object, const Callback& callback)
 {
+    assert(object);
     // using SFINAE to validate templates arguments
     static_assert(std::is_invocable_v<Callback, Object*, Args...>, "Error, callback is not invocable with given arg");
 
