@@ -29,6 +29,7 @@ namespace ptree
             value_.reset();
             value_.emplace(value);
             holds_value_ = holds_value_t::value;
+            value_changed_.notify(value_.value());
             was_set = true;
         }
 
