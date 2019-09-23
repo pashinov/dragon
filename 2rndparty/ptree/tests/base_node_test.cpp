@@ -137,11 +137,56 @@ TEST_F(base_node_test, add_children)
 
     ASSERT_EQ(root_->child(key1), child1);
     ASSERT_EQ(root_->child(key2), child2);
-    ASSERT_FALSE(root_->child(base_node_traits_t::key_t("child3")));
+    ASSERT_EQ(root_->child(base_node_traits_t::key_t("child3")), nullptr);
 }
 
-TEST_F(base_node_test, clear)
+TEST_F(base_node_test, clear_children)
 {
-    root_->add_child(base_node_traits_t::key_t("child1"));
-    root_->add_child(base_node_traits_t::key_t("child2"));
+    // Arrange
+    base_node_traits_t::key_t key1 = { "child1" };
+    base_node_traits_t::key_t key2 = { "child2" };
+
+    root_->add_child(key1);
+    root_->add_child(key2);
+
+    // Act
+    root_->clear();
+
+    // Assert
+    ASSERT_TRUE(root_->empty());
+    ASSERT_FALSE(root_->has_children());
+    ASSERT_FALSE(root_->has_value());
+    ASSERT_EQ(root_->child(key1), nullptr);
+    ASSERT_EQ(root_->child(key2), nullptr);
+    ASSERT_FALSE(root_->exist(key1));
+    ASSERT_FALSE(root_->exist(key2));
+}
+
+TEST_F(base_node_test, clear_value)
+{
+    // Arrange
+    bool was_set_value = root_->set_value(std::int64_t(5));
+
+    // Act
+    root_->clear();
+
+    // Assert
+    ASSERT_TRUE(was_set_value);
+    ASSERT_TRUE(root_->empty());
+    ASSERT_FALSE(root_->has_value());
+    ASSERT_FALSE(root_->has_children());
+    try
+    {
+        auto value = root_->value();
+        UNUSED(value);
+        FAIL() << "will be exception: base_node_error";
+    }
+    catch(const ptree::base_node_error& ex)
+    {
+        ASSERT_EQ(ex.type(), ptree::base_node_error::error_type::value_not_exist);
+    }
+    catch(...)
+    {
+        FAIL() << "other exception type";
+    }
 }

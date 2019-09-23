@@ -158,9 +158,11 @@ namespace ptree
         }
         case holds_value_t::child:
         {
-            for (auto it = children_.begin(); it != children_; ++it)
+            for (auto it = children_.begin(); it != children_.end();)
             {
-                if (it->second) delete it->second;
+                auto node = it->second;
+                it = children_.erase(it);
+                if (node) delete node;
             }
             holds_value_ = holds_value_t::empty;
             break;
