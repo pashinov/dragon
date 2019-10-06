@@ -1,8 +1,12 @@
 // gtest
 #include <gtest/gtest.h>
 
+// gmock
+#include <gmock/gmock.h>
+
 // internal
 #include <PropertyTree>
+#include <NotificationObject>
 #include "ptree/base_node_error.h"
 
 // std
@@ -191,4 +195,29 @@ TEST_F(base_node_test, clear_value)
     {
         FAIL() << "other exception type";
     }
+}
+
+class notification_mock
+{
+public:
+    MOCK_METHOD1(on_value_changed_mock, void(const base_node_test::base_node_traits_t::value_t&));
+
+    void on_value_changed(const base_node_test::base_node_traits_t::value_t& new_value)
+    {
+        this->on_value_changed_mock(new_value);
+    }
+};
+
+TEST_F(base_node_test, value_changed)
+{
+    // Arrange
+    notification_mock mock;
+    std::uint64_t value = 5;
+    root_->value_changed().connect(&mock, &notification_mock::on_value_changed);
+
+    // Assert
+    EXPECT_CALL(mock, on_value_changed_mock(base_node_test::base_node_test::base_node_value_t(value))).Times(1);
+
+    // Act
+    root_->set_value(value);
 }

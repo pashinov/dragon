@@ -180,7 +180,7 @@ namespace ptree
     }
 
     template <typename Traits>
-    const notification_object<typename Traits::value_t>& base_node<Traits>::value_changed() const
+    notification_object<typename Traits::value_t>& base_node<Traits>::value_changed()
     {
         return value_changed_;
     }

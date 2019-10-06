@@ -13,9 +13,6 @@ namespace ptree
     class base_node
     {
     public:
-        using value_changed_t = notification_object<typename Traits::value_t>;
-
-    public:
         ~base_node();
 
         bool set_value(const typename Traits::value_t& value);
@@ -46,7 +43,7 @@ namespace ptree
         void clear();
         void erase(const typename Traits::key_t& key);
 
-        const notification_object<typename Traits::value_t>& value_changed() const;
+        notification_object<typename Traits::value_t>& value_changed();
 
         static typename Traits::node_ptr root();
 
@@ -66,7 +63,7 @@ namespace ptree
         std::map<typename Traits::key_t, typename Traits::node_ptr> children_ { };
         holds_value_t holds_value_                           { holds_value_t::empty };
 
-        value_changed_t value_changed_;
+        notification_object<typename Traits::value_t> value_changed_;
     };
 
 } //namespace
