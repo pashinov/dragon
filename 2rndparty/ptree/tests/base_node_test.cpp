@@ -7,6 +7,7 @@
 
 // std
 #include <string>
+#include <map>
 #include <variant>
 #include <memory>
 
@@ -73,11 +74,12 @@ TEST_F(base_node_test, root_node)
         FAIL() << "other exception, will be base_node_error";
     }
 
-    const base_node_traits_t::children_t& children1 = root_->children(base_node_traits_t::children_t());
-    ASSERT_EQ(children1, base_node_traits_t::children_t());
+    std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr> default_value = { };
+    const std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr>& children1 = root_->children(default_value);
+    ASSERT_EQ(children1, default_value);
     try
     {
-        const base_node_traits_t::children_t& children2 = root_->children();
+        const std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr>& children2 = root_->children();
         UNUSED(children2);
         FAIL() << "will be exception: base_node_error type";
     }

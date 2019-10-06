@@ -21,9 +21,6 @@ namespace ptree
         using node_ptr = node_t*;
         using key_t = Key;
         using value_t = Value;
-        using children_t = std::map<key_t, node_ptr>;
-        using value_changed_t = notification_object<value_t>;
-
     public:
         static node_ptr root();
     };

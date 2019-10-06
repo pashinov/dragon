@@ -15,10 +15,7 @@ namespace ptree
         : key_(key), parent_(parent) { }
 
     template <typename Traits>
-    base_node<Traits>::~base_node()
-    {
-        for(auto it = children_.begin(); it != children_.end(); ++it) { delete it->second; }
-    }
+    base_node<Traits>::~base_node() { this->clear(); }
 
     template <typename Traits>
     bool base_node<Traits>::set_value(const typename Traits::value_t& value)
@@ -44,7 +41,7 @@ namespace ptree
         typename Traits::node_ptr node = nullptr; // use NRVO optimization
         if (holds_value_ != holds_value_t::value)
         {
-            node = create_child(key);
+            node = this->create_child(key);
             if (node)
             {
                 holds_value_ = holds_value_t::child;
@@ -62,7 +59,7 @@ namespace ptree
         typename Traits::node_ptr node = nullptr; // use NRVO optimization
         if (holds_value_ != holds_value_t::value)
         {
-            node = create_child(key, value);
+            node = this->create_child(key, value);
             if (node)
             {
                 holds_value_ = holds_value_t::child;
@@ -101,7 +98,7 @@ namespace ptree
     }
 
     template <typename Traits>
-    const typename Traits::children_t& base_node<Traits>::children() const
+    const std::map<typename Traits::key_t, typename Traits::node_ptr>& base_node<Traits>::children() const
     {
         if (!has_children())
             throw base_node_error(base_node_error::error_type::children_not_exist,
@@ -111,7 +108,7 @@ namespace ptree
     }
 
     template <typename Traits>
-    const typename Traits::children_t& base_node<Traits>::children(const typename Traits::children_t& default_value) const
+    const std::map<typename Traits::key_t, typename Traits::node_ptr>& base_node<Traits>::children(const std::map<typename Traits::key_t, typename Traits::node_ptr>& default_value) const
     {
         return has_children() ? children_ : default_value;
     }
@@ -183,7 +180,7 @@ namespace ptree
     }
 
     template <typename Traits>
-    const typename Traits::value_changed_t& base_node<Traits>::value_changed() const
+    const notification_object<typename Traits::value_t>& base_node<Traits>::value_changed() const
     {
         return value_changed_;
     }
