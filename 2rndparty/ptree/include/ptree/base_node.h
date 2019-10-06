@@ -44,6 +44,8 @@ namespace ptree
         void erase(const typename Traits::key_t& key);
 
         notification_object<typename Traits::value_t>& value_changed();
+        notification_object<typename Traits::key_t>& child_added();
+        notification_object<typename Traits::key_t>& child_removed();
 
         static typename Traits::node_ptr root();
 
@@ -60,10 +62,13 @@ namespace ptree
         typename Traits::key_t key_                          { typename Traits::key_t() };
         std::optional<typename Traits::value_t> value_       { std::nullopt };
         typename Traits::node_ptr parent_                    { nullptr };
-        std::map<typename Traits::key_t, typename Traits::node_ptr> children_ { };
+        std::map<typename Traits::key_t,
+                 typename Traits::node_ptr> children_        { };
         holds_value_t holds_value_                           { holds_value_t::empty };
 
         notification_object<typename Traits::value_t> value_changed_;
+        notification_object<typename Traits::key_t> child_added_;
+        notification_object<typename Traits::key_t> child_removed_;
     };
 
 } //namespace

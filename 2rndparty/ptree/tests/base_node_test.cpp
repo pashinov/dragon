@@ -201,10 +201,22 @@ class notification_mock
 {
 public:
     MOCK_METHOD1(on_value_changed_mock, void(const base_node_test::base_node_traits_t::value_t&));
+    MOCK_METHOD1(on_child_added_mock, void(const base_node_test::base_node_traits_t::key_t&));
+    MOCK_METHOD1(on_child_removed_mock, void(const base_node_test::base_node_traits_t::key_t&));
 
     void on_value_changed(const base_node_test::base_node_traits_t::value_t& new_value)
     {
         this->on_value_changed_mock(new_value);
+    }
+
+    void on_child_added(const base_node_test::base_node_traits_t::key_t& key)
+    {
+        this->on_child_added_mock(key);
+    }
+
+    void on_child_removed(const base_node_test::base_node_traits_t::key_t& key)
+    {
+        this->on_child_removed_mock(key);
     }
 };
 
@@ -220,4 +232,33 @@ TEST_F(base_node_test, value_changed)
 
     // Act
     root_->set_value(value);
+}
+
+TEST_F(base_node_test, child_added)
+{
+    // Arrange
+    notification_mock mock;
+    base_node_traits_t::key_t child = "child1";
+    root_->child_added().connect(&mock, &notification_mock::on_child_added);
+
+    // Assert
+    EXPECT_CALL(mock, on_child_added_mock(child)).Times(1);
+
+    // Act
+    root_->add_child(child);
+}
+
+TEST_F(base_node_test, child_removed)
+{
+    // Arrange
+    notification_mock mock;
+    base_node_traits_t::key_t child = "child1";
+    root_->add_child(child);
+    root_->child_removed().connect(&mock, &notification_mock::on_child_removed);
+
+    // Assert
+    EXPECT_CALL(mock, on_child_removed_mock(child)).Times(1);
+
+    // Act
+    root_->erase(child);
 }

@@ -45,6 +45,7 @@ namespace ptree
             if (node)
             {
                 holds_value_ = holds_value_t::child;
+                child_added_.notify(node->key());
             }
         }
 
@@ -63,6 +64,7 @@ namespace ptree
             if (node)
             {
                 holds_value_ = holds_value_t::child;
+                child_added_.notify(node->key());
             }
         }
         return node;
@@ -175,15 +177,19 @@ namespace ptree
     {
         if (auto it = children_.find(key); it != children_.cend())
         {
-            it = children_.erise(it);
+            it = children_.erase(it);
+            child_removed_.notify(key);
         }
     }
 
     template <typename Traits>
-    notification_object<typename Traits::value_t>& base_node<Traits>::value_changed()
-    {
-        return value_changed_;
-    }
+    notification_object<typename Traits::value_t>& base_node<Traits>::value_changed() { return value_changed_; }
+
+    template <typename Traits>
+    notification_object<typename Traits::key_t>& base_node<Traits>::child_added() { return child_added_; }
+
+    template <typename Traits>
+    notification_object<typename Traits::key_t>& base_node<Traits>::child_removed() { return child_removed_; }
 
     template <typename Traits>
     typename Traits::node_ptr base_node<Traits>::root()
