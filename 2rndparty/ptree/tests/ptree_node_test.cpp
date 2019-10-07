@@ -28,9 +28,26 @@ TEST_F(ptree_node_test, create_node)
     ASSERT_TRUE(root_.is_root());
     ASSERT_FALSE(root_.has_children());
 
-    auto child = root_.child("child1");
+    auto child1 = root_.child("child1");
+    auto child2 = root_.child("child2");
+    auto child3 = root_.child("child3");
 
-    ASSERT_FALSE(child.is_root());
     ASSERT_TRUE(root_.has_children());
-    ASSERT_FALSE(child.has_children());
+
+    ASSERT_FALSE(child1.is_root());
+    ASSERT_FALSE(child1.has_children());
+
+    ASSERT_FALSE(child2.is_root());
+    ASSERT_FALSE(child2.has_children());
+
+    ASSERT_FALSE(child3.is_root());
+    ASSERT_FALSE(child3.has_children());
+
+    auto children = root_.children();
+    ASSERT_EQ(children.size(), 3);
+}
+
+TEST_F(ptree_node_test, create_node_by_path)
+{
+    auto node = root_.child<std::list<std::string>>({ "a", "b", "c" });
 }
