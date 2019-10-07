@@ -19,7 +19,13 @@ namespace ptree
         [[nodiscard]] std::map<typename Traits::key_t, Node> children() const;
 
         template <typename Path>
-        Node child(const Path& path) const;
+        [[nodiscard]] Node child(const Path& path) const;
+
+        template <typename Path>
+        [[nodiscard]] Node operator[](const Path& path) const;
+
+        bool operator == (const base_tree& other) const;
+        bool operator != (const base_tree& other) const;
 
     protected:
         typename Traits::node_ptr node_;

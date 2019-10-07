@@ -50,4 +50,8 @@ TEST_F(ptree_node_test, create_node)
 TEST_F(ptree_node_test, create_node_by_path)
 {
     auto node = root_.child<std::list<std::string>>({ "a", "b", "c" });
+    auto node2 = root_["a"]["b"]["c"];
+
+    ASSERT_TRUE(node == node2);
+    ASSERT_FALSE(node != node2);
 }

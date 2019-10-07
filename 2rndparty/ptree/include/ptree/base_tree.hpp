@@ -59,6 +59,22 @@ namespace ptree
             static_assert(!std::is_same_v<Path, Path>, "Path will be iteratable container to Path-convertible objects");
         }
     }
+
+    template <typename Traits, typename Node>
+    template <typename Path>
+    Node base_tree<Traits, Node>::operator[](const Path& path) const { return this->child<Path>(path); }
+
+    template <typename Traits, typename Node>
+    bool base_tree<Traits, Node>::operator == (const base_tree<Traits, Node>& other) const
+    {
+        return node_ == other.node_;
+    }
+
+    template <typename Traits, typename Node>
+    bool base_tree<Traits, Node>::operator != (const base_tree<Traits, Node>& other) const
+    {
+        return node_ != other.node_;
+    }
 }
 
 #endif // BASE_TREE_HPP
