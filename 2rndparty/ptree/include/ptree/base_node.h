@@ -18,23 +18,24 @@ namespace ptree
         bool set_value(const typename Traits::value_t& value);
         
         typename Traits::node_ptr add_child(const typename Traits::key_t& key);
-        typename Traits::node_ptr add_child(const typename Traits::key_t& key, const typename Traits::value_t& value);
+        typename Traits::node_ptr add_child(const typename Traits::key_t& key,
+                                            const typename Traits::value_t& value);
 
         [[nodiscard]] bool empty() const;
         [[nodiscard]] bool has_children() const;
         [[nodiscard]] bool has_value() const;
 
         const typename Traits::key_t& key() const;
-
         typename Traits::node_ptr parent() const;
 
         const typename Traits::value_t& value() const;
         const typename Traits::value_t& value(const typename Traits::value_t& default_value) const;
 
         const std::map<typename Traits::key_t, typename Traits::node_ptr>& children() const;
-        const std::map<typename Traits::key_t, typename Traits::node_ptr>& children(const std::map<typename Traits::key_t, typename Traits::node_ptr>& default_value) const;
+        const std::map<typename Traits::key_t, typename Traits::node_ptr>& children
+            (const std::map<typename Traits::key_t, typename Traits::node_ptr>& default_value) const;
 
-        typename Traits::node_ptr child(const typename Traits::key_t& key);
+        typename Traits::node_ptr child(const typename Traits::key_t& key) const;
 
         bool exist(const typename Traits::node_ptr child) const;
         bool exist(const typename Traits::key_t& child) const;
@@ -59,12 +60,12 @@ namespace ptree
         typename Traits::node_ptr create_child(const typename Traits::key_t& key, const typename Traits::value_t& value);
 
     private:
-        typename Traits::key_t key_                          { typename Traits::key_t() };
-        std::optional<typename Traits::value_t> value_       { std::nullopt };
-        typename Traits::node_ptr parent_                    { nullptr };
+        typename Traits::key_t key_                    { typename Traits::key_t() };
+        std::optional<typename Traits::value_t> value_ { std::nullopt };
+        typename Traits::node_ptr parent_              { nullptr };
         std::map<typename Traits::key_t,
-                 typename Traits::node_ptr> children_        { };
-        holds_value_t holds_value_                           { holds_value_t::empty };
+                 typename Traits::node_ptr> children_  { };
+        holds_value_t holds_value_                     { holds_value_t::empty };
 
         notification_object<typename Traits::value_t> value_changed_;
         notification_object<typename Traits::key_t> child_added_;

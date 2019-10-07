@@ -4,7 +4,10 @@
 namespace ptree
 {
     template <typename Traits>
-    ptree_node<Traits>::ptree_node() : ptree_node<Traits>(Traits::root()) { }
+    ptree_node<Traits>::ptree_node() : ptree_node<Traits>(Traits::root())
+    {
+        is_root_ = true;
+    }
 
     template <typename Traits>
     ptree_node<Traits>::ptree_node(typename Traits::node_ptr node)
@@ -13,8 +16,11 @@ namespace ptree
     template <typename Traits>
     ptree_node<Traits>::~ptree_node()
     {
-        delete node_;
+        if (this->is_root()) delete node_;
     }
+
+    template <typename Traits>
+    bool ptree_node<Traits>::is_root() const { return is_root_; }
 
 } // namespace
 

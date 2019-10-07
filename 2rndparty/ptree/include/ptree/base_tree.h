@@ -10,7 +10,8 @@ namespace ptree
         base_tree(typename Traits::node_ptr node);
         ~base_tree() = default;
 
-        Node child(const typename Traits::key_t& key);
+        [[nodiscard]] bool has_children() const;
+        [[nodiscard]] Node child(const typename Traits::key_t& key) const;
 
     protected:
         typename Traits::node_ptr node_;

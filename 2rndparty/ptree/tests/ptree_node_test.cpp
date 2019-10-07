@@ -24,4 +24,13 @@ protected:
 
 TEST_F(ptree_node_test, create_node)
 {
+    // Assert
+    ASSERT_TRUE(root_.is_root());
+    ASSERT_FALSE(root_.has_children());
+
+    auto child = root_.child("child1");
+
+    ASSERT_FALSE(child.is_root());
+    ASSERT_TRUE(root_.has_children());
+    ASSERT_FALSE(child.has_children());
 }

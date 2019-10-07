@@ -239,13 +239,19 @@ TEST_F(base_node_test, child_added)
     // Arrange
     notification_mock mock;
     base_node_traits_t::key_t child = "child1";
-    root_->child_added().connect(&mock, &notification_mock::on_child_added);
+    auto handle = root_->child_added().connect(&mock, &notification_mock::on_child_added);
 
     // Assert
     EXPECT_CALL(mock, on_child_added_mock(child)).Times(1);
 
     // Act
     root_->add_child(child);
+
+    // Act
+    handle.disconnect();
+
+    // Assert
+    EXPECT_CALL(mock, on_child_added_mock(child)).Times(0);
 }
 
 TEST_F(base_node_test, child_removed)
@@ -254,11 +260,17 @@ TEST_F(base_node_test, child_removed)
     notification_mock mock;
     base_node_traits_t::key_t child = "child1";
     root_->add_child(child);
-    root_->child_removed().connect(&mock, &notification_mock::on_child_removed);
+    auto handle = root_->child_removed().connect(&mock, &notification_mock::on_child_removed);
 
     // Assert
     EXPECT_CALL(mock, on_child_removed_mock(child)).Times(1);
 
     // Act
     root_->erase(child);
+
+    // Act
+    handle.disconnect();
+
+    // Assert
+    EXPECT_CALL(mock, on_child_removed_mock(child)).Times(0);
 }

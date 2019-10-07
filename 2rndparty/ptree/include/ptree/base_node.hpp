@@ -116,7 +116,7 @@ namespace ptree
     }
 
     template <typename Traits>
-    typename Traits::node_ptr base_node<Traits>::child(const typename Traits::key_t& key)
+    typename Traits::node_ptr base_node<Traits>::child(const typename Traits::key_t& key) const
     {
         if (auto it = children_.find(key); it != children_.cend())
         {
