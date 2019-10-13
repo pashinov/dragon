@@ -44,6 +44,12 @@ namespace ptree
         void clear();
         void erase(const typename Traits::key_t& key);
 
+        base_node(const base_node& other) = delete;
+        base_node& operator=(const base_node& other) = delete;
+
+        base_node(base_node&& other) = default;
+        base_node& operator=(base_node&& other) = default;
+
         notification_object<typename Traits::value_t>& value_changed();
         notification_object<typename Traits::key_t>& child_added();
         notification_object<typename Traits::key_t>& child_removed();

@@ -11,7 +11,7 @@ namespace ptree
     {
     public:
         base_tree(typename Traits::node_ptr node);
-        ~base_tree() = default;
+        virtual ~base_tree() = default;
 
         [[nodiscard]] bool has_children() const;
         [[nodiscard]] Node child(const typename Traits::key_t& key) const;

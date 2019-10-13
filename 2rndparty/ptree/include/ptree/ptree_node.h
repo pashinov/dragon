@@ -15,7 +15,7 @@ namespace ptree
         friend class base_tree<Traits, ptree_node<Traits> >;
     public:
         ptree_node();
-        ~ptree_node();
+        ~ptree_node() override;
 
         [[nodiscard]] bool is_root() const;
 
