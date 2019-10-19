@@ -14,6 +14,7 @@ namespace ptree
         virtual ~base_tree() = default;
 
         [[nodiscard]] bool has_children() const;
+        [[nodiscard]] bool exist(const typename Traits::key_t& key) const;
         [[nodiscard]] Node child(const typename Traits::key_t& key) const;
 
         [[nodiscard]] std::map<typename Traits::key_t, Node> children() const;

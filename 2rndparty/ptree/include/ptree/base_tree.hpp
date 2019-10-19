@@ -13,6 +13,12 @@ namespace ptree
     }
 
     template <typename Traits, typename Node>
+    bool base_tree<Traits, Node>::exist(const typename Traits::key_t& key) const
+    {
+        return this->node_->exist(key);
+    }
+
+    template <typename Traits, typename Node>
     Node base_tree<Traits, Node>::child(const typename Traits::key_t& key) const
     {
         auto node = this->node_->child(key);
