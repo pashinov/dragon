@@ -29,6 +29,8 @@ public:
     MOCK_CONST_METHOD1(child, traits_stub::node_ptr(const traits_stub::key_t&));
     MOCK_METHOD1(add_child, traits_stub::node_ptr(const traits_stub::key_t&));
     MOCK_CONST_METHOD0(children, std::map<traits_stub::key_t, traits_stub::node_ptr>());
+    MOCK_CONST_METHOD0(empty, bool());
+    MOCK_CONST_METHOD0(has_value, bool());
 };
 
 #endif // TRAITS_STUB_H

@@ -3,6 +3,7 @@
 
 // internal
 #include "base_tree.h"
+#include "base_read.h"
 
 // std
 #include <memory>
@@ -10,7 +11,8 @@
 namespace ptree
 {
     template <typename Traits>
-    class ptree_node : public base_tree<Traits, ptree_node<Traits> >
+    class ptree_node : public base_tree<Traits, ptree_node<Traits> >,
+                       public base_read<Traits>
     {
         friend class base_tree<Traits, ptree_node<Traits> >;
     public:

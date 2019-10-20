@@ -7,8 +7,13 @@ namespace ptree
     class base_read
     {
     public:
-        base_read(typename Traits::node_ptr node);
+        explicit base_read(typename Traits::node_ptr node);
         virtual ~base_read() = default;
+
+        bool empty() const;
+        bool has_value() const;
+
+        explicit operator bool() const;
 
     protected:
         typename Traits::node_ptr node_;

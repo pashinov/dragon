@@ -10,7 +10,7 @@ namespace ptree
     class base_tree
     {
     public:
-        base_tree(typename Traits::node_ptr node);
+        explicit base_tree(typename Traits::node_ptr node);
         virtual ~base_tree() = default;
 
         [[nodiscard]] bool has_children() const;
