@@ -4,8 +4,12 @@
 // gmock
 #include <gmock/gmock.h>
 
+// internal
+#include <NotificationObject>
+
 // std
 #include <variant>
+#include <optional>
 #include <string>
 #include <map>
 
@@ -31,6 +35,16 @@ public:
     MOCK_CONST_METHOD0(children, std::map<traits_stub::key_t, traits_stub::node_ptr>());
     MOCK_CONST_METHOD0(empty, bool());
     MOCK_CONST_METHOD0(has_value, bool());
+    MOCK_CONST_METHOD0(key, traits_stub::key_t());
+    // TODO:
+    // MOCK_CONST_METHOD0(value, std::optional<traits_stub::value_t>());
+    MOCK_METHOD0(clear, void());
+    MOCK_METHOD1(erase, void(traits_stub::key_t));
+    // TODO:
+    // MOCK_METHOD1(set_value, bool(traits_stub::value_t));
+    MOCK_METHOD0(child_added, notification_object<traits_stub::key_t>());
+    MOCK_METHOD0(child_removed, notification_object<traits_stub::key_t>());
+    MOCK_METHOD0(value_changed, notification_object<std::optional<traits_stub::value_t>>());
 };
 
 #endif // TRAITS_STUB_H

@@ -16,15 +16,15 @@ public:
     using callback = std::function<void(const Args&...)>;
 
 public:
-    notification_handle connect(const callback& f);
+    notification_handle connect(const callback& f) const;
 
     template <typename Object, typename Callback>
-    notification_handle connect(Object* object, const Callback& callback);
+    notification_handle connect(Object* object, const Callback& callback) const;
 
     void notify(const Args& ... args);
 
 private:
-    callbacks_storage<Args...> storage_;
+    mutable callbacks_storage<Args...> storage_;
 };
 
 #endif // NOTIFICATION_OBJECT_H

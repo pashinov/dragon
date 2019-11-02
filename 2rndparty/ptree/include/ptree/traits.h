@@ -21,6 +21,7 @@ namespace ptree
         using node_ptr = node_t*;
         using key_t = Key;
         using value_t = Value;
+        using optional_value_t = std::optional<value_t>;
     public:
         static node_ptr root();
     };

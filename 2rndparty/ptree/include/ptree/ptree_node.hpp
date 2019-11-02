@@ -13,6 +13,8 @@ namespace ptree
     ptree_node<Traits>::ptree_node(typename Traits::node_ptr node)
         : base_tree<Traits, ptree_node<Traits> >(node),
           base_read<Traits>(node),
+          base_write<Traits>(node),
+          base_notification<Traits>(node),
           node_(node) { }
 
     template <typename Traits>

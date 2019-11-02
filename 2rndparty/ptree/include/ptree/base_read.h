@@ -10,10 +10,13 @@ namespace ptree
         explicit base_read(typename Traits::node_ptr node);
         virtual ~base_read() = default;
 
-        bool empty() const;
-        bool has_value() const;
+        [[nodiscard]] bool empty() const;
+        [[nodiscard]] bool has_value() const;
 
-        explicit operator bool() const;
+        [[nodiscard]] explicit operator bool() const;
+
+        typename Traits::key_t key() const;
+        typename Traits::value_t value() const;
 
     protected:
         typename Traits::node_ptr node_;

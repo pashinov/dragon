@@ -9,14 +9,14 @@
 #include <cassert>
 
 template <typename ...Args>
-notification_handle notification_object<Args...>::connect(const notification_object::callback& f)
+notification_handle notification_object<Args...>::connect(const notification_object::callback& f) const
 {
     return notification_handle { storage_.add(f) };
 }
 
 template <typename ...Args>
 template <typename Object, typename Callback>
-notification_handle notification_object<Args...>::connect(Object* object, const Callback& callback)
+notification_handle notification_object<Args...>::connect(Object* object, const Callback& callback) const
 {
     assert(object);
     // using SFINAE to validate templates arguments

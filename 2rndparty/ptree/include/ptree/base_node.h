@@ -28,8 +28,7 @@ namespace ptree
         const typename Traits::key_t& key() const;
         typename Traits::node_ptr parent() const;
 
-        const typename Traits::value_t& value() const;
-        const typename Traits::value_t& value(const typename Traits::value_t& default_value) const;
+        const typename Traits::optional_value_t& value() const;
 
         const std::map<typename Traits::key_t, typename Traits::node_ptr>& children() const;
         const std::map<typename Traits::key_t, typename Traits::node_ptr>& children
@@ -50,9 +49,9 @@ namespace ptree
         base_node(base_node&& other) = default;
         base_node& operator=(base_node&& other) = default;
 
-        notification_object<typename Traits::value_t>& value_changed();
-        notification_object<typename Traits::key_t>& child_added();
-        notification_object<typename Traits::key_t>& child_removed();
+        const notification_object<typename Traits::optional_value_t>& value_changed() const;
+        const notification_object<typename Traits::key_t>& child_added() const;
+        const notification_object<typename Traits::key_t>& child_removed() const;
 
         static typename Traits::node_ptr root();
 
@@ -63,17 +62,18 @@ namespace ptree
         enum class holds_value_t : std::uint8_t { empty, value, child };
 
         typename Traits::node_ptr create_child(const typename Traits::key_t& key);
-        typename Traits::node_ptr create_child(const typename Traits::key_t& key, const typename Traits::value_t& value);
+        typename Traits::node_ptr create_child(const typename Traits::key_t& key,
+                                               const typename Traits::value_t& value);
 
     private:
         typename Traits::key_t key_                    { typename Traits::key_t() };
-        std::optional<typename Traits::value_t> value_ { std::nullopt };
+        typename Traits::optional_value_t value_       { std::nullopt };
         typename Traits::node_ptr parent_              { nullptr };
         std::map<typename Traits::key_t,
                  typename Traits::node_ptr> children_  { };
         holds_value_t holds_value_                     { holds_value_t::empty };
 
-        notification_object<typename Traits::value_t> value_changed_;
+        notification_object<typename Traits::optional_value_t> value_changed_;
         notification_object<typename Traits::key_t> child_added_;
         notification_object<typename Traits::key_t> child_removed_;
     };

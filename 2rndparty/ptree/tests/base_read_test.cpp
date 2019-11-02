@@ -1,4 +1,4 @@
-// internal
+﻿// internal
 #include "ptree/base_read.h"
 #include "traits_stub.h"
 
@@ -90,4 +90,30 @@ TEST_F(base_read_test, operator_to_bool_convertion)
 
     // Act and Assert
     ASSERT_TRUE(bool(*reader_.get()));
+}
+
+TEST_F(base_read_test, key)
+{
+    // Arrange
+    traits_stub::key_t key = "child";
+
+    // Assert
+    EXPECT_CALL(*node_mock_.get(), key()).WillOnce(::testing::Return(key));
+
+    // Act and Assert
+    ASSERT_EQ(key, reader_->key());
+}
+
+TEST_F(base_read_test, value)
+{
+    // TODO: !mock object has not set_value(), when value_t is std::variant
+
+    // Arrange
+    traits_stub::value_t value = std::uint64_t(5);
+
+    // EXPECT_CALL(*node_mock_.get(), value()).Times(1);
+
+    // Act and Assert
+    // reader_->value();
+    // ASSERT_EQ(std::get<std::uint64_t>(value), std::get<uint64_t>(reader_->value()));
 }

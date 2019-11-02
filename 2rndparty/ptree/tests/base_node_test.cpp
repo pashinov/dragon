@@ -60,23 +60,8 @@ TEST_F(base_node_test, root_node)
     ASSERT_FALSE(root_->has_children());
     ASSERT_FALSE(root_->has_value());
 
-    const base_node_traits_t::value_t& value1 = root_->value(base_node_traits_t::value_t());
-    ASSERT_EQ(value1, base_node_traits_t::value_t());
-
-    try
-    {
-        const base_node_traits_t::value_t& value2 = root_->value();
-        UNUSED(value2);
-        FAIL() << "will be exception: base_node_error type";
-    }
-    catch(const ptree::base_node_error& ex)
-    {
-        ASSERT_EQ(ex.type(), ptree::base_node_error::error_type::value_not_exist);
-    }
-    catch(...)
-    {
-        FAIL() << "other exception, will be base_node_error";
-    }
+    const std::optional<base_node_traits_t::value_t>& value = root_->value();
+    ASSERT_FALSE(value.has_value());
 
     std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr> default_value = { };
     const std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr>& children1 = root_->children(default_value);
@@ -109,7 +94,9 @@ TEST_F(base_node_test, set_value)
     ASSERT_FALSE(root_->empty());
     ASSERT_TRUE(root_->has_value());
     ASSERT_FALSE(root_->has_children());
-    ASSERT_EQ(std::get<std::uint64_t>(root_->value()), value);
+    const auto& v = root_->value();
+    ASSERT_TRUE(v.has_value());
+    ASSERT_EQ(std::get<std::uint64_t>(v.value()), value);
 }
 
 TEST_F(base_node_test, add_children)
@@ -181,30 +168,18 @@ TEST_F(base_node_test, clear_value)
     ASSERT_TRUE(root_->empty());
     ASSERT_FALSE(root_->has_value());
     ASSERT_FALSE(root_->has_children());
-    try
-    {
-        auto value = root_->value();
-        UNUSED(value);
-        FAIL() << "will be exception: base_node_error";
-    }
-    catch(const ptree::base_node_error& ex)
-    {
-        ASSERT_EQ(ex.type(), ptree::base_node_error::error_type::value_not_exist);
-    }
-    catch(...)
-    {
-        FAIL() << "other exception type";
-    }
+    auto value = root_->value();
+    ASSERT_FALSE(value.has_value());
 }
 
 class notification_mock
 {
 public:
-    MOCK_METHOD1(on_value_changed_mock, void(const base_node_test::base_node_traits_t::value_t&));
+    MOCK_METHOD1(on_value_changed_mock, void(const std::optional<base_node_test::base_node_traits_t::value_t>&));
     MOCK_METHOD1(on_child_added_mock, void(const base_node_test::base_node_traits_t::key_t&));
     MOCK_METHOD1(on_child_removed_mock, void(const base_node_test::base_node_traits_t::key_t&));
 
-    void on_value_changed(const base_node_test::base_node_traits_t::value_t& new_value)
+    void on_value_changed(const std::optional<base_node_test::base_node_traits_t::value_t>& new_value)
     {
         this->on_value_changed_mock(new_value);
     }
@@ -228,7 +203,8 @@ TEST_F(base_node_test, value_changed)
     root_->value_changed().connect(&mock, &notification_mock::on_value_changed);
 
     // Assert
-    EXPECT_CALL(mock, on_value_changed_mock(base_node_test::base_node_test::base_node_value_t(value))).Times(1);
+    std::optional<base_node_test::base_node_value_t> opt_value = value;
+    EXPECT_CALL(mock, on_value_changed_mock(opt_value)).Times(1);
 
     // Act
     root_->set_value(value);

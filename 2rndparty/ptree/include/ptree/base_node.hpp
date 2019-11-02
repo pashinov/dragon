@@ -86,18 +86,7 @@ namespace ptree
     typename Traits::node_ptr base_node<Traits>::parent() const { return parent_; }
 
     template <typename Traits>
-    const typename Traits::value_t& base_node<Traits>::value() const
-    {
-        if (!has_value()) throw base_node_error(base_node_error::error_type::value_not_exist, "value does not exits");
-
-        return value_.value();
-    }
-
-    template <typename Traits>
-    const typename Traits::value_t& base_node<Traits>::value(const typename Traits::value_t& default_value) const
-    {
-        return has_value() ? value_.value() : default_value;
-    }
+    const typename Traits::optional_value_t& base_node<Traits>::value() const { return value_; }
 
     template <typename Traits>
     const std::map<typename Traits::key_t, typename Traits::node_ptr>& base_node<Traits>::children() const
@@ -110,7 +99,8 @@ namespace ptree
     }
 
     template <typename Traits>
-    const std::map<typename Traits::key_t, typename Traits::node_ptr>& base_node<Traits>::children(const std::map<typename Traits::key_t, typename Traits::node_ptr>& default_value) const
+    const std::map<typename Traits::key_t, typename Traits::node_ptr>& base_node<Traits>::children
+    (const std::map<typename Traits::key_t, typename Traits::node_ptr>& default_value) const
     {
         return has_children() ? children_ : default_value;
     }
@@ -183,13 +173,13 @@ namespace ptree
     }
 
     template <typename Traits>
-    notification_object<typename Traits::value_t>& base_node<Traits>::value_changed() { return value_changed_; }
+    const notification_object<typename Traits::optional_value_t>& base_node<Traits>::value_changed() const { return value_changed_; }
 
     template <typename Traits>
-    notification_object<typename Traits::key_t>& base_node<Traits>::child_added() { return child_added_; }
+    const notification_object<typename Traits::key_t>& base_node<Traits>::child_added() const { return child_added_; }
 
     template <typename Traits>
-    notification_object<typename Traits::key_t>& base_node<Traits>::child_removed() { return child_removed_; }
+    const notification_object<typename Traits::key_t>& base_node<Traits>::child_removed() const { return child_removed_; }
 
     template <typename Traits>
     typename Traits::node_ptr base_node<Traits>::root()

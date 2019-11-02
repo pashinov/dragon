@@ -13,10 +13,13 @@ namespace ptree
     bool base_read<Traits>::has_value() const { return node_->has_value(); }
 
     template <typename Traits>
-    base_read<Traits>::operator bool() const
-    {
-        return !node_->empty();
-    }
+    base_read<Traits>::operator bool() const { return !node_->empty(); }
+
+    template <typename Traits>
+    typename Traits::key_t base_read<Traits>::key() const { return node_->key(); }
+
+    template <typename Traits>
+    typename Traits::value_t base_read<Traits>::value() const { return node_->value(); }
 
 } // namespace
 
