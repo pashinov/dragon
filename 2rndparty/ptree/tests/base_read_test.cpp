@@ -13,10 +13,19 @@
 #include <string>
 
 
-class tree_node_stub : public ptree::base_read<traits_stub>
+class tree_node_read_stub : private ptree::base_read<traits_stub>
 {
 public:
-    tree_node_stub(traits_stub::node_ptr node) : ptree::base_read<traits_stub>(node), node_(node) { }
+    tree_node_read_stub(traits_stub::node_ptr node)
+        : ptree::base_read<traits_stub>(node), node_(node) { }
+
+    using reading_tree_t = base_read<traits_stub>;
+
+    using reading_tree_t::empty;
+    using reading_tree_t::has_value;
+    using reading_tree_t::operator bool;
+    using reading_tree_t::key;
+    using reading_tree_t::value;
 
     traits_stub::node_ptr get() const { return node_; }
 
@@ -31,7 +40,7 @@ protected:
     void SetUp() override
     {
         node_mock_.reset(new node_mock());
-        reader_.reset(new ptree::base_read<traits_stub>(node_mock_.get()));
+        reader_.reset(new tree_node_read_stub(node_mock_.get()));
     }
 
     void TearDown() override
@@ -40,7 +49,7 @@ protected:
 
 protected:
     std::unique_ptr<node_mock> node_mock_;
-    std::unique_ptr<ptree::base_read<traits_stub> > reader_;
+    std::unique_ptr<tree_node_read_stub> reader_;
 };
 
 TEST_F(base_read_test, empty)

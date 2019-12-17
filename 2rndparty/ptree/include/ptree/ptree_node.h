@@ -6,31 +6,66 @@
 #include "base_read.h"
 #include "base_write.h"
 #include "base_notification.h"
-
-// std
-#include <memory>
+#include "ptree_const_node.h"
 
 namespace ptree
 {
+    // class ptree_node is the fasade class (using pattern fasade)
     template <typename Traits>
     class ptree_node : public base_tree<Traits, ptree_node<Traits> >,
                        public base_read<Traits>,
                        public base_write<Traits>,
                        public base_notification<Traits>
     {
+        // class base_tree use private contructor to create new object ptree_node
         friend class base_tree<Traits, ptree_node<Traits> >;
+
+        using common_tree_t = base_tree<Traits, ptree_node<Traits> >;
+        using reading_tree_t = base_read<Traits>;
+        using writing_tree_t = base_write<Traits>;
+        using notification_changed_t = base_notification<Traits>;
+
     public:
         ptree_node();
-        ~ptree_node() override;
+        ~ptree_node();
 
-        [[nodiscard]] bool is_root() const;
+        // the common base functionality of the tree
+        using common_tree_t::has_children;
+        using common_tree_t::exist;
+        using common_tree_t::child;
+        using common_tree_t::children;
+        using common_tree_t::operator[];
+        using common_tree_t::operator==;
+
+        // the reading functionality of the tree
+        using reading_tree_t::empty;
+        using reading_tree_t::has_value;
+        using reading_tree_t::operator bool;
+        using reading_tree_t::key;
+        using reading_tree_t::value;
+
+        // the wrinitg functionality of the tree
+        using writing_tree_t::set_value;
+        using writing_tree_t::clear;
+        using writing_tree_t::erase;
+        using writing_tree_t::operator=;
+
+        // the tree change notification
+        using notification_changed_t::child_added;
+        using notification_changed_t::child_removed;
+        using notification_changed_t::value_changed;
+
+        bool operator == (const ptree_node& other) const;
+        bool operator != (const ptree_node& other) const;
+
+//        [[nodiscard]] bool is_root() const;
 
     private:
-        ptree_node(typename Traits::node_ptr node);
+        ptree_node(typename Traits::node_ptr node, bool is_root = false);
 
-    private:
-        bool is_root_ = false;
-        typename Traits::node_ptr node_;
+    protected:
+//        bool is_root_ = false;
+//        typename Traits::node_ptr node_;
     };
 
 } // namespace

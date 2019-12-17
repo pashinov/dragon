@@ -184,6 +184,7 @@ namespace ptree
     template <typename Traits>
     typename Traits::node_ptr base_node<Traits>::root()
     {
+        static_assert(std::is_default_constructible<typename Traits::key_t>(),"key_t don't default condtuctible");
         return new base_node<Traits>(typename Traits::key_t());
     }
 

@@ -14,14 +14,32 @@
 #include <list>
 
 
-class tree_node_stub : public ptree::base_tree<traits_stub, tree_node_stub>
+class base_tree_node_stub : private ptree::base_tree<traits_stub, base_tree_node_stub>
 {
 public:
-    friend class ptree::base_tree<traits_stub, tree_node_stub>;
-    tree_node_stub(traits_stub::node_ptr node)
-        : ptree::base_tree<traits_stub, tree_node_stub>(node)
+    using common_tree_t = ptree::base_tree<traits_stub, base_tree_node_stub>;
+
+    friend class ptree::base_tree<traits_stub, base_tree_node_stub>;
+public:
+    base_tree_node_stub(traits_stub::node_ptr node)
+        : ptree::base_tree<traits_stub, base_tree_node_stub>(node)
     {
         node_ = node;
+    }
+
+    using common_tree_t::has_children;
+    using common_tree_t::exist;
+    using common_tree_t::child;
+    using common_tree_t::children;
+    using common_tree_t::operator[];
+
+    bool operator == (const base_tree_node_stub& other) const
+    {
+        return common_tree_t::operator==(other);
+    }
+    bool operator != (const base_tree_node_stub& other) const
+    {
+        return common_tree_t::operator != (other);
     }
 
     traits_stub::node_ptr get() const { return node_; }
@@ -37,8 +55,7 @@ protected:
     void SetUp() override
     {
         node_mock_.reset(new node_mock());
-        // tree_.reset(new tree_node_stub(node_mock_.get()));
-        tree_.reset(new ptree::base_tree<traits_stub, tree_node_stub>(node_mock_.get()));
+        tree_.reset(new base_tree_node_stub(node_mock_.get()));
     }
 
     void TearDown() override
@@ -47,8 +64,7 @@ protected:
 
 protected:
     std::unique_ptr<node_mock> node_mock_;
-    std::unique_ptr<ptree::base_tree<traits_stub, tree_node_stub>> tree_;
-    // std::unique_ptr<tree_node_stub> tree_;
+    std::unique_ptr<base_tree_node_stub> tree_;
 };
 
 TEST_F(base_tree_test, has_childred)
@@ -150,7 +166,7 @@ TEST_F(base_tree_test, child_path)
     EXPECT_CALL(node_mock2, add_child(key3)).WillOnce(::testing::Return(&node_mock3));
 
     // Act
-    tree_node_stub child = tree_->child<path_t>(path);
+    base_tree_node_stub child = tree_->child<path_t>(path);
 
     // Assert
     ASSERT_EQ(child.get(), &node_mock3);
@@ -166,7 +182,7 @@ TEST_F(base_tree_test, child_path)
     EXPECT_CALL(node_mock2, add_child(key3)).Times(0);
 
     // Act
-    tree_node_stub child2 = tree_->child<path_t>(path);
+    base_tree_node_stub child2 = tree_->child<path_t>(path);
 
     // Assert
     ASSERT_EQ(child2.get(), &node_mock3);
@@ -198,7 +214,7 @@ TEST_F(base_tree_test, operator_index)
     EXPECT_CALL(node_mock2, add_child(key3)).WillOnce(::testing::Return(&node_mock3));
 
     // Act
-    tree_node_stub child = (*tree_.get())[key1][key2][key3];
+    base_tree_node_stub child = (*tree_.get())[key1][key2][key3];
 
     // Assert
     ASSERT_EQ(child.get(), &node_mock3);
@@ -214,7 +230,7 @@ TEST_F(base_tree_test, operator_index)
     EXPECT_CALL(node_mock2, add_child(key3)).Times(0);
 
     // Act
-    tree_node_stub child2 = (*tree_.get())[key1][key2][key3];
+    base_tree_node_stub child2 = (*tree_.get())[key1][key2][key3];
 
     // Assert
     ASSERT_EQ(child2.get(), &node_mock3);

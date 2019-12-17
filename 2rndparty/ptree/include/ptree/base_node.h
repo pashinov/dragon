@@ -56,7 +56,8 @@ namespace ptree
         static typename Traits::node_ptr root();
 
     protected:
-        explicit base_node(const typename Traits::key_t& key, typename Traits::node_ptr parent = nullptr);
+        explicit base_node(const typename Traits::key_t& key,
+                           typename Traits::node_ptr parent = nullptr);
 
     private:
         enum class holds_value_t : std::uint8_t { empty, value, child };

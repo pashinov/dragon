@@ -19,7 +19,7 @@ namespace ptree
     typename Traits::key_t base_read<Traits>::key() const { return node_->key(); }
 
     template <typename Traits>
-    typename Traits::value_t base_read<Traits>::value() const { return node_->value(); }
+    const typename Traits::optional_value_t& base_read<Traits>::value() const { return node_->value(); }
 
 } // namespace
 

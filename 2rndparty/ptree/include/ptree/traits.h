@@ -1,11 +1,13 @@
-#ifndef TRAITS_H
-#define TRAITS_H
+#ifndef PTREE_TRAITS_H
+#define PTREE_TRAITS_H
 
 // notification_object
 #include <NotificationObject>
 
 // std
 #include <map>
+#include <optional>
+#include <memory>
 
 namespace ptree
 {
@@ -28,6 +30,6 @@ namespace ptree
 
 } // namespace
 
-#endif // TRAITS_H
+#endif // PTREE_TRAITS_H
 
 #include "traits.hpp"

@@ -7,18 +7,23 @@ namespace ptree
     class base_read
     {
     public:
-        explicit base_read(typename Traits::node_ptr node);
-        virtual ~base_read() = default;
-
         [[nodiscard]] bool empty() const;
         [[nodiscard]] bool has_value() const;
 
         [[nodiscard]] explicit operator bool() const;
 
         typename Traits::key_t key() const;
-        typename Traits::value_t value() const;
+        const typename Traits::optional_value_t& value() const;
+
+        base_read(const base_read<Traits>& other) = default;
+        base_read& operator=(const base_read& other) = default;
 
     protected:
+        explicit base_read(typename Traits::node_ptr node);
+
+        ~base_read() = default;
+
+    private:
         typename Traits::node_ptr node_;
     };
 

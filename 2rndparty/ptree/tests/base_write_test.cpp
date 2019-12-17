@@ -14,10 +14,10 @@
 #include <list>
 
 
-class tree_node_stub : public ptree::base_write<traits_stub>
+class write_tree_node_stub : public ptree::base_write<traits_stub>
 {
 public:
-    tree_node_stub(traits_stub::node_ptr node)
+    write_tree_node_stub(traits_stub::node_ptr node)
         : ptree::base_write<traits_stub>(node),
           node_(node) { }
 
@@ -34,7 +34,7 @@ protected:
     void SetUp() override
     {
         node_mock_.reset(new node_mock());
-        writer_.reset(new ptree::base_write<traits_stub>(node_mock_.get()));
+        writer_.reset(new write_tree_node_stub(node_mock_.get()));
     }
 
     void TearDown() override
@@ -43,7 +43,7 @@ protected:
 
 protected:
     std::unique_ptr<node_mock> node_mock_;
-    std::unique_ptr<ptree::base_write<traits_stub> > writer_;
+    std::unique_ptr<write_tree_node_stub> writer_;
 };
 
 

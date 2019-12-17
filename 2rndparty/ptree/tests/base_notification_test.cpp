@@ -3,10 +3,10 @@
 
 #define UNUSED(value) (void)value
 
-class tree_node_stub : public ptree::base_notification<traits_stub>
+class notify_tree_node_stub : public ptree::base_notification<traits_stub>
 {
 public:
-    tree_node_stub(traits_stub::node_ptr node)
+    notify_tree_node_stub(traits_stub::node_ptr node)
         : ptree::base_notification<traits_stub>(node),
           node_(node) { }
 
@@ -23,7 +23,7 @@ protected:
     void SetUp() override
     {
         node_mock_.reset(new node_mock());
-        notify_.reset(new ptree::base_notification<traits_stub>(node_mock_.get()));
+        notify_.reset(new notify_tree_node_stub(node_mock_.get()));
     }
 
     void TearDown() override
@@ -32,7 +32,7 @@ protected:
 
 protected:
     std::unique_ptr<node_mock> node_mock_;
-    std::unique_ptr<ptree::base_notification<traits_stub> > notify_;
+    std::unique_ptr<notify_tree_node_stub> notify_;
 };
 
 TEST_F(base_notification_test, child_added)

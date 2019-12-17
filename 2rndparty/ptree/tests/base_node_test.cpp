@@ -29,6 +29,7 @@ protected:
     void SetUp() override
     {
         root_.reset(base_node_t::root());
+        // root_ = base_node_t::root();
     }
 
     void TearDown() override
@@ -38,6 +39,7 @@ protected:
 
 protected:
     base_node_unique_ptr root_ = nullptr;
+    // std::shared_ptr<base_node_t> root_;
 };
 
 TEST_F(base_node_test, root_node)

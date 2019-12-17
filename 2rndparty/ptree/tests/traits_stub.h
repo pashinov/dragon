@@ -23,6 +23,7 @@ public:
     using node_ptr = node_t*;
     using key_t = std::string;
     using value_t = std::variant<std::monostate, std::int64_t, std::uint64_t, std::string, double, float>;
+    using optional_value_t = std::optional<value_t>;
 };
 
 class node_mock

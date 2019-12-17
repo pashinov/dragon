@@ -4,7 +4,8 @@
 namespace ptree
 {
     template <typename Traits, typename Node>
-    base_tree<Traits, Node>::base_tree(typename Traits::node_ptr node) : node_(node) { }
+    base_tree<Traits, Node>::base_tree(typename Traits::node_ptr node, bool is_root)
+        : node_(node), is_root_(is_root) { }
 
     template <typename Traits, typename Node>
     bool base_tree<Traits, Node>::has_children() const
@@ -65,6 +66,13 @@ namespace ptree
             static_assert(!std::is_same_v<Path, Path>, "Path will be iteratable container to Path-convertible objects");
         }
     }
+
+//    template <typename Traits, typename Node>
+//    template <typename Other>
+//    base_tree<Traits, Node>::base_tree(const base_tree<Traits, Other>& other)
+//        : node_(other.node_)
+//    {
+//    }
 
     template <typename Traits, typename Node>
     template <typename Path>

@@ -1,7 +1,9 @@
 #ifndef BASE_WRITE_HPP
 #define BASE_WRITE_HPP
 
+// std
 #include <type_traits>
+#include <optional>
 
 namespace ptree
 {
@@ -15,16 +17,16 @@ namespace ptree
     void base_write<Traits>::erase(const typename Traits::key_t& key) { node_->erase(key); }
 
     template <typename Traits>
-    void base_write<Traits>::set_value(const typename Traits::value_t& value)
+    bool base_write<Traits>::set_value(const typename Traits::value_t& value)
     {
-        node_->set_value(value);
+        return node_->set_value(value);
     }
 
     template <typename Traits>
     template <typename Value>
     base_write<Traits>& base_write<Traits>::operator=(const Value& value)
     {
-        if (!node_->has_value() && node_->has_children())
+        if (!node_->has_value())
         {
             node_->clear();
         }
@@ -38,6 +40,11 @@ namespace ptree
         else if constexpr(std::is_constructible_v<typename Traits::value_t, Value>)
         {
             this->set_value(value);
+        }
+        // operator=(std::nullopt)
+        else if constexpr(std::is_constructible_v<std::nullopt, Value>)
+        {
+            this->clear();
         }
         else
         {

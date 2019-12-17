@@ -13,12 +13,13 @@ namespace ptree
     class base_notification
     {
     public:
-        base_notification(typename Traits::node_ptr node);
-        virtual ~base_notification() = default;
-
         const notification_object<typename Traits::key_t>& child_added() const;
         const notification_object<typename Traits::key_t>& child_removed() const;
         const notification_object<std::optional<typename Traits::value_t> >& value_changed() const;
+
+    protected:
+        base_notification(typename Traits::node_ptr node);
+        ~base_notification() = default;
 
     private:
         typename Traits::node_ptr node_;

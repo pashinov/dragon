@@ -1,5 +1,5 @@
-#ifndef TRAITS_HPP
-#define TRAITS_HPP
+#ifndef PTREE_TRAITS_HPP
+#define PTREE_TRAITS_HPP
 
 namespace ptree
 {
@@ -11,4 +11,4 @@ namespace ptree
 
 } // namespace
 
-#endif // TRAITS_HPP
+#endif // PTREE_TRAITS_HPP
