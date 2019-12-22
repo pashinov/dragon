@@ -61,11 +61,10 @@ namespace ptree
 //        [[nodiscard]] bool is_root() const;
 
     private:
-        ptree_node(typename Traits::node_ptr node, bool is_root = false);
+        ptree_node(const typename Traits::node_shared_ptr& node);
 
     protected:
-//        bool is_root_ = false;
-//        typename Traits::node_ptr node_;
+        typename Traits::node_shared_ptr node_;
     };
 
 } // namespace

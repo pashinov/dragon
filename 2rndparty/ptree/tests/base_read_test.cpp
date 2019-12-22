@@ -13,34 +13,28 @@
 #include <string>
 
 
-class tree_node_read_stub : private ptree::base_read<traits_stub>
+class tree_node_read_stub : public ptree::base_read<traits_stub>
 {
 public:
-    tree_node_read_stub(traits_stub::node_ptr node)
+    tree_node_read_stub(const traits_stub::node_weak_ptr& node)
         : ptree::base_read<traits_stub>(node), node_(node) { }
 
     using reading_tree_t = base_read<traits_stub>;
 
-    using reading_tree_t::empty;
-    using reading_tree_t::has_value;
-    using reading_tree_t::operator bool;
-    using reading_tree_t::key;
-    using reading_tree_t::value;
-
-    traits_stub::node_ptr get() const { return node_; }
+    traits_stub::node_weak_ptr get() const { return node_; }
 
 private:
-    traits_stub::node_ptr node_;
+    traits_stub::node_weak_ptr node_;
 };
-
 
 class base_read_test : public testing::Test
 {
 protected:
+    base_read_test() : node_mock_(new node_mock()),
+        reader_(new tree_node_read_stub(node_mock_)) { }
+
     void SetUp() override
     {
-        node_mock_.reset(new node_mock());
-        reader_.reset(new tree_node_read_stub(node_mock_.get()));
     }
 
     void TearDown() override
@@ -48,7 +42,7 @@ protected:
     }
 
 protected:
-    std::unique_ptr<node_mock> node_mock_;
+    std::shared_ptr<node_mock> node_mock_;
     std::unique_ptr<tree_node_read_stub> reader_;
 };
 

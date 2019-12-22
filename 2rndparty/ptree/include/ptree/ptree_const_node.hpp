@@ -4,14 +4,14 @@
 namespace ptree
 {
     template <typename Traits>
-    ptree_const_node<Traits>::ptree_const_node() : ptree_const_node<Traits>(Traits::root(), true)
+    ptree_const_node<Traits>::ptree_const_node() : ptree_const_node<Traits>(Traits::root())
     {
 //        is_root_ = true;
     }
 
     template <typename Traits>
-    ptree_const_node<Traits>::ptree_const_node(typename Traits::node_ptr node, bool is_root)
-        : base_tree<Traits, ptree_const_node<Traits> >(node, is_root),
+    ptree_const_node<Traits>::ptree_const_node(const typename Traits::node_weak_ptr& node)
+        : base_tree<Traits, ptree_const_node<Traits> >(node),
           base_read<Traits>(node)
 //          node_(node)
     {

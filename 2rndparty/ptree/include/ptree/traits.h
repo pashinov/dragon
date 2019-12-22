@@ -20,13 +20,24 @@ namespace ptree
     {
     public:
         using node_t = base_node<traits>;
-        using node_ptr = node_t*;
+        using node_shared_ptr = std::shared_ptr<node_t>;
+        using node_weak_ptr = std::weak_ptr<node_t>;
         using key_t = Key;
         using value_t = Value;
         using optional_value_t = std::optional<value_t>;
     public:
-        static node_ptr root();
+        static node_shared_ptr root();
+        static node_shared_ptr get_shared(const node_weak_ptr& node);
     };
+
+    template <typename WeakPtr, typename SharedPtr>
+    SharedPtr get_shared(const WeakPtr& weak)
+    {
+        SharedPtr res = weak.lock();
+        if (!res) throw std::bad_weak_ptr();
+        return res;
+    }
+
 
 } // namespace
 

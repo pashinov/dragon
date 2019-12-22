@@ -19,12 +19,11 @@ namespace ptree
         base_read& operator=(const base_read& other) = default;
 
     protected:
-        explicit base_read(typename Traits::node_ptr node);
-
+        explicit base_read(const typename Traits::node_weak_ptr& node);
         ~base_read() = default;
 
     private:
-        typename Traits::node_ptr node_;
+        typename Traits::node_weak_ptr node_;
     };
 
 } // namespace

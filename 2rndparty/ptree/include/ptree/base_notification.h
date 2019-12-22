@@ -18,11 +18,11 @@ namespace ptree
         const notification_object<std::optional<typename Traits::value_t> >& value_changed() const;
 
     protected:
-        base_notification(typename Traits::node_ptr node);
+        base_notification(const typename Traits::node_weak_ptr& node);
         ~base_notification() = default;
 
     private:
-        typename Traits::node_ptr node_;
+        typename Traits::node_weak_ptr node_;
     };
 }
 

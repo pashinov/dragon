@@ -18,11 +18,11 @@ namespace ptree
         base_write& operator=(const Value& value);
 
     protected:
-        base_write(typename Traits::node_ptr node);
+        base_write(const typename Traits::node_weak_ptr& node);
         ~base_write() = default;
 
     private:
-        typename Traits::node_ptr node_;
+        typename Traits::node_weak_ptr node_;
     };
 
 } // namespace

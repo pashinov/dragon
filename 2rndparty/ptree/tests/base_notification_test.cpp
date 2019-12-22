@@ -6,14 +6,14 @@
 class notify_tree_node_stub : public ptree::base_notification<traits_stub>
 {
 public:
-    notify_tree_node_stub(traits_stub::node_ptr node)
+    notify_tree_node_stub(const traits_stub::node_weak_ptr& node)
         : ptree::base_notification<traits_stub>(node),
           node_(node) { }
 
-    traits_stub::node_ptr get() const { return node_; }
+    traits_stub::node_weak_ptr get() const { return node_; }
 
 private:
-    traits_stub::node_ptr node_;
+    traits_stub::node_weak_ptr node_;
 };
 
 
@@ -23,15 +23,16 @@ protected:
     void SetUp() override
     {
         node_mock_.reset(new node_mock());
-        notify_.reset(new notify_tree_node_stub(node_mock_.get()));
+        notify_.reset(new notify_tree_node_stub(node_mock_));
     }
 
     void TearDown() override
     {
+        notify_.reset();
     }
 
 protected:
-    std::unique_ptr<node_mock> node_mock_;
+    std::shared_ptr<node_mock> node_mock_;
     std::unique_ptr<notify_tree_node_stub> notify_;
 };
 
@@ -50,7 +51,7 @@ TEST_F(base_notification_test, child_added)
 
 TEST_F(base_notification_test, child_removed)
 {
-    // Arrange
+    // Arrangecheck_node_weak_ptr
     notification_object<traits_stub::key_t> child_removed_object;
 
     // Assert

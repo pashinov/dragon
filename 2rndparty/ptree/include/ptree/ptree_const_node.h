@@ -53,7 +53,7 @@ namespace ptree
 
 //        [[nodiscard]] bool is_root() const;
     private:
-        ptree_const_node(typename Traits::node_ptr node, bool is_root = false);
+        ptree_const_node(const typename Traits::node_weak_ptr& node);
 
     private:
 //        bool is_root_ = false;

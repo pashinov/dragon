@@ -55,11 +55,11 @@ const_tree_t parser::parse_from_str(const std::string& str)
             break;
         }
     }
-    ptree::ptree_node<libcfg::tree_types> p;
-    auto n = p.child("asdasd");
+//    ptree::ptree_node<libcfg::tree_types> p;
+//    auto n = p.child("asdasd");
 //    p["1"] = 1;
 
-    ptree::ptree_const_node<libcfg::tree_types> c = std::move(p);
+//    ptree::ptree_const_node<libcfg::tree_types> c = std::move(p);
 
     return const_tree_t();
 }

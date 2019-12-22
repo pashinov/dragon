@@ -24,22 +24,21 @@ public:
     using base_node_traits_t = ptree::traits<std::string, base_node_value_t>;
     using base_node_t = ptree::base_node<base_node_traits_t>;
     using base_node_ptr = base_node_t*;
-    using base_node_unique_ptr = std::unique_ptr<base_node_t>;
+    using base_node_shared_ptr = std::shared_ptr<base_node_t>;
+    using base_node_weak_ptr = std::weak_ptr<base_node_t>;
 protected:
     void SetUp() override
     {
-        root_.reset(base_node_t::root());
-        // root_ = base_node_t::root();
+        root_ = base_node_t::root();
     }
 
     void TearDown() override
     {
-        root_.release();
+        root_.reset();
     }
 
 protected:
-    base_node_unique_ptr root_ = nullptr;
-    // std::shared_ptr<base_node_t> root_;
+    base_node_shared_ptr root_ = nullptr;
 };
 
 TEST_F(base_node_test, root_node)
@@ -52,25 +51,25 @@ TEST_F(base_node_test, root_node)
     ASSERT_EQ(correct_key, obtained_key);
 
     // Arrange
-    base_node_traits_t::node_ptr correct_parent = nullptr;
+    base_node_traits_t::node_weak_ptr correct_parent;
     // Act
-    base_node_traits_t::node_ptr obtained_parent = root_->parent();
+    base_node_traits_t::node_weak_ptr obtained_parent = root_->parent();
     // Assert
-    ASSERT_EQ(correct_parent, obtained_parent);
+    ASSERT_EQ(correct_parent.lock(), obtained_parent.lock());
 
     ASSERT_TRUE(root_->empty());
     ASSERT_FALSE(root_->has_children());
     ASSERT_FALSE(root_->has_value());
 
-    const std::optional<base_node_traits_t::value_t>& value = root_->value();
+    const base_node_traits_t::optional_value_t& value = root_->value();
     ASSERT_FALSE(value.has_value());
 
-    std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr> default_value = { };
-    const std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr>& children1 = root_->children(default_value);
+    std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr> default_value = { };
+    const std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr>& children1 = root_->children(default_value);
     ASSERT_EQ(children1, default_value);
     try
     {
-        const std::map<base_node_traits_t::key_t, base_node_traits_t::node_ptr>& children2 = root_->children();
+        const std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr>& children2 = root_->children();
         UNUSED(children2);
         FAIL() << "will be exception: base_node_error type";
     }
@@ -108,15 +107,15 @@ TEST_F(base_node_test, add_children)
     base_node_traits_t::key_t key2 = { "child2" };
 
     // Act
-    base_node_traits_t::node_ptr child1 = root_->add_child(key1);
-    base_node_traits_t::node_ptr child2 = root_->add_child(key2, { std::uint64_t(10) });
+    base_node_traits_t::node_shared_ptr child1 = root_->add_child(key1).lock();
+    base_node_traits_t::node_shared_ptr child2 = root_->add_child(key2, { std::uint64_t(10) }).lock();
 
     // Assert
-    ASSERT_TRUE(child1);
-    ASSERT_TRUE(child2);
+    ASSERT_TRUE(child1.get());
+    ASSERT_TRUE(child2.get());
 
-    ASSERT_EQ(root_.get(), child1->parent());
-    ASSERT_EQ(root_.get(), child2->parent());
+    ASSERT_EQ(root_.get(), child1->parent().lock().get());
+    ASSERT_EQ(root_.get(), child2->parent().lock().get());
 
     ASSERT_EQ(child1->key(), key1);
     ASSERT_EQ(child2->key(), key2);
@@ -130,9 +129,14 @@ TEST_F(base_node_test, add_children)
     ASSERT_FALSE(child1->has_children());
     ASSERT_FALSE(child2->has_children());
 
-    ASSERT_EQ(root_->child(key1), child1);
-    ASSERT_EQ(root_->child(key2), child2);
-    ASSERT_EQ(root_->child(base_node_traits_t::key_t("child3")), nullptr);
+    base_node_traits_t::node_shared_ptr child1_shared_ptr = root_->child(key1).lock();
+    base_node_traits_t::node_shared_ptr child2_shared_ptr = root_->child(key2).lock();
+
+    ASSERT_TRUE(child1_shared_ptr.get());
+    ASSERT_TRUE(child2_shared_ptr.get());
+    ASSERT_EQ(child1_shared_ptr.get(), child1.get());
+    ASSERT_EQ(child2_shared_ptr.get(), child2.get());
+    ASSERT_EQ(root_->child(base_node_traits_t::key_t("child3")).lock().get(), nullptr);
 }
 
 TEST_F(base_node_test, clear_children)
@@ -151,8 +155,8 @@ TEST_F(base_node_test, clear_children)
     ASSERT_TRUE(root_->empty());
     ASSERT_FALSE(root_->has_children());
     ASSERT_FALSE(root_->has_value());
-    ASSERT_EQ(root_->child(key1), nullptr);
-    ASSERT_EQ(root_->child(key2), nullptr);
+    ASSERT_EQ(root_->child(key1).lock(), nullptr);
+    ASSERT_EQ(root_->child(key2).lock(), nullptr);
     ASSERT_FALSE(root_->exist(key1));
     ASSERT_FALSE(root_->exist(key2));
 }

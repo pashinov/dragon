@@ -10,7 +10,7 @@ namespace ptree
     class base_node_error : public std::exception
     {
     public:
-        enum class error_type : std::uint32_t
+        enum class error_type : std::uint64_t
         {
             value_not_exist,
             children_not_exist
