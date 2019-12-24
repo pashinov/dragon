@@ -3,6 +3,7 @@
 
 // std
 #include <map>
+#include <iostream>
 
 namespace ptree
 {
@@ -26,19 +27,22 @@ namespace ptree
         [[nodiscard]] Node operator[](const Path& path) const;
 
         template <typename Other>
-        base_tree(const base_tree<Traits, Other>& other)
-            : node_(other.node_)
-        {
-        }
+        base_tree(const base_tree<Traits, Other>& other);
+
+        base_tree(const base_tree& other) = default;
+        base_tree(base_tree&& other) = default;
 
         bool operator == (const base_tree& other) const;
         bool operator != (const base_tree& other) const;
-    protected:
-        explicit base_tree(const typename Traits::node_weak_ptr& node);
-        ~base_tree() { }
 
+        base_tree& operator=(const base_tree& other) = default;
+        base_tree& operator=(base_tree&& other) = default;
+
+    protected:
+        explicit base_tree(const typename Traits::node_shared_ptr& node);
+        ~base_tree() { }
     private:
-        typename Traits::node_weak_ptr node_;
+        typename Traits::node_shared_ptr node_;
     };
 
 } // namespace

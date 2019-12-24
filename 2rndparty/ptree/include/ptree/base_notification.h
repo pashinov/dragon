@@ -6,6 +6,7 @@
 
 // std
 #include <optional>
+#include <iostream>
 
 namespace ptree
 {
@@ -17,12 +18,18 @@ namespace ptree
         const notification_object<typename Traits::key_t>& child_removed() const;
         const notification_object<std::optional<typename Traits::value_t> >& value_changed() const;
 
+        base_notification(const base_notification& other) = default;
+        base_notification(base_notification&& other) = default;
+
+        base_notification& operator=(const base_notification& other) = default;
+        base_notification& operator=(base_notification&& other) = default;
+
     protected:
-        base_notification(const typename Traits::node_weak_ptr& node);
-        ~base_notification() = default;
+        base_notification(const typename Traits::node_shared_ptr& node);
+        ~base_notification() { }
 
     private:
-        typename Traits::node_weak_ptr node_;
+        typename Traits::node_shared_ptr node_;
     };
 }
 

@@ -16,15 +16,15 @@
 class tree_node_read_stub : public ptree::base_read<traits_stub>
 {
 public:
-    tree_node_read_stub(const traits_stub::node_weak_ptr& node)
+    tree_node_read_stub(const traits_stub::node_shared_ptr& node)
         : ptree::base_read<traits_stub>(node), node_(node) { }
 
     using reading_tree_t = base_read<traits_stub>;
 
-    traits_stub::node_weak_ptr get() const { return node_; }
+    traits_stub::node_shared_ptr get() const { return node_; }
 
 private:
-    traits_stub::node_weak_ptr node_;
+    traits_stub::node_shared_ptr node_;
 };
 
 class base_read_test : public testing::Test

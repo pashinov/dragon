@@ -6,14 +6,14 @@
 class notify_tree_node_stub : public ptree::base_notification<traits_stub>
 {
 public:
-    notify_tree_node_stub(const traits_stub::node_weak_ptr& node)
+    notify_tree_node_stub(const traits_stub::node_shared_ptr& node)
         : ptree::base_notification<traits_stub>(node),
           node_(node) { }
 
-    traits_stub::node_weak_ptr get() const { return node_; }
+    traits_stub::node_shared_ptr get() const { return node_; }
 
 private:
-    traits_stub::node_weak_ptr node_;
+    traits_stub::node_shared_ptr node_;
 };
 
 

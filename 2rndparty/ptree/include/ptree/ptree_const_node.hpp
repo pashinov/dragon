@@ -6,14 +6,12 @@ namespace ptree
     template <typename Traits>
     ptree_const_node<Traits>::ptree_const_node() : ptree_const_node<Traits>(Traits::root())
     {
-//        is_root_ = true;
     }
 
     template <typename Traits>
-    ptree_const_node<Traits>::ptree_const_node(const typename Traits::node_weak_ptr& node)
+    ptree_const_node<Traits>::ptree_const_node(const typename Traits::node_shared_ptr& node)
         : base_tree<Traits, ptree_const_node<Traits> >(node),
           base_read<Traits>(node)
-//          node_(node)
     {
     }
 
@@ -36,11 +34,7 @@ namespace ptree
     template <typename Traits>
     ptree_const_node<Traits>::~ptree_const_node()
     {
-//        if (common_tree_t::is_root()) delete node_;
     }
-
-//    template <typename Traits>
-//    bool ptree_const_node<Traits>::is_root() const { return is_root_; }
 
 } // namespace
 

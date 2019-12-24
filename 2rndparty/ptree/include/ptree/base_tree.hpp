@@ -3,40 +3,41 @@
 
 // std
 #include <memory>
+#include <type_traits>
+#include <cassert>
 
 namespace ptree
 {
     template <typename Traits, typename Node>
-    base_tree<Traits, Node>::base_tree(const typename Traits::node_weak_ptr& node) : node_(node)
+    base_tree<Traits, Node>::base_tree(const typename Traits::node_shared_ptr& node) : node_(node)
     {
-        if (!node_.lock()) throw std::bad_weak_ptr();
+        assert(node_.get());
     }
 
     template <typename Traits, typename Node>
     bool base_tree<Traits, Node>::has_children() const
     {
-        return Traits::get_shared(node_)->has_children();
+        return node_->has_children();
     }
 
     template <typename Traits, typename Node>
     bool base_tree<Traits, Node>::exist(const typename Traits::key_t& key) const
     {
-        return Traits::get_shared(node_)->exist(key);
+        return node_->exist(key);
     }
 
     template <typename Traits, typename Node>
     Node base_tree<Traits, Node>::child(const typename Traits::key_t& key) const
     {
-        auto node = Traits::get_shared(node_);
-        typename Traits::node_shared_ptr child = node->child(key).lock();
-        return child ? child : node->add_child(key).lock();
+        typename Traits::node_shared_ptr child = node_->child(key);
+        return child ? child : node_->add_child(key);
     }
 
     template <typename Traits, typename Node>
     std::map<typename Traits::key_t, Node> base_tree<Traits, Node>::children() const
     {
         std::map<typename Traits::key_t, Node> res;
-        const auto& node_children = Traits::get_shared(node_)->children();
+        const auto& node_children = node_->children();
         for (auto it = node_children.cbegin(); it != node_children.cend(); ++it)
         {
             res.insert(std::make_pair(it->first, Node(it->second)));
@@ -74,19 +75,26 @@ namespace ptree
     }
 
     template <typename Traits, typename Node>
+    template <typename Other>
+    base_tree<Traits, Node>::base_tree(const base_tree<Traits, Other>& other) : node_(other.node_)
+    {
+        static_assert (std::is_base_of<base_tree<Traits, Other>, Other>::value, "Type is not base of base_tree class");
+    }
+
+    template <typename Traits, typename Node>
     template <typename Path>
     Node base_tree<Traits, Node>::operator[](const Path& path) const { return this->child<Path>(path); }
 
     template <typename Traits, typename Node>
     bool base_tree<Traits, Node>::operator == (const base_tree<Traits, Node>& other) const
     {
-        return Traits::get_shared(node_).get() == Traits::get_shared(other.node_).get();
+        return node_.get() == other.node_.get();
     }
 
     template <typename Traits, typename Node>
     bool base_tree<Traits, Node>::operator != (const base_tree<Traits, Node>& other) const
     {
-        return Traits::get_shared(node_).get() == Traits::get_shared(other.node_).get();
+        return node_.get() == other.node_.get();
     }
 }
 

@@ -41,8 +41,8 @@ class node_mock
 public:
     MOCK_CONST_METHOD0(has_children, bool());
     MOCK_CONST_METHOD1(exist, bool(const traits_stub::key_t&));
-    MOCK_CONST_METHOD1(child, traits_stub::node_weak_ptr(const traits_stub::key_t&));
-    MOCK_METHOD1(add_child, traits_stub::node_weak_ptr(const traits_stub::key_t&));
+    MOCK_CONST_METHOD1(child, traits_stub::node_shared_ptr(const traits_stub::key_t&));
+    MOCK_METHOD1(add_child, traits_stub::node_shared_ptr(const traits_stub::key_t&));
     MOCK_CONST_METHOD0(children, std::map<traits_stub::key_t, traits_stub::node_shared_ptr>());
     MOCK_CONST_METHOD0(empty, bool());
     MOCK_CONST_METHOD0(has_value, bool());

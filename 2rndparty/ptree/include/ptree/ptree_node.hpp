@@ -1,13 +1,13 @@
 #ifndef PTREE_NODE_HPP
 #define PTREE_NODE_HPP
 
+#include <iostream>
 
 namespace ptree
 {
     template <typename Traits>
     ptree_node<Traits>::ptree_node() : ptree_node(Traits::root())
     {
-//        is_root_ = true;
     }
 
     template <typename Traits>
@@ -21,18 +21,19 @@ namespace ptree
     template <typename Traits>
     ptree_node<Traits>::~ptree_node()
     {
+//        std::cout << "~ptree_node()" << std::endl;
     }
 
     template <typename Traits>
     bool ptree_node<Traits>::operator == (const ptree_node& other) const
     {
-        return common_tree_t::operator==(other);
+        return node_ == other.node_;
     }
 
     template <typename Traits>
     bool ptree_node<Traits>::operator != (const ptree_node& other) const
     {
-        return common_tree_t::operator != (other);
+        return node_ != other.node_;
     }
 
 } // namespace

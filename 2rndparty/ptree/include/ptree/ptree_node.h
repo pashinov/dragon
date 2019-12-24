@@ -58,8 +58,6 @@ namespace ptree
         bool operator == (const ptree_node& other) const;
         bool operator != (const ptree_node& other) const;
 
-//        [[nodiscard]] bool is_root() const;
-
     private:
         ptree_node(const typename Traits::node_shared_ptr& node);
 

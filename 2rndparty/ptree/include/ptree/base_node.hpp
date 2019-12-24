@@ -34,7 +34,7 @@ namespace ptree
             value_.reset();
             value_.emplace(value);
             holds_value_ = holds_value_t::value;
-            value_changed_.notify(value_.value());
+            value_changed_.notify(value_);
             was_set = true;
         }
 
@@ -42,7 +42,7 @@ namespace ptree
     }
 
     template <typename Traits>
-    typename Traits::node_weak_ptr base_node<Traits>::add_child(const typename Traits::key_t& key)
+    typename Traits::node_shared_ptr base_node<Traits>::add_child(const typename Traits::key_t& key)
     {
         typename Traits::node_shared_ptr node = nullptr; // use NRVO optimization
         if (holds_value_ != holds_value_t::value)
@@ -60,8 +60,8 @@ namespace ptree
 
     // TODO: for return value can be use return_type<V,E>
     template <typename Traits>
-    typename Traits::node_weak_ptr base_node<Traits>::add_child(const typename Traits::key_t& key,
-                                                                const typename Traits::value_t& value)
+    typename Traits::node_shared_ptr base_node<Traits>::add_child(const typename Traits::key_t& key,
+                                                                  const typename Traits::value_t& value)
     {
         typename Traits::node_shared_ptr node = nullptr; // use NRVO optimization
         if (holds_value_ != holds_value_t::value)
@@ -101,6 +101,7 @@ namespace ptree
             throw base_node_error(base_node_error::error_type::children_not_exist,
                     "children do not exists");
 
+//        return std::map<typename Traits::key_t, typename Traits::node_shared_ptr>();
         return children_;
     }
 
@@ -108,17 +109,18 @@ namespace ptree
     const std::map<typename Traits::key_t, typename Traits::node_shared_ptr>& base_node<Traits>::children
     (const std::map<typename Traits::key_t, typename Traits::node_shared_ptr>& default_value) const
     {
+//        return std::map<typename Traits::key_t, typename Traits::node_shared_ptr>();
         return has_children() ? children_ : default_value;
     }
 
     template <typename Traits>
-    typename Traits::node_weak_ptr base_node<Traits>::child(const typename Traits::key_t& key) const
+    typename Traits::node_shared_ptr base_node<Traits>::child(const typename Traits::key_t& key) const
     {
         if (auto it = children_.find(key); it != children_.cend())
         {
             return it->second;
         }
-        return typename Traits::node_weak_ptr();
+        return typename Traits::node_shared_ptr();
     }
 
     template <typename Traits>

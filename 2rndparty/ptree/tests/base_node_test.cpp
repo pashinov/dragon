@@ -65,11 +65,13 @@ TEST_F(base_node_test, root_node)
     ASSERT_FALSE(value.has_value());
 
     std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr> default_value = { };
-    const std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr>& children1 = root_->children(default_value);
+    const std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr>& children1
+            = root_->children(default_value);
     ASSERT_EQ(children1, default_value);
     try
     {
-        const std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr>& children2 = root_->children();
+        const std::map<base_node_traits_t::key_t, base_node_traits_t::node_shared_ptr>& children2
+                = root_->children();
         UNUSED(children2);
         FAIL() << "will be exception: base_node_error type";
     }
@@ -107,8 +109,8 @@ TEST_F(base_node_test, add_children)
     base_node_traits_t::key_t key2 = { "child2" };
 
     // Act
-    base_node_traits_t::node_shared_ptr child1 = root_->add_child(key1).lock();
-    base_node_traits_t::node_shared_ptr child2 = root_->add_child(key2, { std::uint64_t(10) }).lock();
+    base_node_traits_t::node_shared_ptr child1 = root_->add_child(key1);
+    base_node_traits_t::node_shared_ptr child2 = root_->add_child(key2, { std::uint64_t(10) });
 
     // Assert
     ASSERT_TRUE(child1.get());
@@ -129,14 +131,14 @@ TEST_F(base_node_test, add_children)
     ASSERT_FALSE(child1->has_children());
     ASSERT_FALSE(child2->has_children());
 
-    base_node_traits_t::node_shared_ptr child1_shared_ptr = root_->child(key1).lock();
-    base_node_traits_t::node_shared_ptr child2_shared_ptr = root_->child(key2).lock();
+    base_node_traits_t::node_shared_ptr child1_shared_ptr = root_->child(key1);
+    base_node_traits_t::node_shared_ptr child2_shared_ptr = root_->child(key2);
 
     ASSERT_TRUE(child1_shared_ptr.get());
     ASSERT_TRUE(child2_shared_ptr.get());
     ASSERT_EQ(child1_shared_ptr.get(), child1.get());
     ASSERT_EQ(child2_shared_ptr.get(), child2.get());
-    ASSERT_EQ(root_->child(base_node_traits_t::key_t("child3")).lock().get(), nullptr);
+    ASSERT_EQ(root_->child(base_node_traits_t::key_t("child3")).get(), nullptr);
 }
 
 TEST_F(base_node_test, clear_children)
@@ -155,8 +157,8 @@ TEST_F(base_node_test, clear_children)
     ASSERT_TRUE(root_->empty());
     ASSERT_FALSE(root_->has_children());
     ASSERT_FALSE(root_->has_value());
-    ASSERT_EQ(root_->child(key1).lock(), nullptr);
-    ASSERT_EQ(root_->child(key2).lock(), nullptr);
+    ASSERT_EQ(root_->child(key1), nullptr);
+    ASSERT_EQ(root_->child(key2), nullptr);
     ASSERT_FALSE(root_->exist(key1));
     ASSERT_FALSE(root_->exist(key2));
 }

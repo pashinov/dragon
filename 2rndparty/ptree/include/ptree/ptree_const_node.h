@@ -39,8 +39,6 @@ namespace ptree
         ptree_const_node(const Other& other)
             : base_tree<Traits, ptree_const_node<Traits> >(other),
               base_read<Traits>(other)
-//              node_(other.node_),
-//              is_root_(other.is_root_)
         {
         }
 
@@ -50,14 +48,8 @@ namespace ptree
               base_read<Traits>(other)
         {
         }
-
-//        [[nodiscard]] bool is_root() const;
     private:
-        ptree_const_node(const typename Traits::node_weak_ptr& node);
-
-    private:
-//        bool is_root_ = false;
-//        typename Traits::node_ptr node_ = nullptr;
+        ptree_const_node(const typename Traits::node_shared_ptr& node);
     };
 
 } // namespace

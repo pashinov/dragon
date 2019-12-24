@@ -6,36 +6,36 @@
 namespace ptree
 {
     template <typename Traits>
-    base_read<Traits>::base_read(const typename Traits::node_weak_ptr& node) : node_(node) { }
+    base_read<Traits>::base_read(const typename Traits::node_shared_ptr& node) : node_(node) { }
 
     template <typename Traits>
     bool base_read<Traits>::empty() const
     {
-        return Traits::get_shared(node_)->empty();
+        return node_->empty();
     }
 
     template <typename Traits>
     bool base_read<Traits>::has_value() const
     {
-        return Traits::get_shared(node_)->has_value();
+        return node_->has_value();
     }
 
     template <typename Traits>
     base_read<Traits>::operator bool() const
     {
-        return !Traits::get_shared(node_)->empty();
+        return !node_->empty();
     }
 
     template <typename Traits>
     typename Traits::key_t base_read<Traits>::key() const
     {
-        return Traits::get_shared(node_)->key();
+        return node_->key();
     }
 
     template <typename Traits>
     const typename Traits::optional_value_t& base_read<Traits>::value() const
     {
-        return Traits::get_shared(node_)->value();
+        return node_->value();
     }
 
 } // namespace

@@ -1,13 +1,15 @@
 #ifndef BASE_WRITE_H
 #define BASE_WRITE_H
 
+#include <iostream>
+
 namespace ptree
 {
     template <typename Traits>
     class base_write
     {
     public:
-        bool set_value(const typename Traits::value_t& value);
+        [[nodiscard]] bool set_value(const typename Traits::value_t& value);
 
         void clear();
         void erase(const typename Traits::key_t& key);
@@ -18,11 +20,10 @@ namespace ptree
         base_write& operator=(const Value& value);
 
     protected:
-        base_write(const typename Traits::node_weak_ptr& node);
-        ~base_write() = default;
-
+        base_write(const typename Traits::node_shared_ptr& node);
+        ~base_write() { }
     private:
-        typename Traits::node_weak_ptr node_;
+        typename Traits::node_shared_ptr node_;
     };
 
 } // namespace

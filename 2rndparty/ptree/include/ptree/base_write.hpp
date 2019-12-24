@@ -8,27 +8,27 @@
 namespace ptree
 {
     template <typename Traits>
-    base_write<Traits>::base_write(const typename Traits::node_weak_ptr& node) : node_(node) { }
+    base_write<Traits>::base_write(const typename Traits::node_shared_ptr& node) : node_(node) { }
 
     template <typename Traits>
-    void base_write<Traits>::clear() { node_.lock()->clear(); }
+    void base_write<Traits>::clear() { node_->clear(); }
 
     template <typename Traits>
-    void base_write<Traits>::erase(const typename Traits::key_t& key) { node_.lock()->erase(key); }
+    void base_write<Traits>::erase(const typename Traits::key_t& key) { node_->erase(key); }
 
     template <typename Traits>
     bool base_write<Traits>::set_value(const typename Traits::value_t& value)
     {
-        return node_.lock()->set_value(value);
+        return node_->set_value(value);
     }
 
     template <typename Traits>
     template <typename Value>
     base_write<Traits>& base_write<Traits>::operator=(const Value& value)
     {
-        if (!node_.lock()->has_value())
+        if (!node_->has_value())
         {
-            node_.lock()->clear();
+            node_->clear();
         }
 
         // operator=(const base_write<Traits>& )

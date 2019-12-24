@@ -17,9 +17,9 @@ namespace ptree
 
         bool set_value(const typename Traits::value_t& value);
         
-        typename Traits::node_weak_ptr add_child(const typename Traits::key_t& key);
-        typename Traits::node_weak_ptr add_child(const typename Traits::key_t& key,
-                                                 const typename Traits::value_t& value);
+        typename Traits::node_shared_ptr add_child(const typename Traits::key_t& key);
+        typename Traits::node_shared_ptr add_child(const typename Traits::key_t& key,
+                                                   const typename Traits::value_t& value);
 
         [[nodiscard]] bool empty() const;
         [[nodiscard]] bool has_children() const;
@@ -34,7 +34,7 @@ namespace ptree
         const std::map<typename Traits::key_t, typename Traits::node_shared_ptr>& children
             (const std::map<typename Traits::key_t, typename Traits::node_shared_ptr>& default_value) const;
 
-        typename Traits::node_weak_ptr child(const typename Traits::key_t& key) const;
+        typename Traits::node_shared_ptr child(const typename Traits::key_t& key) const;
 
         bool exist(const typename Traits::node_shared_ptr& child) const;
         bool exist(const typename Traits::key_t& child) const;
@@ -65,7 +65,7 @@ namespace ptree
 
         typename Traits::node_shared_ptr create_child(const typename Traits::key_t& key);
         typename Traits::node_shared_ptr create_child(const typename Traits::key_t& key,
-                                               const typename Traits::value_t& value);
+                                                      const typename Traits::value_t& value);
 
     private:
         // weak_ptr to this pointer
