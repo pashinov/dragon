@@ -3,14 +3,16 @@
 
 // internal
 #include "trsits.h"
+#include "libconfig_error.h"
+#include "libconfig/libconfig_error.h"
 
 namespace libcfg
 {
     class parser
     {
     public:
-        static const_tree_t parse_from_str(const std::string& str);
-        static const_tree_t parse_from_file(const std::string& filename);
+        static const_tree_t from_string(const std::string& str);
+        static const_tree_t from_file(const std::string& filename);
     };
 
 } // namespace
