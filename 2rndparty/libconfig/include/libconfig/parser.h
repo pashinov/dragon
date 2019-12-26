@@ -11,8 +11,8 @@ namespace libcfg
     class parser
     {
     public:
-        static const_tree_t from_string(const std::string& str);
-        static const_tree_t from_file(const std::string& filename);
+        static const_tree_node_t from_string(const std::string& str);
+        static const_tree_node_t from_file(const std::string& filename);
     };
 
 } // namespace

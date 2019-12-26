@@ -80,7 +80,7 @@ TEST_F(libconfig_test, parse)
                      " bitmask = 0x1FC3;" \
                 "};" \
             "};";
-    libcfg::const_tree_t cfg = libcfg::parser::from_string(config);
+    libcfg::const_tree_node_t cfg = libcfg::parser::from_string(config);
     std::cout << "version = " << std::get<std::string>(cfg["version"].value().value()) << std::endl;
 
     auto application = cfg["application"];
