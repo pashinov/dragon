@@ -5,7 +5,10 @@
 
 // 3rd party includes
 #include <args.hxx>
-#include <boost/asio.hpp>
+
+// project includes
+#include <dispatcher/task_manager.hpp>
+#include <sysinfo/cpuinfo.hpp>
 
 namespace asio = boost::asio;
 
@@ -13,7 +16,20 @@ static bool alive = false;
 
 void service_main_thread(asio::io_service& io_service)
 {
+    CPUInfo cpu_info;
+
+    std::function<void()> cpu_vendor = [&]() { std::cout << cpu_info.vendor() << std::endl; };
+    std::function<void()> cpu_model = [&]()  { std::cout << cpu_info.model() << std::endl;  };
+
+    std::unique_ptr<task_manager> tm = std::make_unique<task_manager>(io_service);
+    tm->add_task(cpu_vendor);
+    tm->add_task(cpu_model);
+    tm->start();
+
+    // Run asio event loop
     io_service.run();
+
+    tm->stop();
 }
 
 void signals_callback_handler(int signal)

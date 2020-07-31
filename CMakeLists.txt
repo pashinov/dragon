@@ -8,9 +8,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Threads REQUIRED)
 find_package(Boost 1.73 COMPONENTS system REQUIRED)
 
+set(SVC_HDR_FILES
+        src/dispatcher/task_manager.hpp
+        src/sysinfo/cpuinfo.hpp
+        )
+
+set(SVC_SRC_FILES
+        src/dispatcher/task_manager.cpp
+        src/sysinfo/cpuinfo.cpp
+        )
+
 set(SVC_SRC_MAIN_FILES src/main.cpp)
 
-add_executable(${PROJECT_NAME} ${SVC_SRC_MAIN_FILES})
+include_directories(src)
+
+add_executable(${PROJECT_NAME} ${SVC_SRC_MAIN_FILES} ${SVC_SRC_FILES} ${SVC_HDR_FILES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/args)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
