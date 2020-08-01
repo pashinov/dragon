@@ -1,0 +1,30 @@
+language: cpp
+sudo: required
+
+rust:
+  - stable
+
+matrix:
+  include:
+    - os: osx
+      env:
+      - BOOST_ROOT=$(brew --prefix boost)
+      - Boost_LIBRARY_DIR=$(brew --prefix boost)/lib
+      - Boost_INCLUDE_DIR=$(brew --prefix boost)/include
+    - os: linux
+      dist: bionic
+      install:
+        - mkdir /tmp/download && pushd /tmp/download
+        - wget -O boost_1_72_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.72.0/boost_1_72_0.tar.gz/download
+        - tar xzvf boost_1_72_0.tar.gz > /dev/null 2>&1 && cd boost_1_72_0/
+        - ./bootstrap.sh --prefix=/usr/local --with-libraries=system
+        - ./b2 variant=release
+        - sudo ./b2 install > /dev/null 2>&1
+        - popd
+
+script:
+  - mkdir build
+  - pushd build
+  - cmake ..
+  - make
+  - popd

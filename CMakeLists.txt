@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Threads REQUIRED)
-find_package(Boost 1.73 COMPONENTS system REQUIRED)
+find_package(Boost 1.71 COMPONENTS system REQUIRED)
 
 set(SVC_HDR_FILES
         src/sysinfo/cpuinfo.hpp
@@ -29,4 +29,4 @@ add_executable(${PROJECT_NAME} ${SVC_SRC_MAIN_FILES} ${SVC_SRC_FILES} ${SVC_HDR_
 target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/args)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
