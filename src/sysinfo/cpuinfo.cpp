@@ -1,20 +1,32 @@
 #include <sysinfo/cpuinfo.hpp>
 
-CPUInfo::CPUInfo()
+namespace sysinfo
 {
-    // Get vendor name EAX=0
-    CPUID cpuID0(0, 0);
-    vendor_id_ += std::string((const char *)&cpuID0.EBX(), 4);
-    vendor_id_ += std::string((const char *)&cpuID0.EDX(), 4);
-    vendor_id_ += std::string((const char *)&cpuID0.ECX(), 4);
+    std::string cpu_vendor()
+    {
+        CPUID cpuID0(0, 0);
 
-    // Get processor brand string
-    // This seems to be working for both Intel & AMD vendors
-    for(unsigned int i=0x80000002; i<0x80000005; ++i) {
-        CPUID cpuID(i, 0);
-        model_name_ += std::string((const char*)&cpuID.EAX(), 4);
-        model_name_ += std::string((const char*)&cpuID.EBX(), 4);
-        model_name_ += std::string((const char*)&cpuID.ECX(), 4);
-        model_name_ += std::string((const char*)&cpuID.EDX(), 4);
+        std::string vendor_id;
+        vendor_id += std::string((const char *)&cpuID0.EBX(), 4);
+        vendor_id += std::string((const char *)&cpuID0.EDX(), 4);
+        vendor_id += std::string((const char *)&cpuID0.ECX(), 4);
+
+        return vendor_id;
     }
-}
+
+    std::string cpu_model()
+    {
+        std::string model_name;
+
+        for(unsigned int i=0x80000002; i<0x80000005; ++i)
+        {
+            CPUID cpuID(i, 0);
+            model_name += std::string((const char*)&cpuID.EAX(), 4);
+            model_name += std::string((const char*)&cpuID.EBX(), 4);
+            model_name += std::string((const char*)&cpuID.ECX(), 4);
+            model_name += std::string((const char*)&cpuID.EDX(), 4);
+        }
+
+        return model_name;
+    }
+} // namespace sysinfo

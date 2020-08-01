@@ -9,13 +9,15 @@ find_package(Threads REQUIRED)
 find_package(Boost 1.73 COMPONENTS system REQUIRED)
 
 set(SVC_HDR_FILES
-        src/dispatcher/task_manager.hpp
         src/sysinfo/cpuinfo.hpp
+        src/sysinfo/osinfo.hpp
+        src/utils/task_manager.hpp
         )
 
 set(SVC_SRC_FILES
-        src/dispatcher/task_manager.cpp
         src/sysinfo/cpuinfo.cpp
+        src/sysinfo/osinfo.cpp
+        src/utils/task_manager.cpp
         )
 
 set(SVC_SRC_MAIN_FILES src/main.cpp)

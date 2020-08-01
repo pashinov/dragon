@@ -7,8 +7,9 @@
 #include <args.hxx>
 
 // project includes
-#include <dispatcher/task_manager.hpp>
 #include <sysinfo/cpuinfo.hpp>
+#include <sysinfo/osinfo.hpp>
+#include <utils/task_manager.hpp>
 
 namespace asio = boost::asio;
 
@@ -16,14 +17,22 @@ static bool alive = false;
 
 void service_main_thread(asio::io_service& io_service)
 {
-    CPUInfo cpu_info;
+    std::function<void()> cpu_vendor =      [&]() { std::cout << sysinfo::cpu_vendor()      << std::endl; };
+    std::function<void()> cpu_model =       [&]() { std::cout << sysinfo::cpu_model()       << std::endl; };
+    std::function<void()> os_system_name =  [&]() { std::cout << sysinfo::os_system_name()  << std::endl; };
+    std::function<void()> os_name =         [&]() { std::cout << sysinfo::os_name()         << std::endl; };
+    std::function<void()> os_machine =      [&]() { std::cout << sysinfo::os_machine()      << std::endl; };
+    std::function<void()> os_release =      [&]() { std::cout << sysinfo::os_release()      << std::endl; };
+    std::function<void()> os_version =      [&]() { std::cout << sysinfo::os_version ()     << std::endl; };
 
-    std::function<void()> cpu_vendor = [&]() { std::cout << cpu_info.vendor() << std::endl; };
-    std::function<void()> cpu_model = [&]()  { std::cout << cpu_info.model() << std::endl;  };
-
-    std::unique_ptr<task_manager> tm = std::make_unique<task_manager>(io_service);
+    std::unique_ptr<utils::task_manager> tm = std::make_unique<utils::task_manager>(io_service);
     tm->add_task(cpu_vendor);
     tm->add_task(cpu_model);
+    tm->add_task(os_name);
+    tm->add_task(os_system_name);
+    tm->add_task(os_machine);
+    tm->add_task(os_release);
+    tm->add_task(os_version);
     tm->start();
 
     // Run asio event loop
