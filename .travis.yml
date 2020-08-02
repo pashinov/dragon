@@ -7,6 +7,7 @@ rust:
 matrix:
   include:
     - os: osx
+      osx_image: xcode12
       env:
       - BOOST_ROOT=$(brew --prefix boost)
       - Boost_LIBRARY_DIR=$(brew --prefix boost)/lib
