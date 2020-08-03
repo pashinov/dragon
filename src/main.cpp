@@ -9,11 +9,10 @@
 // project includes
 #include <sysinfo/cpuinfo.hpp>
 #include <sysinfo/osinfo.hpp>
+#include <utils/signal_handler.hpp>
 #include <utils/task_manager.hpp>
 
 namespace asio = boost::asio;
-
-static bool alive = false;
 
 void service_main_thread(asio::io_service& io_service)
 {
@@ -41,30 +40,14 @@ void service_main_thread(asio::io_service& io_service)
     tm->stop();
 }
 
-void signals_callback_handler(int signal)
-{
-    switch(signal) {
-        case SIGINT:
-        case SIGTERM:
-        default:
-            alive = false;
-            break;
-    }
-}
-
 void run_service()
 {
     asio::io_service io_service;
     std::thread thread(&service_main_thread, std::ref(io_service));
 
-    signal(SIGINT, signals_callback_handler);
-    signal(SIGTERM, signals_callback_handler);
-
-    alive = true;
-    while(alive)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+    utils::signal_handler::hook_signal(SIGINT);
+    utils::signal_handler::hook_signal(SIGTERM);
+    utils::signal_handler::wait_for_signal_interrupt();
 
     io_service.stop();
     thread.join();

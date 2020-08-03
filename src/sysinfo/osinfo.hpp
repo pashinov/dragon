@@ -1,5 +1,5 @@
 //
-// Created by apashinov on 01/08/20
+// Created by Alexey Pashinov on 01/08/20
 //
 
 #ifndef SYSINFO_OSINFO_HPP
