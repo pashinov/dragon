@@ -11,6 +11,7 @@ find_package(Boost 1.71 COMPONENTS system REQUIRED)
 set(SVC_HDR_FILES
         src/sysinfo/cpuinfo.hpp
         src/sysinfo/osinfo.hpp
+        src/utils/signal_handler.hpp
         src/utils/task_manager.hpp
         )
 

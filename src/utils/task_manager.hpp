@@ -1,5 +1,5 @@
 //
-// Created by apashinov on 31/07/20
+// Created by Alexey Pashinov on 31/07/20
 //
 
 #ifndef UTILS_TASK_MANAGER_HPP
