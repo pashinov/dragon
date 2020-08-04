@@ -2,18 +2,20 @@
 // Created by Alexey Pashinov on 31/07/20
 //
 
-#ifndef UTILS_TASK_MANAGER_HPP
-#define UTILS_TASK_MANAGER_HPP
+#pragma once
+
+// system includes
+#include <chrono>
 
 // 3rd party includes
 #include <boost/asio.hpp>
 
-namespace utils
+namespace phoenix_service
 {
     class task_manager
     {
     public:
-        explicit task_manager(boost::asio::io_service& io_service);
+        task_manager(boost::asio::io_service& io_service);
         ~task_manager();
 
         void start();
@@ -25,6 +27,4 @@ namespace utils
         class impl;
         std::unique_ptr<impl> impl_;
     };
-} // namespace utils
-
-#endif // UTILS_TASK_MANAGER_HPP
+}

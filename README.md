@@ -1,6 +1,6 @@
 # Dragon
 
-Asynchronous single thread service provides REST API interface for management device.
+Service provides REST API interface for management device.
 
 [![Build Status][travis-badge]][travis-link]
 [![License][license-badge]][license-link]

@@ -7,50 +7,33 @@
 #include <args.hxx>
 
 // project includes
-#include <sysinfo/cpuinfo.hpp>
-#include <sysinfo/osinfo.hpp>
-#include <utils/signal_handler.hpp>
-#include <utils/task_manager.hpp>
-
-namespace asio = boost::asio;
-
-void service_main_thread(asio::io_service& io_service)
-{
-    std::function<void()> cpu_vendor =      [&]() { std::cout << sysinfo::cpu_vendor()      << std::endl; };
-    std::function<void()> cpu_model =       [&]() { std::cout << sysinfo::cpu_model()       << std::endl; };
-    std::function<void()> os_system_name =  [&]() { std::cout << sysinfo::os_system_name()  << std::endl; };
-    std::function<void()> os_name =         [&]() { std::cout << sysinfo::os_name()         << std::endl; };
-    std::function<void()> os_machine =      [&]() { std::cout << sysinfo::os_machine()      << std::endl; };
-    std::function<void()> os_release =      [&]() { std::cout << sysinfo::os_release()      << std::endl; };
-    std::function<void()> os_version =      [&]() { std::cout << sysinfo::os_version ()     << std::endl; };
-
-    std::unique_ptr<utils::task_manager> tm = std::make_unique<utils::task_manager>(io_service);
-    tm->add_task(cpu_vendor);
-    tm->add_task(cpu_model);
-    tm->add_task(os_name);
-    tm->add_task(os_system_name);
-    tm->add_task(os_machine);
-    tm->add_task(os_release);
-    tm->add_task(os_version);
-    tm->start();
-
-    // Run asio event loop
-    io_service.run();
-
-    tm->stop();
-}
+#include <phoenix_service/microsvc_controller.hpp>
+#include <rest_service/microsvc_controller.hpp>
+#include <utils/interrupt_handler.hpp>
 
 void run_service()
 {
-    asio::io_service io_service;
-    std::thread thread(&service_main_thread, std::ref(io_service));
+    rest_service::microservice_controller server;
+    server.set_endpoint("http://localhost:9001/api/v1");
 
-    utils::signal_handler::hook_signal(SIGINT);
-    utils::signal_handler::hook_signal(SIGTERM);
-    utils::signal_handler::wait_for_signal_interrupt();
+    phoenix_service::microsvc_controller phoenix_controller;
 
-    io_service.stop();
-    thread.join();
+    try
+    {
+        server.accept().wait();
+        phoenix_controller.start();
+
+        utils::interrupt_handler::hook_signal(SIGINT);
+        utils::interrupt_handler::hook_signal(SIGTERM);
+        utils::interrupt_handler::wait_for_signal_interrupt();
+
+        phoenix_controller.stop();
+        server.shutdown().wait();
+    }
+    catch(std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
 }
 
 int main(int argc, char* argv[])
