@@ -1,0 +1,17 @@
+{
+  "Config": {
+
+    "Application": {
+      "Name": "dragon",
+      "Version": "0.0.1"
+    },
+
+    "System": {
+      "Logging": {
+        "Level": "info",
+        "Path" : "/tmp/dragon.log"
+      }
+    }
+
+  }
+}

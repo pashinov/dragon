@@ -10,12 +10,15 @@
 // 3rdparty includes
 #include <boost/asio.hpp>
 
+// project includes
+#include <phoenix_service/task_manager.hpp>
+
 namespace phoenix_service
 {
     class microsvc_controller
     {
     public:
-        microsvc_controller() = default;
+        microsvc_controller();
         ~microsvc_controller() = default;
 
         void start();
@@ -25,7 +28,8 @@ namespace phoenix_service
         static void make_get_request(const std::string& endpoint, const std::string& uri);
 
     private:
-        std::thread thread_;
         boost::asio::io_service io_service_;
+        std::unique_ptr<std::thread> thread_;
+        std::unique_ptr<task_manager> task_manager_;
     };
 }
