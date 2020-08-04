@@ -10,6 +10,7 @@
 #include <phoenix_service/microsvc_controller.hpp>
 #include <rest_service/microsvc_controller.hpp>
 #include <utils/interrupt_handler.hpp>
+#include <utils/logger.hpp>
 
 void run_service()
 {
@@ -32,7 +33,7 @@ void run_service()
     }
     catch(std::exception& ex)
     {
-        std::cerr << ex.what() << std::endl;
+        LOG_ERROR(LOGGER("dragon"), "Run service exception: {}", ex.what());
     }
 }
 
@@ -75,6 +76,9 @@ int main(int argc, char* argv[])
     {
         config_file = "/etc/dragon/dragon.json";
     }
+
+    // Init logging
+    LOGGER("dragon", spdlog::level::info);
 
     // Start service
     run_service();

@@ -24,6 +24,8 @@
 // SOFTWARE.
 //
 
+#pragma once
+
 // system includes
 #include <condition_variable>
 #include <mutex>

@@ -18,6 +18,7 @@ set(SVC_HDR_FILES
         src/rest_service/sysinfo/cpuinfo.hpp
         src/rest_service/sysinfo/osinfo.hpp
         src/utils/interrupt_handler.hpp
+        src/utils/logger.hpp
         )
 
 set(SVC_SRC_FILES
@@ -27,6 +28,7 @@ set(SVC_SRC_FILES
         src/rest_service/microsvc_controller.cpp
         src/rest_service/sysinfo/cpuinfo.cpp
         src/rest_service/sysinfo/osinfo.cpp
+        src/utils/logger.cpp
         )
 
 set(SVC_SRC_MAIN_FILES src/main.cpp)
@@ -36,6 +38,7 @@ include_directories(src)
 add_executable(${PROJECT_NAME} ${SVC_SRC_MAIN_FILES} ${SVC_SRC_FILES} ${SVC_HDR_FILES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/args)
+target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/spdlog/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} cpprestsdk::cpprest)
