@@ -1,6 +1,6 @@
-#include <sysinfo/cpuinfo.hpp>
+#include <rest_service/sysinfo/cpuinfo.hpp>
 
-namespace sysinfo
+namespace rest_service::sysinfo
 {
     std::string cpu_vendor()
     {

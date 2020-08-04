@@ -2,14 +2,13 @@
 // Created by Alexey Pashinov on 31/07/20
 //
 
-#ifndef SYSINFO_CPUINFO_HPP
-#define SYSINFO_CPUINFO_HPP
+#pragma once
 
 // system includes
 #include <cstdint>
 #include <string>
 
-namespace sysinfo
+namespace rest_service::sysinfo
 {
     class CPUID
     {
@@ -31,7 +30,4 @@ namespace sysinfo
 
     std::string cpu_vendor();
     std::string cpu_model();
-
-} // namespace sysinfo
-
-#endif // SYSINFO_CPUINFO_HPP
+}
