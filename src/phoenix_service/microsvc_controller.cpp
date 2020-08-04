@@ -4,6 +4,7 @@
 // project includes
 #include <phoenix_service/microsvc_controller.hpp>
 #include <phoenix_service/task_manager.hpp>
+#include <utils/logger.hpp>
 
 using namespace web;
 using namespace http;
@@ -45,11 +46,11 @@ namespace phoenix_service
             auto value = response.extract_json().get();
             try
             {
-                std::cout << value.serialize() << std::endl;
+                LOG_INFO(LOGGER("dragon"), "{}", value.serialize());
             }
             catch (http_exception const& ex)
             {
-                std::cout << "Error: " << ex.what() << std::endl;
+                LOG_ERROR(LOGGER("dragon"), "Make GET request exception: {}", ex.what());
             }
         }
     }
