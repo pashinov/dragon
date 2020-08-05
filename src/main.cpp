@@ -7,7 +7,7 @@
 #include <args.hxx>
 
 // project includes
-#include <phoenix_service/microsvc_controller.hpp>
+#include <iot_service/microsvc_controller.hpp>
 #include <rest_service/microsvc_controller.hpp>
 #include <utils/config.hpp>
 #include <utils/interrupt_handler.hpp>
@@ -16,20 +16,19 @@
 void run_service()
 {
     rest_service::microservice_controller server;
-    server.set_endpoint("http://localhost:9001/api/v1");
-
-    phoenix_service::microsvc_controller phoenix_controller;
+    iot_service::microsvc_controller iot_svc;
 
     try
     {
+        server.set_endpoint("http://localhost:9001/api/v1");
         server.accept().wait();
-        phoenix_controller.start();
+        iot_svc.start();
 
         utils::interrupt_handler::hook_signal(SIGINT);
         utils::interrupt_handler::hook_signal(SIGTERM);
         utils::interrupt_handler::wait_for_signal_interrupt();
 
-        phoenix_controller.stop();
+        iot_svc.stop();
         server.shutdown().wait();
     }
     catch(std::exception& ex)

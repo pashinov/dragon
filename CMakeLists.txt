@@ -10,11 +10,14 @@ find_package(Protobuf REQUIRED)
 find_package(cpprestsdk REQUIRED)
 find_package(Boost 1.71 COMPONENTS system REQUIRED)
 
+find_library(ZeroMQ_LIBRARY NAMES zmq)
+
 add_subdirectory(proto)
 
 set(SVC_HDR_FILES
-        src/phoenix_service/microsvc_controller.hpp
-        src/phoenix_service/task_manager.hpp
+        src/iot_service/microsvc_controller.hpp
+        src/iot_service/phoenix_connector.hpp
+        src/iot_service/task_manager.hpp
         src/rest_service/foundation/include/basic_controller.hpp
         src/rest_service/foundation/include/controller.hpp
         src/rest_service/microsvc_controller.hpp
@@ -27,8 +30,9 @@ set(SVC_HDR_FILES
         )
 
 set(SVC_SRC_FILES
-        src/phoenix_service/microsvc_controller.cpp
-        src/phoenix_service/task_manager.cpp
+        src/iot_service/microsvc_controller.cpp
+        src/iot_service/phoenix_connector.cpp
+        src/iot_service/task_manager.cpp
         src/rest_service/foundation/basic_controller.cpp
         src/rest_service/microsvc_controller.cpp
         src/system/sysinfo/cpuinfo.cpp
@@ -43,8 +47,9 @@ include_directories(src)
 
 add_executable(${PROJECT_NAME} ${SVC_SRC_MAIN_FILES} ${SVC_SRC_FILES} ${SVC_HDR_FILES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/args)
-target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/spdlog/include)
-target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PRIVATE 3rdparty/args)
+target_include_directories(${PROJECT_NAME} PRIVATE 3rdparty/cppzmq)
+target_include_directories(${PROJECT_NAME} PRIVATE 3rdparty/spdlog/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} cpprestsdk::cpprest proto)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${ZeroMQ_LIBRARY} cpprestsdk::cpprest proto)

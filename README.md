@@ -2,10 +2,10 @@
 
 Service provides REST API interface for management device.
 
-[![Build Status][travis-badge]][travis-link]
+[![Travis-CI Status][travis-badge]][travis-link]
 [![License][license-badge]][license-link]
 
-[travis-badge]:     https://travis-ci.org/pashinov/dragon.svg?branch=develop
+[travis-badge]:     https://img.shields.io/travis/pashinov/dragon/develop.svg?label=Linux%20|%20OSX
 [travis-link]:      https://travis-ci.org/pashinov/dragon
-[license-badge]:    https://img.shields.io/badge/License-MIT-yellow.svg
+[license-badge]:    https://img.shields.io/github/license/pashinov/dragon.svg
 [license-link]:     https://github.com/pashinov/dragon/blob/develop/LICENSE

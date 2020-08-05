@@ -15,6 +15,7 @@ matrix:
             - boost
             - cpprestsdk
             - protobuf
+            - zeromq
       env:
         - OPENSSL_ROOT_DIR=$(brew --prefix openssl)
         - OPENSSL_LIB_DIR=$(brew --prefix openssl)/lib
@@ -31,6 +32,7 @@ matrix:
             - libcpprest-dev
             - libprotobuf-dev
             - protobuf-compiler
+            - libzmq3-dev
       env:
         - CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake
 

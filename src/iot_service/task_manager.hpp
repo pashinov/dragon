@@ -10,7 +10,7 @@
 // 3rd party includes
 #include <boost/asio.hpp>
 
-namespace phoenix_service
+namespace iot_service
 {
     class task_manager
     {
