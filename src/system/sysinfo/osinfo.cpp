@@ -2,9 +2,9 @@
 #include <sys/utsname.h>
 
 // project includes
-#include <rest_service/sysinfo/osinfo.hpp>
+#include <system/sysinfo/osinfo.hpp>
 
-namespace rest_service::sysinfo
+namespace sys::sysinfo
 {
     std::string os_name()
     {

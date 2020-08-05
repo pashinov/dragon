@@ -26,8 +26,8 @@
 
 // project includes
 #include <rest_service/microsvc_controller.hpp>
-#include <rest_service/sysinfo/cpuinfo.hpp>
-#include <rest_service/sysinfo/osinfo.hpp>
+#include <system/sysinfo/cpuinfo.hpp>
+#include <system/sysinfo/osinfo.hpp>
 
 using namespace web;
 using namespace http;
@@ -48,18 +48,18 @@ namespace rest_service
                 if (path[0] == "osinfo")
                 {
                     auto response = json::value::object();
-                    response["name"] = json::value::string(sysinfo::os_name());
-                    response["release"] = json::value::string(sysinfo::os_release());
-                    response["version"] = json::value::string(sysinfo::os_version());
-                    response["machine"] = json::value::string(sysinfo::os_machine());
-                    response["system_name"] = json::value::string(sysinfo::os_system_name());
+                    response["name"] = json::value::string(sys::sysinfo::os_name());
+                    response["release"] = json::value::string(sys::sysinfo::os_release());
+                    response["version"] = json::value::string(sys::sysinfo::os_version());
+                    response["machine"] = json::value::string(sys::sysinfo::os_machine());
+                    response["system_name"] = json::value::string(sys::sysinfo::os_system_name());
                     message.reply(status_codes::OK, response);
                 }
                 else if (path[0] == "cpuinfo")
                 {
                     auto response = json::value::object();
-                    response["model"] = json::value::string(sysinfo::cpu_model());
-                    response["vendor"] = json::value::string(sysinfo::cpu_vendor());
+                    response["model"] = json::value::string(sys::sysinfo::cpu_model());
+                    response["vendor"] = json::value::string(sys::sysinfo::cpu_vendor());
                     message.reply(status_codes::OK, response);
                 }
                 else

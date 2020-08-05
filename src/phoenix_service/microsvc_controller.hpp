@@ -25,9 +25,6 @@ namespace phoenix_service
         void stop();
 
     private:
-        static void make_get_request(const std::string& endpoint, const std::string& uri);
-
-    private:
         boost::asio::io_service io_service_;
         std::unique_ptr<std::thread> thread_;
         std::unique_ptr<task_manager> task_manager_;

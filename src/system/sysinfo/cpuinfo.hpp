@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <string>
 
-namespace rest_service::sysinfo
+namespace sys::sysinfo
 {
     class CPUID
     {

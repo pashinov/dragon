@@ -1,12 +1,13 @@
 // system includes
-#include <fstream>
 #include <iostream>
 
 // 3rdpatry includes
-#include <nlohmann/json.hpp>
+#include <cpprest/json.h>
 
 // project includes
 #include <utils/config.hpp>
+
+using namespace web;
 
 namespace utils
 {
@@ -19,16 +20,15 @@ namespace utils
         {
             try
             {
-                nlohmann::json data = nlohmann::json::parse(ifs);
+                json::value data = json::value::parse(ifs);
 
-                cfg_->application.name                                              = data["Config"]["Application"]["Name"].get<std::string>();
-                cfg_->application.version                                           = data["Config"]["Application"]["Version"].get<std::string>();
+                cfg_->application.name =        data.at("Config").at("Application").at("Name").as_string();
+                cfg_->application.version =     data.at("Config").at("Application").at("Version").as_string();
 
-                cfg_->system.logging.path                                           = data["Config"]["System"]["Logging"]["Path"].get<std::string>();
-                cfg_->system.logging.level                                          = spdlog::level::from_str(data["Config"]["System"]["Logging"]["Level"].get<std::string>());
-
+                cfg_->system.logging.path =     data.at("Config").at("System").at("Logging").at("Path").as_string();
+                cfg_->system.logging.level =    spdlog::level::from_str(data.at("Config").at("System").at("Logging").at("Level").as_string());
             }
-            catch(std::exception& ex)
+            catch(json::json_exception& ex)
             {
                 std::cerr << ex.what() << std::endl;
                 rval = false;
