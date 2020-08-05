@@ -6,8 +6,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Threads REQUIRED)
+find_package(Protobuf REQUIRED)
 find_package(cpprestsdk REQUIRED)
 find_package(Boost 1.71 COMPONENTS system REQUIRED)
+
+add_subdirectory(proto)
 
 set(SVC_HDR_FILES
         src/phoenix_service/microsvc_controller.hpp
@@ -44,4 +47,4 @@ target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/args)
 target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/spdlog/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} cpprestsdk::cpprest)
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} cpprestsdk::cpprest proto)

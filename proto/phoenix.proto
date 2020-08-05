@@ -1,0 +1,14 @@
+syntax = "proto3";
+package phoenix_proto;
+
+enum message_id
+{
+  CPU_INFO_MSG  = 0;
+  OS_INFO_MSG   = 1;
+}
+
+message message
+{
+  message_id msg_id   = 1;
+  string msg_payload  = 2;
+}

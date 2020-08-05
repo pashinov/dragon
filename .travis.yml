@@ -14,6 +14,7 @@ matrix:
             - openssl
             - boost
             - cpprestsdk
+            - protobuf
       env:
         - OPENSSL_ROOT_DIR=$(brew --prefix openssl)
         - OPENSSL_LIB_DIR=$(brew --prefix openssl)/lib
@@ -28,6 +29,8 @@ matrix:
         apt:
           packages:
             - libcpprest-dev
+            - libprotobuf-dev
+            - protobuf-compiler
       env:
         - CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake
 
