@@ -9,6 +9,8 @@
 #include <utils/config.hpp>
 #include <utils/logger.hpp>
 
+#include "phoenix.pb.h"
+
 using namespace web;
 using namespace http;
 
@@ -27,7 +29,11 @@ namespace phoenix_service
                 data["model"] = json::value::string(sys::sysinfo::cpu_model());
                 data["vendor"] = json::value::string(sys::sysinfo::cpu_vendor());
 
-                LOG_INFO(LOGGER(CONFIG()->application.name), "{}", data.serialize());
+                phoenix_proto::message msg;
+                msg.set_msg_id(phoenix_proto::CPU_INFO_MSG);
+                msg.set_msg_payload(data.serialize());
+
+                // TODO: send message to phoenix application
             };
 
             std::function<void()> osinfo = [this]() {
@@ -38,7 +44,11 @@ namespace phoenix_service
                 data["machine"] = json::value::string(sys::sysinfo::os_machine());
                 data["system_name"] = json::value::string(sys::sysinfo::os_system_name());
 
-                LOG_INFO(LOGGER(CONFIG()->application.name), "{}", data.serialize());
+                phoenix_proto::message msg;
+                msg.set_msg_id(phoenix_proto::OS_INFO_MSG);
+                msg.set_msg_payload(data.serialize());
+
+                // TODO: send message to phoenix application
             };
 
             task_manager_->add_task(cpuinfo);
