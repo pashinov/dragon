@@ -2,28 +2,30 @@
 #include <cpprest/http_client.h>
 
 // project includes
-#include <phoenix_service/microsvc_controller.hpp>
-#include <phoenix_service/task_manager.hpp>
+#include <iot_service/microsvc_controller.hpp>
+#include <iot_service/task_manager.hpp>
 #include <system/sysinfo/cpuinfo.hpp>
 #include <system/sysinfo/osinfo.hpp>
 #include <utils/config.hpp>
-#include <utils/logger.hpp>
 
 #include "phoenix.pb.h"
 
 using namespace web;
 using namespace http;
 
-namespace phoenix_service
+namespace iot_service
 {
     microsvc_controller::microsvc_controller()
     {
         task_manager_ = std::make_unique<task_manager>(io_service_);
+        phoenix_connector_ = std::make_unique<phoenix_connector>();
     }
 
     void microsvc_controller::start()
     {
-        thread_ = std::make_unique<std::thread>([this]() {
+        thread_ = std::thread([this]() {
+            phoenix_connector_->bind("ipc://phoenix_connector");
+
             std::function<void()> cpuinfo = [this]() {
                 auto data = json::value::object();
                 data["model"] = json::value::string(sys::sysinfo::cpu_model());
@@ -33,7 +35,7 @@ namespace phoenix_service
                 msg.set_msg_id(phoenix_proto::CPU_INFO_MSG);
                 msg.set_msg_payload(data.serialize());
 
-                // TODO: send message to phoenix application
+                phoenix_connector_->send(msg.SerializeAsString());
             };
 
             std::function<void()> osinfo = [this]() {
@@ -48,7 +50,7 @@ namespace phoenix_service
                 msg.set_msg_id(phoenix_proto::OS_INFO_MSG);
                 msg.set_msg_payload(data.serialize());
 
-                // TODO: send message to phoenix application
+                phoenix_connector_->send(msg.SerializeAsString());
             };
 
             task_manager_->add_task(cpuinfo);
@@ -63,6 +65,6 @@ namespace phoenix_service
     {
         task_manager_->stop();
         io_service_.stop();
-        thread_->join();
+        thread_.join();
     }
 }

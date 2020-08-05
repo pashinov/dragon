@@ -3,11 +3,11 @@
 #include <boost/asio/steady_timer.hpp>
 
 // project includes
-#include <phoenix_service/task_manager.hpp>
+#include <iot_service/task_manager.hpp>
 
 namespace asio = boost::asio;
 
-namespace phoenix_service
+namespace iot_service
 {
     class task
     {

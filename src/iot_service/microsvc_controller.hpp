@@ -1,5 +1,5 @@
 //
-// Created by Alexey Pashinov on 3/08/20
+// Created by Alexey Pashinov on 03/08/20
 //
 
 #pragma once
@@ -11,9 +11,10 @@
 #include <boost/asio.hpp>
 
 // project includes
-#include <phoenix_service/task_manager.hpp>
+#include <iot_service/phoenix_connector.hpp>
+#include <iot_service/task_manager.hpp>
 
-namespace phoenix_service
+namespace iot_service
 {
     class microsvc_controller
     {
@@ -25,8 +26,9 @@ namespace phoenix_service
         void stop();
 
     private:
+        std::thread thread_;
         boost::asio::io_service io_service_;
-        std::unique_ptr<std::thread> thread_;
         std::unique_ptr<task_manager> task_manager_;
+        std::unique_ptr<phoenix_connector> phoenix_connector_;
     };
 }
