@@ -9,6 +9,6 @@ enum message_id
 
 message message
 {
-  message_id msg_id   = 1;
-  string msg_payload  = 2;
+  message_id  msg_id      = 1;
+  string      msg_payload = 2;
 }

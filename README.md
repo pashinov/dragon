@@ -1,6 +1,8 @@
 # Dragon
 
-Service provides REST API interface for management device.
+Service provides REST API interface for management device and includes IoT service for gathering
+and publishing device data to [Phoenix MQTT](https://github.com/pashinov/phoenix) service and handling
+received command from this service.
 
 [![Travis-CI Status][travis-badge]][travis-link]
 [![License][license-badge]][license-link]
