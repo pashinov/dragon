@@ -15,8 +15,8 @@ set(SVC_HDR_FILES
         src/rest_service/foundation/include/basic_controller.hpp
         src/rest_service/foundation/include/controller.hpp
         src/rest_service/microsvc_controller.hpp
-        src/rest_service/sysinfo/cpuinfo.hpp
-        src/rest_service/sysinfo/osinfo.hpp
+        src/system/sysinfo/cpuinfo.hpp
+        src/system/sysinfo/osinfo.hpp
         src/utils/config.hpp
         src/utils/config_st.hpp
         src/utils/interrupt_handler.hpp
@@ -28,8 +28,8 @@ set(SVC_SRC_FILES
         src/phoenix_service/task_manager.cpp
         src/rest_service/foundation/basic_controller.cpp
         src/rest_service/microsvc_controller.cpp
-        src/rest_service/sysinfo/cpuinfo.cpp
-        src/rest_service/sysinfo/osinfo.cpp
+        src/system/sysinfo/cpuinfo.cpp
+        src/system/sysinfo/osinfo.cpp
         src/utils/config.cpp
         src/utils/logger.cpp
         )
@@ -41,7 +41,6 @@ include_directories(src)
 add_executable(${PROJECT_NAME} ${SVC_SRC_MAIN_FILES} ${SVC_SRC_FILES} ${SVC_HDR_FILES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/args)
-target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/json/include)
 target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/spdlog/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
 

@@ -4,6 +4,8 @@
 // project includes
 #include <phoenix_service/microsvc_controller.hpp>
 #include <phoenix_service/task_manager.hpp>
+#include <system/sysinfo/cpuinfo.hpp>
+#include <system/sysinfo/osinfo.hpp>
 #include <utils/config.hpp>
 #include <utils/logger.hpp>
 
@@ -21,11 +23,22 @@ namespace phoenix_service
     {
         thread_ = std::make_unique<std::thread>([this]() {
             std::function<void()> cpuinfo = [this]() {
-                make_get_request("http://localhost:9001/api/v1", "cpuinfo");
+                auto data = json::value::object();
+                data["model"] = json::value::string(sys::sysinfo::cpu_model());
+                data["vendor"] = json::value::string(sys::sysinfo::cpu_vendor());
+
+                LOG_INFO(LOGGER(CONFIG()->application.name), "{}", data.serialize());
             };
 
             std::function<void()> osinfo = [this]() {
-                make_get_request("http://localhost:9001/api/v1", "osinfo");
+                auto data = json::value::object();
+                data["name"] = json::value::string(sys::sysinfo::os_name());
+                data["release"] = json::value::string(sys::sysinfo::os_release());
+                data["version"] = json::value::string(sys::sysinfo::os_version());
+                data["machine"] = json::value::string(sys::sysinfo::os_machine());
+                data["system_name"] = json::value::string(sys::sysinfo::os_system_name());
+
+                LOG_INFO(LOGGER(CONFIG()->application.name), "{}", data.serialize());
             };
 
             task_manager_->add_task(cpuinfo);
@@ -41,23 +54,5 @@ namespace phoenix_service
         task_manager_->stop();
         io_service_.stop();
         thread_->join();
-    }
-
-    void microsvc_controller::make_get_request(const std::string& endpoint, const std::string& uri)
-    {
-        auto client = client::http_client{endpoint};
-        auto response = client.request(http::methods::GET, uri).get();
-        if (response.status_code() == status_codes::OK)
-        {
-            auto value = response.extract_json().get();
-            try
-            {
-                LOG_INFO(LOGGER(CONFIG()->application.name), "{}", value.serialize());
-            }
-            catch (http_exception const& ex)
-            {
-                LOG_ERROR(LOGGER(CONFIG()->application.name), "Make GET request exception: {}", ex.what());
-            }
-        }
     }
 }

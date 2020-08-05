@@ -7,7 +7,7 @@
 // system includes
 #include <string>
 
-namespace rest_service::sysinfo
+namespace sys::sysinfo
 {
     std::string os_name();
     std::string os_system_name();
