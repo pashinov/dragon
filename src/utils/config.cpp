@@ -22,11 +22,15 @@ namespace utils
             {
                 json::value data = json::value::parse(ifs);
 
-                cfg_->application.name =        data.at("Config").at("Application").at("Name").as_string();
-                cfg_->application.version =     data.at("Config").at("Application").at("Version").as_string();
+                cfg_->application.name                      = data.at("Config").at("Application").at("Name").as_string();
+                cfg_->application.version                   = data.at("Config").at("Application").at("Version").as_string();
 
-                cfg_->system.logging.path =     data.at("Config").at("System").at("Logging").at("Path").as_string();
-                cfg_->system.logging.level =    spdlog::level::from_str(data.at("Config").at("System").at("Logging").at("Level").as_string());
+                cfg_->system.logging.path                   = data.at("Config").at("System").at("Logging").at("Path").as_string();
+                cfg_->system.logging.level                  = spdlog::level::from_str(data.at("Config").at("System").at("Logging").at("Level").as_string());
+
+                cfg_->service.rest.endpoint                 = data.at("Config").at("Service").at("REST").at("Endpoint").as_string();
+                cfg_->service.iot.connector.zmq.pub.addr    = data.at("Config").at("Service").at("IoT").at("Connector").at("ZMQ").at("Pub").at("Addr").as_string();
+                cfg_->service.iot.connector.zmq.pub.topic   = data.at("Config").at("Service").at("IoT").at("Connector").at("ZMQ").at("Pub").at("Topic").as_string();
             }
             catch(json::json_exception& ex)
             {

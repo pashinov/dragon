@@ -41,14 +41,6 @@ namespace sys::sysinfo
         return std::string(uname_data.release);
     }
 
-    std::string os_version()
-    {
-        struct utsname uname_data{};
-        uname(&uname_data);
-
-        return std::string(uname_data.version);
-    }
-
     std::string os_machine()
     {
         struct utsname uname_data{};

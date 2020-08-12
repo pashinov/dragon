@@ -20,7 +20,7 @@ void run_service()
 
     try
     {
-        server.set_endpoint("http://localhost:9001/api/v1");
+        server.set_endpoint(CONFIG()->service.rest.endpoint);
         server.accept().wait();
         iot_svc.start();
 

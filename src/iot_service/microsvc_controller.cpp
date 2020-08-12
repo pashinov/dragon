@@ -24,7 +24,7 @@ namespace iot_service
     void microsvc_controller::start()
     {
         thread_ = std::thread([this]() {
-            phoenix_connector_->bind("ipc://phoenix_connector");
+            phoenix_connector_->bind(CONFIG()->service.iot.connector.zmq.pub.addr);
 
             std::function<void()> cpuinfo = [this]() {
                 auto data = json::value::object();
@@ -32,29 +32,28 @@ namespace iot_service
                 data["vendor"] = json::value::string(sys::sysinfo::cpu_vendor());
 
                 phoenix_proto::message msg;
-                msg.set_msg_id(phoenix_proto::CPU_INFO_MSG);
-                msg.set_msg_payload(data.serialize());
+                msg.set_topic("topic/cpu_info");
+                msg.set_payload(data.serialize());
 
-                phoenix_connector_->send(msg.SerializeAsString());
+                phoenix_connector_->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
             };
 
             std::function<void()> osinfo = [this]() {
                 auto data = json::value::object();
                 data["name"] = json::value::string(sys::sysinfo::os_name());
                 data["release"] = json::value::string(sys::sysinfo::os_release());
-                data["version"] = json::value::string(sys::sysinfo::os_version());
                 data["machine"] = json::value::string(sys::sysinfo::os_machine());
                 data["system_name"] = json::value::string(sys::sysinfo::os_system_name());
 
                 phoenix_proto::message msg;
-                msg.set_msg_id(phoenix_proto::OS_INFO_MSG);
-                msg.set_msg_payload(data.serialize());
+                msg.set_topic("topic/os_info");
+                msg.set_payload(data.serialize());
 
-                phoenix_connector_->send(msg.SerializeAsString());
+                phoenix_connector_->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
             };
 
-            task_manager_->add_task(cpuinfo);
-            task_manager_->add_task(osinfo);
+            task_manager_->add_task(cpuinfo, std::chrono::seconds(5));
+            task_manager_->add_task(osinfo, std::chrono::seconds(5));
             task_manager_->start();
 
             io_service_.run();

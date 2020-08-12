@@ -16,7 +16,7 @@ namespace iot_service
         ~phoenix_connector();
 
         void bind(const std::string& addr);
-        std::optional<size_t> send(const std::string& msg);
+        void publish(const std::string& topic, const std::string& msg);
 
     private:
         zmq::context_t zmq_ctx_;

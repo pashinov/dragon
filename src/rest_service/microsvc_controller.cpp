@@ -50,7 +50,6 @@ namespace rest_service
                     auto response = json::value::object();
                     response["name"] = json::value::string(sys::sysinfo::os_name());
                     response["release"] = json::value::string(sys::sysinfo::os_release());
-                    response["version"] = json::value::string(sys::sysinfo::os_version());
                     response["machine"] = json::value::string(sys::sysinfo::os_machine());
                     response["system_name"] = json::value::string(sys::sysinfo::os_system_name());
                     message.reply(status_codes::OK, response);

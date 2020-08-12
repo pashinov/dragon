@@ -31,7 +31,40 @@ namespace utils
             Logging logging;
         };
 
+        struct Service
+        {
+            struct REST
+            {
+                std::string endpoint;
+            };
+
+            struct IoT
+            {
+                struct Connector
+                {
+                    struct ZMQ
+                    {
+                        struct Pub
+                        {
+                            std::string addr;
+                            std::string topic;
+                        };
+
+                        Pub pub;
+                    };
+
+                    ZMQ zmq;
+                };
+
+                Connector connector;
+            };
+
+            REST rest;
+            IoT iot;
+        };
+
         Application application;
         System system;
+        Service service;
     };
 }

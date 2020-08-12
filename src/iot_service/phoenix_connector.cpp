@@ -13,12 +13,13 @@ namespace iot_service
         zmq_publisher_.bind(addr);
     }
 
-    std::optional<size_t> phoenix_connector::send(const std::string& msg)
+    void phoenix_connector::publish(const std::string& topic, const std::string& msg)
     {
+        zmq::message_t ztopic(std::begin(topic), std::end(topic));
+        zmq_publisher_.send(ztopic, zmq::send_flags::sndmore);
         zmq::message_t zmsg(std::begin(msg), std::end(msg));
-        return zmq_publisher_.send(zmsg, zmq::send_flags::dontwait);
+        zmq_publisher_.send(zmsg, zmq::send_flags::dontwait);
     }
-
 
     phoenix_connector::~phoenix_connector()
     {
