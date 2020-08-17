@@ -31,6 +31,9 @@ namespace utils
                 cfg_->service.rest.endpoint                 = data.at("Config").at("Service").at("REST").at("Endpoint").as_string();
                 cfg_->service.iot.connector.zmq.pub.addr    = data.at("Config").at("Service").at("IoT").at("Connector").at("ZMQ").at("Pub").at("Addr").as_string();
                 cfg_->service.iot.connector.zmq.pub.topic   = data.at("Config").at("Service").at("IoT").at("Connector").at("ZMQ").at("Pub").at("Topic").as_string();
+                cfg_->service.iot.connector.zmq.sub.addr    = data.at("Config").at("Service").at("IoT").at("Connector").at("ZMQ").at("Sub").at("Addr").as_string();
+                cfg_->service.iot.connector.zmq.sub.topic   = data.at("Config").at("Service").at("IoT").at("Connector").at("ZMQ").at("Sub").at("Topic").as_string();
+                cfg_->service.iot.connector.zmq.sub.timeout = data.at("Config").at("Service").at("IoT").at("Connector").at("ZMQ").at("Sub").at("Timeout").as_integer();
             }
             catch(json::json_exception& ex)
             {
