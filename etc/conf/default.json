@@ -23,6 +23,11 @@
             "Pub": {
               "Addr": "ipc:///tmp/phoenix_sender",
               "Topic": "phoenix_sender"
+            },
+            "Sub": {
+              "Addr": "ipc:///tmp/phoenix_receiver",
+              "Topic": "phoenix_receiver",
+              "Timeout": 1000
             }
           }
         }

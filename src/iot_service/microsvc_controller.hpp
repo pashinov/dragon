@@ -26,7 +26,9 @@ namespace iot_service
         void stop();
 
     private:
-        std::thread thread_;
+        std::atomic<bool> alive_;
+        std::thread pub_thread_;
+        std::thread sub_thread_;
         boost::asio::io_service io_service_;
         std::unique_ptr<task_manager> task_manager_;
         std::unique_ptr<phoenix_connector> phoenix_connector_;
