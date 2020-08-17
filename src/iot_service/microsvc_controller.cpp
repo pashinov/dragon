@@ -8,7 +8,8 @@
 #include <system/sysinfo/osinfo.hpp>
 #include <utils/config.hpp>
 
-#include "phoenix.pb.h"
+// proto
+#include <phoenix.pb.h>
 
 using namespace web;
 using namespace http;
@@ -16,15 +17,19 @@ using namespace http;
 namespace iot_service
 {
     microsvc_controller::microsvc_controller()
+        : alive_(false)
+        , task_manager_(std::make_unique<task_manager>(io_service_))
+        , phoenix_connector_(std::make_unique<phoenix_connector>())
     {
-        task_manager_ = std::make_unique<task_manager>(io_service_);
-        phoenix_connector_ = std::make_unique<phoenix_connector>();
+
     }
 
     void microsvc_controller::start()
     {
-        thread_ = std::thread([this]() {
-            phoenix_connector_->bind(CONFIG()->service.iot.connector.zmq.pub.addr);
+        alive_ = true;
+
+        pub_thread_ = std::thread([this]() {
+            phoenix_connector_->publisher_instance()->bind(CONFIG()->service.iot.connector.zmq.pub.addr);
 
             std::function<void()> cpuinfo = [this]() {
                 auto data = json::value::object();
@@ -35,7 +40,7 @@ namespace iot_service
                 msg.set_topic("topic/cpu_info");
                 msg.set_payload(data.serialize());
 
-                phoenix_connector_->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
+                phoenix_connector_->publisher_instance()->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
             };
 
             std::function<void()> osinfo = [this]() {
@@ -49,21 +54,29 @@ namespace iot_service
                 msg.set_topic("topic/os_info");
                 msg.set_payload(data.serialize());
 
-                phoenix_connector_->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
+                phoenix_connector_->publisher_instance()->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
             };
 
-            task_manager_->add_task(cpuinfo, std::chrono::seconds(5));
-            task_manager_->add_task(osinfo, std::chrono::seconds(5));
+            task_manager_->add_task(cpuinfo);
+            task_manager_->add_task(osinfo);
             task_manager_->start();
 
             io_service_.run();
+        });
+
+        sub_thread_ = std::thread([this]() {
+            phoenix_connector_->subscriber_instance()->connect(CONFIG()->service.iot.connector.zmq.sub.addr);
+            phoenix_connector_->subscriber_instance()->subscribe(CONFIG()->service.iot.connector.zmq.sub.topic);
+            phoenix_connector_->subscriber_instance()->polling_loop(alive_);
         });
     }
 
     void microsvc_controller::stop()
     {
+        alive_ = false;
         task_manager_->stop();
         io_service_.stop();
-        thread_.join();
+        pub_thread_.join();
+        sub_thread_.join();
     }
 }

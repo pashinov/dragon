@@ -50,7 +50,15 @@ namespace utils
                             std::string topic;
                         };
 
+                        struct Sub
+                        {
+                            std::string addr;
+                            std::string topic;
+                            int timeout;
+                        };
+
                         Pub pub;
+                        Sub sub;
                     };
 
                     ZMQ zmq;
