@@ -5,11 +5,13 @@
 #pragma once
 
 // system includes
-#include <queue>
 #include <optional>
 
 // 3rdparty includes
 #include <zmq.hpp>
+
+// project includes
+#include <utils/safe_queue.hpp>
 
 namespace iot_service
 {
@@ -38,12 +40,12 @@ namespace iot_service
             void connect(const std::string& addr);
             void subscribe(const std::string& topic);
             void polling_loop(std::atomic<bool>& alive);
-            std::optional<std::pair<std::string, std::string>> try_pop();
+            std::optional<std::pair<std::string, std::string>> pop_for(std::uint32_t ms);
 
         private:
             zmq::context_t zmq_ctx_;
             zmq::socket_t  zmq_subscriber_;
-            std::queue<std::pair<std::string, std::string>> received_message_;
+            safe_queue<std::pair<std::string, std::string>> received_message_;
         };
 
         phoenix_connector();
