@@ -21,11 +21,13 @@ set(SVC_HDR_FILES
         src/rest_service/foundation/include/basic_controller.hpp
         src/rest_service/foundation/include/controller.hpp
         src/rest_service/microsvc_controller.hpp
+        src/system/power/power_management.cpp
         src/system/sysinfo/cpuinfo.hpp
         src/system/sysinfo/osinfo.hpp
         src/utils/config.hpp
         src/utils/config_st.hpp
         src/utils/interrupt_handler.hpp
+        src/utils/logger.hpp
         src/utils/logger.hpp
         )
 
@@ -35,6 +37,7 @@ set(SVC_SRC_FILES
         src/iot_service/task_manager.cpp
         src/rest_service/foundation/basic_controller.cpp
         src/rest_service/microsvc_controller.cpp
+        src/system/power/power_management.cpp
         src/system/sysinfo/cpuinfo.cpp
         src/system/sysinfo/osinfo.cpp
         src/utils/config.cpp

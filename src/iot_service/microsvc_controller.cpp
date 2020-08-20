@@ -4,9 +4,11 @@
 // project includes
 #include <iot_service/microsvc_controller.hpp>
 #include <iot_service/task_manager.hpp>
+#include <system/power/power_management.hpp>
 #include <system/sysinfo/cpuinfo.hpp>
 #include <system/sysinfo/osinfo.hpp>
 #include <utils/config.hpp>
+#include <utils/logger.hpp>
 
 // proto
 #include <phoenix.pb.h>
@@ -37,7 +39,7 @@ namespace iot_service
                 data["vendor"] = json::value::string(sys::sysinfo::cpu_vendor());
 
                 phoenix_proto::message msg;
-                msg.set_topic("topic/cpu_info");
+                msg.set_topic("cpu_info");
                 msg.set_payload(data.serialize());
 
                 phoenix_connector_->publisher_instance()->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
@@ -51,7 +53,7 @@ namespace iot_service
                 data["system_name"] = json::value::string(sys::sysinfo::os_system_name());
 
                 phoenix_proto::message msg;
-                msg.set_topic("topic/os_info");
+                msg.set_topic("os_info");
                 msg.set_payload(data.serialize());
 
                 phoenix_connector_->publisher_instance()->publish(CONFIG()->service.iot.connector.zmq.pub.topic, msg.SerializeAsString());
@@ -68,6 +70,35 @@ namespace iot_service
             phoenix_connector_->subscriber_instance()->connect(CONFIG()->service.iot.connector.zmq.sub.addr);
             phoenix_connector_->subscriber_instance()->subscribe(CONFIG()->service.iot.connector.zmq.sub.topic);
             phoenix_connector_->subscriber_instance()->polling_loop(alive_);
+        });
+
+        handler_thread_ = std::thread([this]() {
+            while (alive_)
+            {
+                int timeout_ms = 1000;
+                auto data = phoenix_connector_->subscriber_instance()->pop_for(timeout_ms);
+                if (data.has_value())
+                {
+                    std::string topic; std::string payload;
+                    std::tie(topic, payload) = data.value();
+                    if (topic == "management")
+                    {
+                        json::value jpayload = json::value::parse(payload);
+                        if (jpayload["id"].as_string() == "shutdown" && jpayload["value"].as_bool())
+                        {
+                            sys::power::shutdown_system();
+                        }
+                        else if (jpayload["id"].as_string() == "reboot" && jpayload["value"].as_bool())
+                        {
+                            sys::power::reboot_system();
+                        }
+                        else
+                        {
+                            LOG_WARN(LOGGER(CONFIG()->application.name), "Unknown received IoT command: {}", jpayload["id"].as_string());
+                        }
+                    }
+                }
+            }
         });
     }
 

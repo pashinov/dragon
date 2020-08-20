@@ -101,16 +101,8 @@ namespace iot_service
         }
     }
 
-    std::optional<std::pair<std::string, std::string>> phoenix_connector::subscriber::try_pop()
+    std::optional<std::pair<std::string, std::string>> phoenix_connector::subscriber::pop_for(std::uint32_t ms)
     {
-        std::optional<std::pair<std::string, std::string>> data = std::nullopt;
-
-        if (!received_message_.empty())
-        {
-            data = received_message_.front();
-            received_message_.pop();
-        }
-
-        return data;
+        return received_message_.pop_for(ms);
     }
 }
