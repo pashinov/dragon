@@ -2,7 +2,8 @@ language: cpp
 
 jobs:
   include:
-    - os: osx
+    - arch: amd64
+      os: osx
       osx_image: xcode12
       addons:
         homebrew:
@@ -20,7 +21,8 @@ jobs:
         - Boost_LIBRARY_DIR=$(brew --prefix boost)/lib
         - Boost_INCLUDE_DIR=$(brew --prefix boost)/include
         - cpprestsdk_DIR=$(brew --prefix cpprestsdk)
-    - os: linux
+    - arch: amd64
+      os: linux
       dist: focal
       addons:
         apt:
@@ -29,8 +31,16 @@ jobs:
             - libprotobuf-dev
             - protobuf-compiler
             - libzmq3-dev
-      env:
-        - CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake
+    - arch: arm64
+      os: linux
+      dist: focal
+      addons:
+        apt:
+          packages:
+            - libcpprest-dev
+            - libprotobuf-dev
+            - protobuf-compiler
+            - libzmq3-dev
 
 script:
   - mkdir build
