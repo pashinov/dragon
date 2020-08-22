@@ -10,6 +10,7 @@
 
 namespace sys::sysinfo
 {
+#ifdef __x86_64__
     class CPUID
     {
     public:
@@ -27,7 +28,7 @@ namespace sys::sysinfo
     private:
         uint32_t regs[4]{};
     };
-
+#endif
     std::string cpu_vendor();
     std::string cpu_model();
 }
