@@ -14,6 +14,7 @@ jobs:
             - protobuf
             - zeromq
       env:
+        - TARGET=amd64-osx
         - OPENSSL_ROOT_DIR=$(brew --prefix openssl)
         - OPENSSL_LIB_DIR=$(brew --prefix openssl)/lib
         - OPENSSL_INCLUDE_DIR=$(brew --prefix openssl)/include
@@ -21,6 +22,14 @@ jobs:
         - Boost_LIBRARY_DIR=$(brew --prefix boost)/lib
         - Boost_INCLUDE_DIR=$(brew --prefix boost)/include
         - cpprestsdk_DIR=$(brew --prefix cpprestsdk)
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        file: $TARGET.tar.gz
+        skip_cleanup: true
+        on:
+          repo: pashinov/dragon
+          tags: true
     - arch: amd64
       os: linux
       dist: focal
@@ -31,6 +40,16 @@ jobs:
             - libprotobuf-dev
             - protobuf-compiler
             - libzmq3-dev
+      env:
+        - TARGET=amd64-linux
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        file: $TARGET.tar.gz
+        skip_cleanup: true
+        on:
+          repo: pashinov/dragon
+          tags: true
     - arch: arm64
       os: linux
       dist: focal
@@ -41,6 +60,16 @@ jobs:
             - libprotobuf-dev
             - protobuf-compiler
             - libzmq3-dev
+      env:
+        - TARGET=arm64-linux
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        file: $TARGET.tar.gz
+        skip_cleanup: true
+        on:
+          repo: pashinov/dragon
+          tags: true
 
 script:
   - mkdir build
@@ -48,3 +77,4 @@ script:
   - cmake ..
   - make
   - popd
+  - tar -C build -czf $TARGET.tar.gz dragon
