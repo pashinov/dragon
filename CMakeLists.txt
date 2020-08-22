@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(cpprestsdk REQUIRED)
 find_package(Boost 1.71 COMPONENTS system REQUIRED)
@@ -55,4 +56,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE 3rdparty/cppzmq)
 target_include_directories(${PROJECT_NAME} PRIVATE 3rdparty/spdlog/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${ZeroMQ_LIBRARY} cpprestsdk::cpprest proto)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${OPENSSL_LIBRARIES} ${ZeroMQ_LIBRARY} cpprestsdk::cpprest proto)
+
+install (TARGETS ${PROJECT_NAME} DESTINATION bin)

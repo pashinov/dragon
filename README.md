@@ -8,6 +8,6 @@ received command from this service.
 [![License][license-badge]][license-link]
 
 [travis-badge]:     https://travis-ci.org/pashinov/dragon.svg?branch=develop
-[travis-link]:      https://travis-ci.org/pashinov/dragon/branches/develop
+[travis-link]:      https://travis-ci.org/pashinov/dragon
 [license-badge]:    https://img.shields.io/badge/license-MIT-blue.svg
 [license-link]:     https://github.com/pashinov/dragon/blob/develop/LICENSE
