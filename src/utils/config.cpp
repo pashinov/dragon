@@ -23,7 +23,6 @@ namespace utils
                 json::value data = json::value::parse(ifs);
 
                 cfg_->application.name                      = data.at("Config").at("Application").at("Name").as_string();
-                cfg_->application.version                   = data.at("Config").at("Application").at("Version").as_string();
 
                 cfg_->system.logging.path                   = data.at("Config").at("System").at("Logging").at("Path").as_string();
                 cfg_->system.logging.level                  = spdlog::level::from_str(data.at("Config").at("System").at("Logging").at("Level").as_string());

@@ -13,6 +13,8 @@
 #include <utils/interrupt_handler.hpp>
 #include <utils/logger.hpp>
 
+#include <version.hpp>
+
 void run_service()
 {
     rest_service::microservice_controller server;
@@ -41,9 +43,10 @@ int main(int argc, char* argv[])
 {
     // Parse arguments
     args::ArgumentParser parser("Dragon");
-    args::HelpFlag help(parser, "help", "Display help menu", {'h', "help"});
-    args::ValueFlag<std::string> config(parser, "config", "Configuration path", {'c'});
-    args::Flag daemon(parser, "daemon", "Run as daemon", {'d'});
+    args::HelpFlag help                 (parser, "help",    "Display help menu",    {'h', "help"});
+    args::Flag version                  (parser, "version", "Project version",      {'v', "version"});
+    args::ValueFlag<std::string> config (parser, "config",  "Configuration path",   {'c'});
+    args::Flag daemon                   (parser, "daemon",  "Run as daemon",        {'d'});
     try
     {
         parser.ParseCLI(argc, argv);
@@ -64,6 +67,12 @@ int main(int argc, char* argv[])
         std::cerr << ex.what() << std::endl;
         std::cerr << parser;
         return EXIT_FAILURE;
+    }
+
+    if (version)
+    {
+        std::cout << PROJECT_VERSION << std::endl;
+        return EXIT_SUCCESS;
     }
 
     // Load configuration

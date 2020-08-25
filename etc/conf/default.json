@@ -2,8 +2,7 @@
   "Config": {
 
     "Application": {
-      "Name": "dragon",
-      "Version": "0.1.0"
+      "Name": "dragon"
     },
 
     "System": {
