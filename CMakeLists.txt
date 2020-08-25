@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(dragon)
+file(READ "version.txt" ver)
+string(REGEX MATCH "VERSION_MAJOR ([0-9]*)" _ ${ver})
+set(ver_major ${CMAKE_MATCH_1})
+string(REGEX MATCH "VERSION_MINOR ([0-9]*)" _ ${ver})
+set(ver_minor ${CMAKE_MATCH_1})
+string(REGEX MATCH "VERSION_PATCH ([0-9]*)" _ ${ver})
+set(ver_patch ${CMAKE_MATCH_1})
+
+project(dragon VERSION ${ver_major}.${ver_minor}.${ver_patch})
+message("version: ${PROJECT_VERSION}")
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/data/version.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/version.hpp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,6 +59,7 @@ set(SVC_SRC_FILES
 set(SVC_SRC_MAIN_FILES src/main.cpp)
 
 include_directories(src)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(${PROJECT_NAME} ${SVC_SRC_MAIN_FILES} ${SVC_SRC_FILES} ${SVC_HDR_FILES})
 

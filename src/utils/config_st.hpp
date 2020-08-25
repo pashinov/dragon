@@ -17,7 +17,6 @@ namespace utils
         struct Application
         {
             std::string name;
-            std::string version;
         };
 
         struct System
