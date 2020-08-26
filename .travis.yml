@@ -14,7 +14,7 @@ jobs:
             - protobuf
             - zeromq
       env:
-        - TARGET=amd64-osx
+        - TARGET=macos-amd64
         - OPENSSL_ROOT_DIR=$(brew --prefix openssl)
         - OPENSSL_LIB_DIR=$(brew --prefix openssl)/lib
         - OPENSSL_INCLUDE_DIR=$(brew --prefix openssl)/include
@@ -25,7 +25,7 @@ jobs:
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
-        file: $TARGET.tar.gz
+        file: release-$TRAVIS_TAG-$TARGET.tar.gz
         skip_cleanup: true
         on:
           repo: pashinov/dragon
@@ -41,11 +41,11 @@ jobs:
             - protobuf-compiler
             - libzmq3-dev
       env:
-        - TARGET=amd64-linux
+        - TARGET=linux-amd64
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
-        file: $TARGET.tar.gz
+        file: release-$TRAVIS_TAG-$TARGET.tar.gz
         skip_cleanup: true
         on:
           repo: pashinov/dragon
@@ -61,20 +61,17 @@ jobs:
             - protobuf-compiler
             - libzmq3-dev
       env:
-        - TARGET=arm64-linux
+        - TARGET=linux-arm64
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
-        file: $TARGET.tar.gz
+        file: release-$TRAVIS_TAG-$TARGET.tar.gz
         skip_cleanup: true
         on:
           repo: pashinov/dragon
           tags: true
 
 script:
-  - mkdir build
-  - pushd build
-  - cmake ..
-  - make
-  - popd
-  - tar -C build -czf $TARGET.tar.gz dragon
+  - cmake -H. -Bbuild
+  - cmake --build build
+  - if [ -n "$TRAVIS_TAG" ]; then tar -C build -czf release-$TRAVIS_TAG-$TARGET.tar.gz dragon; fi
