@@ -25,7 +25,7 @@ jobs:
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
-        file: release-$TRAVIS_TAG-$TARGET.tar.gz
+        file: dragon-$TRAVIS_TAG-$TARGET.tar.gz
         skip_cleanup: true
         on:
           repo: pashinov/dragon
@@ -45,7 +45,7 @@ jobs:
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
-        file: release-$TRAVIS_TAG-$TARGET.tar.gz
+        file: dragon-$TRAVIS_TAG-$TARGET.tar.gz
         skip_cleanup: true
         on:
           repo: pashinov/dragon
@@ -65,7 +65,7 @@ jobs:
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
-        file: release-$TRAVIS_TAG-$TARGET.tar.gz
+        file: dragon-$TRAVIS_TAG-$TARGET.tar.gz
         skip_cleanup: true
         on:
           repo: pashinov/dragon
@@ -74,4 +74,4 @@ jobs:
 script:
   - cmake -H. -Bbuild
   - cmake --build build
-  - if [ -n "$TRAVIS_TAG" ]; then tar -C build -czf release-$TRAVIS_TAG-$TARGET.tar.gz dragon; fi
+  - if [ -n "$TRAVIS_TAG" ]; then tar -C build -czf dragon-$TRAVIS_TAG-$TARGET.tar.gz dragon; fi
