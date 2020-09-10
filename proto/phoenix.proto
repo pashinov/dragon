@@ -1,8 +1,0 @@
-syntax = "proto3";
-package phoenix_proto;
-
-message message
-{
-  string  topic   = 1;
-  string  payload = 2;
-}

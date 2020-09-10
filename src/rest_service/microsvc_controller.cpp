@@ -26,8 +26,7 @@
 
 // project includes
 #include <rest_service/microsvc_controller.hpp>
-#include <system/sysinfo/cpuinfo.hpp>
-#include <system/sysinfo/osinfo.hpp>
+#include <system/sysinfo.hpp>
 
 using namespace web;
 using namespace http;
@@ -45,20 +44,59 @@ namespace rest_service
             auto path = basic_controller::request_path(message);
             if (!path.empty())
             {
-                if (path[0] == "osinfo")
+                if (path[0] == "sysinfo")
                 {
                     auto response = json::value::object();
-                    response["name"] = json::value::string(sys::sysinfo::os_name());
-                    response["release"] = json::value::string(sys::sysinfo::os_release());
-                    response["machine"] = json::value::string(sys::sysinfo::os_machine());
-                    response["system_name"] = json::value::string(sys::sysinfo::os_system_name());
-                    message.reply(status_codes::OK, response);
-                }
-                else if (path[0] == "cpuinfo")
-                {
-                    auto response = json::value::object();
-                    response["model"] = json::value::string(sys::sysinfo::cpu_model());
-                    response["vendor"] = json::value::string(sys::sysinfo::cpu_vendor());
+
+                    auto os_info = sys::sysinfo::get_os_info();
+                    if (!os_info.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto cpu_info = sys::sysinfo::get_cpu_info();
+                    if (!cpu_info.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto disk_info = sys::sysinfo::get_disk_info();
+                    if (!disk_info.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto uptime = sys::sysinfo::get_uptime();
+                    if (!uptime.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto boot_time = sys::sysinfo::get_boot_time();
+                    if (!boot_time.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    /*auto temperature = sys::sysinfo::get_temperature();
+                    if (!temperature.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }*/
+
+                    response["os_info"] = json::value::string(os_info.value());
+                    response["cpu_info"] = json::value::string(cpu_info.value());
+                    response["disk_info"] = json::value::string(disk_info.value());
+                    response["uptime"] = json::value::string(uptime.value());
+                    response["boot_time"] = json::value::string(boot_time.value());
+                    //response["temperature"] = json::value::string(temperature.value());
+
                     message.reply(status_codes::OK, response);
                 }
                 else

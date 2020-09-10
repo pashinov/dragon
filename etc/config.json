@@ -1,0 +1,30 @@
+{
+  "Config": {
+
+    "Application": {
+      "Name": "dragon"
+    },
+
+    "System": {
+      "Logging": {
+        "Level": "info",
+        "Path" : "/tmp/dragon.log"
+      }
+    },
+
+    "Service": {
+      "REST": {
+        "Endpoint": "http://localhost:9001/api/v1",
+
+        "Connector": {
+          "Lion": {
+            "ZmqReq": {
+              "Addr": "ipc:///tmp/lion_frontend.socket"
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

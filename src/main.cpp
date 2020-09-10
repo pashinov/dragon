@@ -1,13 +1,11 @@
 // system includes
 #include <csignal>
 #include <iostream>
-#include <thread>
 
 // 3rd party includes
 #include <args.hxx>
 
 // project includes
-#include <iot_service/microsvc_controller.hpp>
 #include <rest_service/microsvc_controller.hpp>
 #include <utils/config.hpp>
 #include <utils/interrupt_handler.hpp>
@@ -18,19 +16,16 @@
 void run_service()
 {
     rest_service::microservice_controller server;
-    iot_service::microsvc_controller iot_svc;
 
     try
     {
         server.set_endpoint(CONFIG()->service.rest.endpoint);
         server.accept().wait();
-        iot_svc.start();
 
         utils::interrupt_handler::hook_signal(SIGINT);
         utils::interrupt_handler::hook_signal(SIGTERM);
         utils::interrupt_handler::wait_for_signal_interrupt();
 
-        iot_svc.stop();
         server.shutdown().wait();
     }
     catch(std::exception& ex)
