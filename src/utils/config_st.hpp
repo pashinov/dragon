@@ -34,41 +34,28 @@ namespace utils
         {
             struct REST
             {
-                std::string endpoint;
-            };
-
-            struct IoT
-            {
                 struct Connector
                 {
-                    struct ZMQ
+                    struct Lion
                     {
-                        struct Pub
+                        struct ZmqReq
                         {
                             std::string addr;
-                            std::string topic;
                         };
 
-                        struct Sub
-                        {
-                            std::string addr;
-                            std::string topic;
-                            int timeout;
-                        };
-
-                        Pub pub;
-                        Sub sub;
+                        ZmqReq zmq_req;
                     };
 
-                    ZMQ zmq;
+                    Lion lion;
                 };
 
+                std::string endpoint;
                 Connector connector;
             };
 
             REST rest;
-            IoT iot;
         };
+
 
         Application application;
         System system;

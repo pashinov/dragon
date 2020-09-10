@@ -9,7 +9,6 @@ jobs:
         homebrew:
           packages:
             - openssl
-            - boost
             - cpprestsdk
             - protobuf
             - zeromq
@@ -18,9 +17,6 @@ jobs:
         - OPENSSL_ROOT_DIR=$(brew --prefix openssl)
         - OPENSSL_LIB_DIR=$(brew --prefix openssl)/lib
         - OPENSSL_INCLUDE_DIR=$(brew --prefix openssl)/include
-        - BOOST_ROOT=$(brew --prefix boost)
-        - Boost_LIBRARY_DIR=$(brew --prefix boost)/lib
-        - Boost_INCLUDE_DIR=$(brew --prefix boost)/include
         - cpprestsdk_DIR=$(brew --prefix cpprestsdk)
       deploy:
         provider: releases

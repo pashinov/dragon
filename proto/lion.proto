@@ -1,0 +1,63 @@
+syntax = "proto3";
+package lion_protocol;
+
+enum CommandType {
+  GET = 0;
+  SET = 1;
+}
+
+enum PowerType {
+  SHUTDOWN  = 0;
+  REBOOT    = 1;
+}
+
+enum SysInfoType {
+  UPTIME        = 0;
+  BOOT_TIME     = 1;
+  TEMPERATURE   = 2;
+  OS_INFO       = 3;
+  CPU_INFO      = 4;
+  DISK_INFO     = 5;
+}
+
+message Power {
+  PowerType type = 1;
+}
+
+message SysInfo {
+  SysInfoType type = 1;
+}
+
+message ResourceType {
+  oneof resource {
+    Power   power   = 1;
+    SysInfo sysinfo = 2;
+  }
+}
+
+message PayloadType {
+  oneof payload_val {
+    int32        ival  = 1;
+    double       rval  = 2;
+    bool         bval  = 3;
+    string       sval  = 4;
+  }
+}
+
+message Request {
+  CommandType   command   = 1;
+  ResourceType  resource  = 2;
+  PayloadType   payload   = 3;
+}
+
+enum ResponseStatus {
+  OK    = 0;
+  FAIL  = 1;
+}
+
+message Response {
+  CommandType     command   = 1;
+  ResourceType    resource  = 2;
+  PayloadType     payload   = 3;
+  ResponseStatus  status    = 4;
+}
