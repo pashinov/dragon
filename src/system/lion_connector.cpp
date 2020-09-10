@@ -1,7 +1,7 @@
 // project includes
-#include <rest_service//lion_connector.hpp>
+#include <system/lion_connector.hpp>
 
-namespace rest_service
+namespace lion
 {
     lion_connector::lion_connector()
     {

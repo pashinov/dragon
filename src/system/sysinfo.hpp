@@ -5,15 +5,14 @@
 #pragma once
 
 // system includes
-#include <string>
 #include <optional>
+#include <string>
+#include <variant>
+
+// proto
+#include <lion.pb.h>
 
 namespace sys::sysinfo
 {
-    std::optional<std::string> get_uptime();
-    std::optional<std::string> get_boot_time();
-    std::optional<std::string> get_temperature();
-    std::optional<std::string> get_os_info();
-    std::optional<std::string> get_cpu_info();
-    std::optional<std::string> get_disk_info();
+    std::optional<std::variant<bool, double, std::string, std::uint32_t, std::int32_t>> get(lion_protocol::SysInfoType type);
 }

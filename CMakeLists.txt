@@ -29,8 +29,8 @@ add_subdirectory(proto)
 set(SVC_HDR_FILES
         src/rest_service/foundation/include/basic_controller.hpp
         src/rest_service/foundation/include/controller.hpp
-        src/rest_service/lion_connector.hpp
         src/rest_service/microsvc_controller.hpp
+        src/system/lion_connector.hpp
         src/system/sysinfo.hpp
         src/utils/config.hpp
         src/utils/config_st.hpp
@@ -41,8 +41,8 @@ set(SVC_HDR_FILES
 
 set(SVC_SRC_FILES
         src/rest_service/foundation/basic_controller.cpp
-        src/rest_service/lion_connector.cpp
         src/rest_service/microsvc_controller.cpp
+        src/system/lion_connector.cpp
         src/system/sysinfo.cpp
         src/utils/config.cpp
         src/utils/logger.cpp
@@ -62,4 +62,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${ZeroMQ_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_THREAD_LIBS_INIT} ${OPENSSL_LIBRARIES} ${ZeroMQ_LIBRARY} cpprestsdk::cpprest lion_proto)
 
-install (TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(FILES etc/config.json DESTINATION etc/dragon)

@@ -10,5 +10,5 @@ Service provides REST API interface for target device.
 [travis-link]:      https://travis-ci.org/pashinov/dragon
 [license-badge]:    https://img.shields.io/badge/license-MIT-blue.svg
 [license-link]:     https://github.com/pashinov/dragon/blob/develop/LICENSE
-[release-badge]:    https://img.shields.io/badge/release-v0.1.0-blue.svg
+[release-badge]:    https://img.shields.io/badge/release-v0.1.1-blue.svg
 [release-link]:     https://github.com/pashinov/dragon/releases
