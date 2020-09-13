@@ -10,7 +10,7 @@
 // 3rdparty includes
 #include <zmq.hpp>
 
-namespace rest_service
+namespace lion
 {
     class lion_connector
     {

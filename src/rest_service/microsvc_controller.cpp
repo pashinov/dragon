@@ -48,54 +48,78 @@ namespace rest_service
                 {
                     auto response = json::value::object();
 
-                    auto os_info = sys::sysinfo::get_os_info();
-                    if (!os_info.has_value())
+                    auto arch = sys::sysinfo::get(lion_protocol::SysInfoType::ARCH);
+                    if (!arch.has_value())
                     {
                         message.reply(status_codes::InternalError);
                         return;
                     }
 
-                    auto cpu_info = sys::sysinfo::get_cpu_info();
-                    if (!cpu_info.has_value())
+                    auto os = sys::sysinfo::get(lion_protocol::SysInfoType::OS);
+                    if (!os.has_value())
                     {
                         message.reply(status_codes::InternalError);
                         return;
                     }
 
-                    auto disk_info = sys::sysinfo::get_disk_info();
-                    if (!disk_info.has_value())
+                    auto os_release = sys::sysinfo::get(lion_protocol::SysInfoType::OS_RELEASE);
+                    if (!os_release.has_value())
                     {
                         message.reply(status_codes::InternalError);
                         return;
                     }
 
-                    auto uptime = sys::sysinfo::get_uptime();
+                    auto cpu_num = sys::sysinfo::get(lion_protocol::SysInfoType::CPU_NUM);
+                    if (!cpu_num.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto cpu_speed = sys::sysinfo::get(lion_protocol::SysInfoType::CPU_SPEED);
+                    if (!cpu_speed.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto storage_total = sys::sysinfo::get(lion_protocol::SysInfoType::STORAGE_TOTAL);
+                    if (!storage_total.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto storage_free = sys::sysinfo::get(lion_protocol::SysInfoType::STORAGE_FREE);
+                    if (!storage_free.has_value())
+                    {
+                        message.reply(status_codes::InternalError);
+                        return;
+                    }
+
+                    auto uptime = sys::sysinfo::get(lion_protocol::SysInfoType::UPTIME);
                     if (!uptime.has_value())
                     {
                         message.reply(status_codes::InternalError);
                         return;
                     }
 
-                    auto boot_time = sys::sysinfo::get_boot_time();
-                    if (!boot_time.has_value())
+                    auto temperature = sys::sysinfo::get(lion_protocol::SysInfoType::TEMPERATURE);
+                    if (!temperature.has_value())
                     {
                         message.reply(status_codes::InternalError);
                         return;
                     }
 
-                    /*auto temperature = sys::sysinfo::get_temperature();
-                    if (!temperature.has_value())
-                    {
-                        message.reply(status_codes::InternalError);
-                        return;
-                    }*/
-
-                    response["os_info"] = json::value::string(os_info.value());
-                    response["cpu_info"] = json::value::string(cpu_info.value());
-                    response["disk_info"] = json::value::string(disk_info.value());
-                    response["uptime"] = json::value::string(uptime.value());
-                    response["boot_time"] = json::value::string(boot_time.value());
-                    //response["temperature"] = json::value::string(temperature.value());
+                    response["arch"] = json::value::string(std::get<std::string>(arch.value()));
+                    response["os"] = json::value::string(std::get<std::string>(os.value()));
+                    response["os_release"] = json::value::string(std::get<std::string>(os_release.value()));
+                    response["cpu_num"] = json::value::number(std::get<std::uint32_t>(cpu_num.value()));
+                    response["cpu_speed"] = json::value::number(std::get<std::uint32_t>(cpu_speed.value()));
+                    response["storage_total"] = json::value::number(std::get<std::uint32_t>(storage_total.value()));
+                    response["storage_free"] = json::value::number(std::get<std::uint32_t>(storage_free.value()));
+                    response["uptime"] = json::value::string(std::get<std::string>(uptime.value()));
+                    response["temperature"] = json::value::number(std::get<double>(temperature.value()));
 
                     message.reply(status_codes::OK, response);
                 }
